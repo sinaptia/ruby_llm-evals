@@ -1,0 +1,24 @@
+require_relative "lib/prompt_bench/version"
+
+Gem::Specification.new do |spec|
+  spec.name        = "prompt_bench"
+  spec.version     = PromptBench::VERSION
+  spec.authors     = [ "Patricio Mac Adden" ]
+  spec.email       = [ "patriciomacadden@gmail.com" ]
+  spec.homepage    = "https://github.com/sinaptia/prompt_bench"
+  spec.summary     = "LLM evaluation engine for Rails."
+  spec.description = "LLM evaluation engine for Rails."
+
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = spec.homepage
+
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  end
+
+  spec.add_dependency "importmap-rails", "~> 2.2"
+  spec.add_dependency "rails", ">= 7.0.0"
+  spec.add_dependency "ruby_llm"
+  spec.add_dependency "stimulus-rails"
+  spec.add_dependency "turbo-rails"
+end

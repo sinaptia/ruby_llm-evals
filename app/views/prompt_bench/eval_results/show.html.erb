@@ -1,0 +1,103 @@
+<h1 class="title">Eval result #<%= @eval_result.id %></h1>
+
+<table class="table">
+  <tbody>
+    <tr>
+      <th>Prompt</th>
+      <td><%= link_to @eval_result.prompt.name, @eval_result.prompt %></td>
+    </tr>
+    <tr>
+      <th>Provider/Model</th>
+      <td><%= @eval_result.provider %>/<%= @eval_result.model %></td>
+    </tr>
+    <tr>
+      <th>Instructions</th>
+      <td><%= @eval_result.instructions %></td>
+    </tr>
+    <tr>
+      <th>Message</th>
+      <td><%= @eval_result.message %></td>
+    </tr>
+    <tr>
+      <th>ActiveJob ID</th>
+      <td><%= @eval_result.active_job_id %></td>
+    </tr>
+    <tr>
+      <th>Started at</th>
+      <td><%= @eval_result.started_at %></td>
+    </tr>
+    <tr>
+      <th>Ended at</th>
+      <td><%= @eval_result.ended_at %></td>
+    </tr>
+    <tr>
+      <th>Duration</th>
+      <td><%= @eval_result.finished? ? distance_of_time_in_words(@eval_result.started_at, @eval_result.ended_at, include_seconds: true) : "N/A" %></td>
+    </tr>
+    <tr>
+      <th>Accuracy</th>
+      <td><%= @eval_result.finished? ? "#{@eval_result.accuracy}%" : "N/A" %></td>
+    </tr>
+    <tr>
+      <th>Cost</th>
+      <td>$<%= @eval_result.cost %></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="mt-6 subtitle">Prompt executions</h2>
+
+<table class="table is-fullwidth">
+  <thead>
+    <tr>
+      <th>Variables</th>
+      <th>With</th>
+      <th>Output message</th>
+      <th>Eval type</th>
+      <th>Expected output</th>
+      <th>Tokens (input/output)</th>
+      <th>Cost</th>
+      <th>Passed?</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @eval_result.prompt_executions.each do |prompt_execution| %>
+      <tr>
+        <td><pre><%= JSON.pretty_generate prompt_execution.variables %></pre></td>
+        <td>
+          <ul>
+            <% prompt_execution.files.each do |file| %>
+              <li>
+                <% if file.previewable? %>
+                  <%= image_tag main_app.url_for(file.preview(resize_to_limit: [400, 400]).processed) %>
+                <% elsif file.variable? %>
+                  <%= image_tag main_app.url_for(file.variant(resize_to_limit: [400, 400]).processed) %>
+                <% else %>
+                  <%= link_to file.filename, main_app.url_for(file) %>
+                <% end %>
+                <div><%= link_to file.filename, main_app.rails_blob_path(file, disposition: "attachment") %> (<%= number_to_human_size(file.byte_size) %>)</div>
+              </li>
+            <% end %>
+          </ul>
+        </td>
+        <td><%= prompt_execution.message %></td>
+        <td><%= prompt_execution.eval_type %></td>
+        <td><%= prompt_execution.expected_output %></td>
+        <td><%= prompt_execution.input %>/<%= prompt_execution.output %></td>
+        <td>$<%= prompt_execution.cost %></td>
+        <td><%= prompt_execution.passed.nil? ? "N/A" : (prompt_execution.passed? ? "🟢" : "🔴") %></td>
+        <td>
+          <% if prompt_execution.eval_example.human? %>
+            <%= button_to "Toggle", toggle_prompt_eval_result_prompt_execution_path(@prompt, @eval_result, prompt_execution), method: :patch, class: "button" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="mt-6 buttons">
+  <%= link_to "Back to eval results", prompt_eval_results_path(@eval_result.prompt), class: "button" %>
+  <%= button_to "Destroy this eval result", [@eval_result.prompt, @eval_result], method: :delete, class: "button is-danger" %>
+</div>

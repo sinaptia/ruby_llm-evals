@@ -1,0 +1,34 @@
+<% content_for :title, "Prompts" %>
+
+<h1 class="title">
+  <div class="level">
+    <div class="level-left">
+      Prompts
+    </div>
+    <div class="level-right">
+      <%= link_to "New prompt", new_prompt_path, class: "button is-link" %>
+    </div>
+  </div>
+</h1>
+
+<% if @prompts.records.any? %>
+  <table class="table is-hoverable is-fullwidth">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Provider/Model</th>
+        <th>Instructions</th>
+        <th>Message</th>
+        <th>Eval results</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "prompt_bench/prompts/prompt", collection: @prompts.records %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="mt-6 has-text-centered is-size-4 has-text-grey">There are no prompts</div>
+<% end %>
+
+<%= render "prompt_bench/application/pagination", page: @prompts %>

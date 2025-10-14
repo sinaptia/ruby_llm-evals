@@ -1,0 +1,30 @@
+<% content_for :title, "Eval results" %>
+
+<h1 class="title">Eval results</h1>
+
+<% if @eval_results.records.any? %>
+  <table class="table is-hoverable is-fullwidth">
+    <thead>
+      <tr>
+        <th>Eval result</th>
+        <th>Prompt</th>
+        <th>Provider/Model</th>
+        <th>Instructions</th>
+        <th>Message</th>
+        <th>Started at</th>
+        <th>Ended at</th>
+        <th>Duration</th>
+        <th>Accuracy</th>
+        <th>Cost</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: "prompt_bench/eval_results/eval_result", collection: @eval_results.records %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="mt-6 has-text-centered is-size-4 has-text-grey">There are no eval results</div>
+<% end %>
+
+<%= render "prompt_bench/application/pagination", page: @eval_results %>

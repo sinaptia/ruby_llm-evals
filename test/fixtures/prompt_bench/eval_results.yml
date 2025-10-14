@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  prompt: one
+  started_at: 2025-10-09 14:39:51
+  ended_at: 2025-10-09 14:39:51
+
+two:
+  prompt: two
+  started_at: 2025-10-09 14:39:51
+  ended_at: 2025-10-09 14:39:51

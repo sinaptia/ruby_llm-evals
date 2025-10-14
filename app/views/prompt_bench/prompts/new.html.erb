@@ -1,0 +1,11 @@
+<% content_for :title, "New prompt" %>
+
+<h1 class="title">New prompt</h1>
+
+<%= render "form", prompt: @prompt %>
+
+<br>
+
+<div>
+  <%= link_to "Back to prompts", prompts_path %>
+</div>
