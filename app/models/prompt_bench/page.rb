@@ -43,8 +43,9 @@ module PromptBench
     end
 
     private
-      def offset
-        (index - 1) * page_size
-      end
+
+    def offset
+      (index - 1) * page_size
+    end
   end
 end

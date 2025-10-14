@@ -4,7 +4,7 @@
   <td><%= truncate prompt.instructions %></td>
   <td><%= truncate prompt.message %></td>
   <td>
-    <%= link_to pluralize(prompt.eval_results.count, "eval result"), prompt_eval_results_path(prompt) %>
+    <%= link_to pluralize(prompt.eval_results.count, "eval result"), eval_results_path(filter: { prompt_bench_prompt_id: prompt.id }) %>
   </td>
   <td>
     <div class="buttons is-right">

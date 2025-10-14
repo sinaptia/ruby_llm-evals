@@ -1,0 +1,6 @@
+<div class="tabs is-boxed">
+  <ul>
+    <li class="<%= "is-active" if controller_name == "prompts" %>"><%= link_to "Prompts", prompts_path %></li>
+    <li class="<%= "is-active" if controller_name == "eval_results" %>"><%= link_to "Eval results", eval_results_path %></li>
+  </ul>
+</div>

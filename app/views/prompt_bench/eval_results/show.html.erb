@@ -89,7 +89,7 @@
         <td><%= prompt_execution.passed.nil? ? "N/A" : (prompt_execution.passed? ? "🟢" : "🔴") %></td>
         <td>
           <% if prompt_execution.eval_example.human? %>
-            <%= button_to "Toggle", toggle_prompt_eval_result_prompt_execution_path(@prompt, @eval_result, prompt_execution), method: :patch, class: "button" %>
+            <%= button_to "Toggle", toggle_prompt_execution_path(prompt_execution), method: :patch, class: "button" %>
           <% end %>
         </td>
       </tr>
@@ -98,6 +98,5 @@
 </table>
 
 <div class="mt-6 buttons">
-  <%= link_to "Back to eval results", prompt_eval_results_path(@eval_result.prompt), class: "button" %>
-  <%= button_to "Destroy this eval result", [@eval_result.prompt, @eval_result], method: :delete, class: "button is-danger" %>
+  <%= button_to "Destroy this eval result", @eval_result, method: :delete, class: "button is-danger" %>
 </div>
