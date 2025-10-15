@@ -1,13 +1,23 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+one:
+  prompt: one
+  eval_type: exact
+  expected_output: car
+  variables: {}
 
-# one:
-#   prompt: one
-#   eval_type: MyString
-#   expected_output: MyText
-#   variables: MyText
+two:
+  prompt: two
+  eval_type: contains
+  expected_output: "Rails"
+  variables: { "text": "Ruby on Rails is a web framework written in Ruby" }
 
-# two:
-#   prompt: two
-#   eval_type: MyString
-#   expected_output: MyText
-#   variables: MyText
+three:
+  prompt: three
+  eval_type: regex
+  expected_output: "(positive|negative|neutral)"
+  variables: { "text": "This product is amazing! I love it." }
+
+four:
+  prompt: three
+  eval_type: human
+  expected_output: null
+  variables: { "text": "The weather is nice today." }

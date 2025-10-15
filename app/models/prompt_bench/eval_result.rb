@@ -13,6 +13,8 @@ module PromptBench
     scope :finished, -> { where.not(ended_at: nil) }
 
     def accuracy
+      return 0.0 if prompt_executions.count.zero?
+
       (prompt_executions.where(passed: true).count * 100.0 / prompt_executions.count).round 2
     end
 

@@ -1,0 +1,40 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<OLLAMA_API_BASE>/chat/completions"
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma3","messages":[{"role":"system","content":"You are a
+        summarization expert."},{"role":"user","content":"Summarize the following
+        text in one sentence: Ruby on Rails is a web framework written in Ruby"}],"stream":false}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 15 Oct 2025 21:10:38 GMT
+      Content-Length:
+      - '487'
+    body:
+      encoding: UTF-8
+      string: '{"id":"chatcmpl-717","object":"chat.completion","created":1760562638,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Ruby
+        on Rails is a popular web framework built using the Ruby programming language.
+        \n\n---\n\nDo you want me to summarize something else, or would you like me
+        to explain a specific aspect of summarization?"},"finish_reason":"stop"}],"usage":{"prompt_tokens":40,"completion_tokens":43,"total_tokens":83}}
+
+        '
+  recorded_at: Wed, 15 Oct 2025 21:10:38 GMT
+recorded_with: VCR 6.3.1

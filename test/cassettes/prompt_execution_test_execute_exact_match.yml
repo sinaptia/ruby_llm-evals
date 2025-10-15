@@ -1,0 +1,39 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<OLLAMA_API_BASE>/chat/completions"
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma3","messages":[{"role":"system","content":"You are an
+        image classification expert. Categorize images accurately based on their content."},{"role":"user","content":"Please
+        categorize this image into one of the following categories: car, landscape,
+        person, animal, building, or other. Respond with just the category name."}],"stream":false}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 15 Oct 2025 21:10:44 GMT
+      Content-Length:
+      - '349'
+    body:
+      encoding: UTF-8
+      string: '{"id":"chatcmpl-647","object":"chat.completion","created":1760562644,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Please
+        provide me with the image! I need to see it to categorize it."},"finish_reason":"stop"}],"usage":{"prompt_tokens":61,"completion_tokens":17,"total_tokens":78}}
+
+        '
+  recorded_at: Wed, 15 Oct 2025 21:10:44 GMT
+recorded_with: VCR 6.3.1

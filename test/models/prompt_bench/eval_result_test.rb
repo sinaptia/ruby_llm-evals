@@ -2,8 +2,104 @@ require "test_helper"
 
 module PromptBench
   class EvalResultTest < ActiveSupport::TestCase
-    # test "the truth" do
-    #   assert true
-    # end
+    test "should be valid with all required attributes" do
+      result = EvalResult.new(
+        prompt: prompt_bench_prompts(:one),
+        active_job_id: "test-job-id",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test message"
+      )
+      assert result.valid?
+    end
+
+    test "should require active_job_id" do
+      result = EvalResult.new(
+        prompt: prompt_bench_prompts(:one),
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test message"
+      )
+      assert_not result.valid?
+    end
+
+    test "should require provider when manually set" do
+      result = prompt_bench_eval_results(:one)
+      result.provider = nil
+      assert_not result.valid?
+    end
+
+    test "should require model when manually set" do
+      result = prompt_bench_eval_results(:one)
+      result.model = nil
+      assert_not result.valid?
+    end
+
+    test "should require message when manually set" do
+      result = prompt_bench_eval_results(:one)
+      result.message = nil
+      assert_not result.valid?
+    end
+
+    test "should copy prompt attributes on create" do
+      prompt = prompt_bench_prompts(:one)
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-job-id-new"
+      )
+
+      assert_equal prompt.provider, result.provider
+      assert_equal prompt.model, result.model
+      assert_equal prompt.message, result.message
+      assert_equal prompt.instructions, result.instructions
+    end
+
+    test "finished? should return true when ended_at is present" do
+      result = prompt_bench_eval_results(:one)
+      assert result.finished?
+    end
+
+    test "finished? should return false when ended_at is nil" do
+      result = prompt_bench_eval_results(:two)
+      assert_not result.finished?
+    end
+
+    test "accuracy should calculate percentage of passed executions" do
+      result = prompt_bench_eval_results(:one)
+
+      assert_equal 100.0, result.accuracy
+    end
+
+    test "accuracy should handle multiple executions" do
+      result = prompt_bench_eval_results(:three)
+
+      expected_accuracy = (1 * 100.0 / 2).round(2)
+      assert_equal expected_accuracy, result.accuracy
+    end
+
+    test "cost should sum all execution costs" do
+      result = prompt_bench_eval_results(:one)
+
+      expected_cost = result.prompt_executions.sum(&:cost)
+      assert_equal expected_cost, result.cost
+    end
+
+    test "cost should return 0.0 when no executions" do
+      result = EvalResult.create(
+        prompt: prompt_bench_prompts(:one),
+        active_job_id: "test-no-executions"
+      )
+
+      assert_equal 0.0, result.cost
+    end
+
+    test "accuracy should return 0.0 when no executions" do
+      result = EvalResult.create(
+        prompt: prompt_bench_prompts(:one),
+        active_job_id: "test-no-executions-accuracy"
+      )
+
+      assert_equal 0.0, result.accuracy
+    end
   end
 end

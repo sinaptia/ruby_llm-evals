@@ -18,7 +18,7 @@ module PromptBench
 
     def destroy
       @eval_result.destroy!
-      redirect_to prompt_eval_results_path(@prompt), notice: "Eval result was successfully destroyed.", status: :see_other
+      redirect_to prompt_eval_results_path(@eval_result.prompt), notice: "Eval result was successfully destroyed.", status: :see_other
     end
 
     private

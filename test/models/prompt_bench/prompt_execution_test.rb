@@ -2,8 +2,152 @@ require "test_helper"
 
 module PromptBench
   class PromptExecutionTest < ActiveSupport::TestCase
-    # test "the truth" do
-    #   assert true
-    # end
+    test "should be valid with required attributes" do
+      execution = PromptExecution.new(
+        eval_example: prompt_bench_eval_examples(:one),
+        eval_result: prompt_bench_eval_results(:one),
+        eval_type: "exact",
+        expected_output: "test",
+        message: "test"
+      )
+      assert execution.valid?
+    end
+
+    test "should require eval_type when manually set" do
+      execution = prompt_bench_prompt_executions(:one)
+      execution.eval_type = nil
+      assert_not execution.valid?
+    end
+
+    test "should copy eval_example attributes on create" do
+      # Test via fixtures - the fixture should have copied attributes from eval_example
+      execution = prompt_bench_prompt_executions(:one)
+      example = execution.eval_example
+
+      assert_equal example.eval_type, execution.eval_type
+      assert_equal example.expected_output, execution.expected_output
+      assert_equal example.variables, execution.variables
+    end
+
+    test "input_message should return message with variables substituted" do
+      execution = prompt_bench_prompt_executions(:two)
+
+      # Fixture has message template: "Summarize the following text in one sentence: {{text}}"
+      # and variables: { "text": "Ruby on Rails is a web framework written in Ruby" }
+      expected = "Summarize the following text in one sentence: Ruby on Rails is a web framework written in Ruby"
+
+      assert_equal expected, execution.input_message
+    end
+
+    test "input_message should return message unchanged when no variables" do
+      execution = prompt_bench_prompt_executions(:one)
+
+      # Fixture has no variables
+      expected = execution.eval_result.message
+
+      assert_equal expected, execution.input_message
+    end
+
+    test "input_message should handle nil variables" do
+      execution = prompt_bench_prompt_executions(:one)
+
+      # Fixture has no variables
+      expected = execution.eval_result.message
+      assert_equal expected, execution.input_message
+    end
+
+    test "cost should return 0.0 for local providers" do
+      execution = prompt_bench_prompt_executions(:two)
+
+      assert_equal "ollama", execution.eval_result.provider
+      assert_equal 0.0, execution.cost
+    end
+
+    test "cost should calculate correctly for paid API providers" do
+      execution = prompt_bench_prompt_executions(:one)
+
+      # Fixture has gemini provider with input: 1500, output: 20
+      assert_equal "gemini", execution.eval_result.provider
+      assert_equal 1500, execution.input
+      assert_equal 20, execution.output
+
+      # Cost should be calculated based on gemini pricing
+      assert execution.cost > 0.0
+    end
+
+    test "cost should return 0.0 when input and output are nil" do
+      execution = PromptExecution.new(
+        eval_example: prompt_bench_eval_examples(:one),
+        eval_result: prompt_bench_eval_results(:one),
+        eval_type: "exact",
+        expected_output: "test",
+        message: "test",
+        input: nil,
+        output: nil
+      )
+
+      assert_equal 0.0, execution.cost
+    end
+
+    test "should track input tokens" do
+      execution = prompt_bench_prompt_executions(:one)
+
+      assert_not_nil execution.input
+      assert execution.input > 0
+    end
+
+    test "should track output tokens" do
+      execution = prompt_bench_prompt_executions(:one)
+
+      assert_not_nil execution.output
+      assert execution.output > 0
+    end
+
+    test "execute should create prompt execution with API response" do
+      VCR.use_cassette("prompt_execution_test_execute_exact_match") do
+        eval_example = prompt_bench_eval_examples(:one)
+        eval_result = prompt_bench_eval_results(:one)
+
+        assert_difference "PromptExecution.count", 1 do
+          PromptExecution.execute(eval_example:, eval_result:)
+        end
+
+        execution = PromptExecution.last
+        assert_equal eval_example, execution.eval_example
+        assert_equal eval_result, execution.eval_result
+        assert_not_nil execution.message
+        assert_not_nil execution.input
+        assert_not_nil execution.output
+      end
+    end
+
+    test "execute should copy variables from eval_example" do
+      VCR.use_cassette("prompt_execution_test_execute_with_variables") do
+        eval_example = prompt_bench_eval_examples(:two)
+        eval_result = prompt_bench_eval_results(:two)
+
+        PromptExecution.execute(eval_example:, eval_result:)
+
+        execution = PromptExecution.last
+        assert_equal eval_example.variables, execution.variables
+      end
+    end
+
+    test "should copy file attachments from eval_example on create" do
+      eval_example = prompt_bench_eval_examples(:one)
+      eval_result = prompt_bench_eval_results(:one)
+
+      # Attach a file to eval_example
+      eval_example.files.attach(
+        io: StringIO.new("test file content"),
+        filename: "test.txt",
+        content_type: "text/plain"
+      )
+
+      execution = PromptExecution.create(eval_example:, eval_result:)
+
+      assert_equal eval_example.files.count, execution.files.count
+      assert_equal "test.txt", execution.files.first.filename.to_s
+    end
   end
 end
