@@ -40,6 +40,22 @@ end
 ![eval_results](./assets/eval_results.png)
 ![eval_result](./assets/eval_result.png)
 
+## Configuration
+
+### Authentication and authorization
+
+PromptBench leaves authentication and authorization to the user. If no authentication is enforced, `/prompt_bench` will be available to everyone.
+
+By default, PromptBench controllers inherit from the host app's `ApplicationController`. So if you implemented authentication and authorization in your `ApplicationController` you're all set. However, if you need to change the base class of the controller (for example if you want to restrict access to admin users), you need to set the `base_controller_class`:
+
+```ruby
+# in config/initializers/prompt_bench.rb
+
+PromptBench.configure do |config|
+  config.base_controller_class = "AdminController"
+end
+```
+
 ## Usage
 
 ### Workflow

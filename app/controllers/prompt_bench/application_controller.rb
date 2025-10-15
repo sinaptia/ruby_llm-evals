@@ -1,4 +1,4 @@
 module PromptBench
-  class ApplicationController < ActionController::Base
+  class ApplicationController < PromptBench.base_controller_class.constantize
   end
 end
