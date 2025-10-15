@@ -1,17 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  slug: MyString
-  provider: MyString
-  model: MyString
-  instructions: MyText
-  message: MyText
+# one:
+#   name: MyString
+#   slug: MyString
+#   provider: MyString
+#   model: MyString
+#   instructions: MyText
+#   message: MyText
 
-two:
-  name: MyString
-  slug: MyString
-  provider: MyString
-  model: MyString
-  instructions: MyText
-  message: MyText
+# two:
+#   name: MyString
+#   slug: MyString
+#   provider: MyString
+#   model: MyString
+#   instructions: MyText
+#   message: MyText

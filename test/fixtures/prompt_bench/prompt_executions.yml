@@ -1,17 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  eval_example: one
-  eval_result: one
-  input: 1
-  output: 1
-  message: MyText
-  passed: false
+# one:
+#   eval_example: one
+#   eval_result: one
+#   input: 1
+#   output: 1
+#   message: MyText
+#   passed: false
 
-two:
-  eval_example: two
-  eval_result: two
-  input: 1
-  output: 1
-  message: MyText
-  passed: false
+# two:
+#   eval_example: two
+#   eval_result: two
+#   input: 1
+#   output: 1
+#   message: MyText
+#   passed: false

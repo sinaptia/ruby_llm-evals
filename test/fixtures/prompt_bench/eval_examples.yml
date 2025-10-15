@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  prompt: one
-  eval_type: MyString
-  expected_output: MyText
-  variables: MyText
+# one:
+#   prompt: one
+#   eval_type: MyString
+#   expected_output: MyText
+#   variables: MyText
 
-two:
-  prompt: two
-  eval_type: MyString
-  expected_output: MyText
-  variables: MyText
+# two:
+#   prompt: two
+#   eval_type: MyString
+#   expected_output: MyText
+#   variables: MyText

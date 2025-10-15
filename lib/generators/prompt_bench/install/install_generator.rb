@@ -1,12 +1,19 @@
 module PromptBench
   class InstallGenerator < Rails::Generators::Base
+    include Rails::Generators::Migration
+
     source_root File.expand_path("templates", __dir__)
 
+    def self.next_migration_number(dirname)
+      next_migration_number = current_migration_number(dirname) + 1
+      ActiveRecord::Migration.next_migration_number(next_migration_number)
+    end
+
     def create_migrations
-      generate "migration", "CreatePromptBenchPrompts", "name:string!:uniq slug:string!:uniq provider:string! model:string! instructions:text message:text!", "--force"
-      generate "migration", "CreatePromptBenchEvalExamples", "prompt_bench_prompt:references eval_type:string! expected_output:text variables:json", "--force"
-      generate "migration", "CreatePromptBenchEvalResults", "prompt_bench_prompt:references active_job_id:string! started_at:timestamp ended_at:timestamp provider:string! model:string! instructions:text message:text!", "--force"
-      generate "migration", "CreatePromptBenchPromptExecutions", "prompt_bench_eval_example:references prompt_bench_eval_result:references eval_type:string! expected_output:text variables:json input:integer output:integer message:text passed:boolean", "--force"
+      migration_template "db/migrate/create_prompt_bench_prompts.rb", "db/migrate/create_prompt_bench_prompts.rb"
+      migration_template "db/migrate/create_prompt_bench_eval_examples.rb", "db/migrate/create_prompt_bench_eval_examples.rb"
+      migration_template "db/migrate/create_prompt_bench_eval_results.rb", "db/migrate/create_prompt_bench_eval_results.rb"
+      migration_template "db/migrate/create_prompt_bench_prompt_executions.rb", "db/migrate/create_prompt_bench_prompt_executions.rb"
     end
   end
 end
