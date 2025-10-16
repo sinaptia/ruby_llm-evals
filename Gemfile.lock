@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     prompt_bench (0.1.0)
-      importmap-rails (~> 2.2)
+      importmap-rails
       rails (>= 7.0.0)
       ruby_llm
       stimulus-rails
