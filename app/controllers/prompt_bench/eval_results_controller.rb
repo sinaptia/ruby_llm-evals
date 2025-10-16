@@ -29,7 +29,7 @@ module PromptBench
     helper_method :filter_param
 
     def set_eval_result
-      @eval_result = EvalResult.find params.expect(:id)
+      @eval_result = EvalResult.find params[:id]
     end
 
     def set_filters
@@ -39,7 +39,7 @@ module PromptBench
     end
 
     def set_prompt
-      @prompt = Prompt.find params.expect(:prompt_id)
+      @prompt = Prompt.find params[:prompt_id]
     end
   end
 end

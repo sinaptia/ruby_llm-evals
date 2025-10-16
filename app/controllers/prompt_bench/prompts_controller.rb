@@ -42,7 +42,7 @@ module PromptBench
     private
 
     def set_prompt
-      @prompt = Prompt.find(params.expect(:id))
+      @prompt = Prompt.find(params[:id])
     end
 
     def prompt_params

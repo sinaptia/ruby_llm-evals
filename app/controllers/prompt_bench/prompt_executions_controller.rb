@@ -11,7 +11,7 @@ module PromptBench
     private
 
     def set_prompt_execution
-      @prompt_execution = PromptExecution.find params.expect(:id)
+      @prompt_execution = PromptExecution.find params[:id]
     end
   end
 end
