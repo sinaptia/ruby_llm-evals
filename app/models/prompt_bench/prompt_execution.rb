@@ -13,11 +13,13 @@ module PromptBench
     before_validation :set_eval_example_attributes, on: :create
 
     def self.execute(eval_example:, eval_result:)
-      chat = eval_example.prompt.to_chat
-
       prompt_execution = create(eval_example:, eval_result:)
 
-      response = chat.ask prompt_execution.input_message, with: prompt_execution.files.map(&:blob)
+      response = PromptExecutor.execute(
+        eval_example.prompt.slug,
+        variables: prompt_execution.variables,
+        files: prompt_execution.files.map(&:blob)
+      )
 
       passed = case prompt_execution.eval_type
       when "contains" then response.content.chomp.include?(prompt_execution.expected_output)
@@ -42,12 +44,6 @@ module PromptBench
       output_cost = output / 1_000_000.0 * model.output_price_per_million
 
       (input_cost + output_cost).round(4)
-    end
-
-    def input_message
-      eval_result.message.dup.tap do |message|
-        variables.try(:each) { |k, v| message.gsub! "{{#{k}}}", v }
-      end
     end
 
     private

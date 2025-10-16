@@ -1,0 +1,36 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<OLLAMA_API_BASE>/chat/completions"
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma3","messages":[{"role":"system","content":"You are a
+        summarization expert."},{"role":"user","content":"Summarize the following
+        text in one sentence: This is a long text that needs to be summarized."}],"stream":false}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 16 Oct 2025 19:42:26 GMT
+      Content-Length:
+      - '568'
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJpZCI6ImNoYXRjbXBsLTQzNSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbiIsImNyZWF0ZWQiOjE3NjA2NDM3NDYsIm1vZGVsIjoiZ2VtbWEzIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfb2xsYW1hIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsIm1lc3NhZ2UiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiJPa2F5LCBoZXJl4oCZcyBhIG9uZS1zZW50ZW5jZSBzdW1tYXJ5IG9mIHRoZSBwcm92aWRlZCB0ZXh0OlxuXG7igJxUaGlzIGxlbmd0aHkgdGV4dCByZXF1aXJlcyBhIGNvbmNpc2Ugc3VtbWFyeSB0byBjYXB0dXJlIGl0cyBjb3JlIGNvbnRlbnQu4oCdIFxuXG4tLS1cblxuV291bGQgeW91IGxpa2UgbWUgdG8gc3VtbWFyaXplIGEgZGlmZmVyZW50IHRleHQsIG9yIHBlcmhhcHMgcHJvdmlkZSB5b3Ugd2l0aCBzb21lIHRpcHMgb24gaG93IHRvIHdyaXRlIGVmZmVjdGl2ZSBzdW1tYXJpZXMgeW91cnNlbGY/In0sImZpbmlzaF9yZWFzb24iOiJzdG9wIn1dLCJ1c2FnZSI6eyJwcm9tcHRfdG9rZW5zIjo0MSwiY29tcGxldGlvbl90b2tlbnMiOjYwLCJ0b3RhbF90b2tlbnMiOjEwMX19Cg==
+  recorded_at: Thu, 16 Oct 2025 19:42:26 GMT
+recorded_with: VCR 6.3.1

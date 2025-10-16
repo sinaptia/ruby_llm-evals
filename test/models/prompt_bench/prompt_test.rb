@@ -89,22 +89,5 @@ module PromptBench
       prompt.valid?
       assert_equal "test-prompt-with-special-characters", prompt.slug
     end
-
-    test "to_chat should create RubyLLM chat object with model and provider" do
-      prompt = prompt_bench_prompts(:one)
-      chat = prompt.to_chat
-
-      assert_instance_of RubyLLM::Chat, chat
-      assert_equal prompt.model.downcase, chat.model.name.downcase
-    end
-
-    test "to_chat should work without instructions" do
-      prompt = prompt_bench_prompts(:three)
-      chat = prompt.to_chat
-
-      assert_nil prompt.instructions
-      # Just verify the chat was created successfully without instructions
-      assert_instance_of RubyLLM::Chat, chat
-    end
   end
 end

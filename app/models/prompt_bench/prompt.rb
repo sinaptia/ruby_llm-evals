@@ -13,16 +13,10 @@ module PromptBench
 
     before_validation :set_slug
 
-    def to_chat
-      RubyLLM.chat(model:, provider:).tap do |chat|
-        chat.with_instructions(instructions) if instructions.present?
-      end
-    end
-
     private
 
     def set_slug
-      self.slug = name.try &:parameterize
+      self.slug = name&.parameterize
     end
   end
 end

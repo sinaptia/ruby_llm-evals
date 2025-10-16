@@ -1,0 +1,35 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<OLLAMA_API_BASE>/chat/completions"
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma3","messages":[{"role":"user","content":"No substitution
+        needed"}],"stream":false}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 16 Oct 2025 19:42:22 GMT
+      Content-Length:
+      - '467'
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJpZCI6ImNoYXRjbXBsLTc3MSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbiIsImNyZWF0ZWQiOjE3NjA2NDM3NDIsIm1vZGVsIjoiZ2VtbWEzIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfb2xsYW1hIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsIm1lc3NhZ2UiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiJPa2F5ISBKdXN0IGxldCBtZSBrbm93IHdoYXQgeW91IG5lZWQuIEknbSBoZXJlIHRvIGhlbHAgaW4gYW55IHdheSBJIGNhbiwgd2l0aG91dCBzdWJzdGl0dXRpbmcgYW55dGhpbmcuIPCfmIogXG5cbkRvIHlvdSBoYXZlIGEgcXVlc3Rpb24sIG5lZWQgbWUgdG8gd3JpdGUgc29tZXRoaW5nLCBvciBqdXN0IHdhbnQgdG8gY2hhdD8ifSwiZmluaXNoX3JlYXNvbiI6InN0b3AifV0sInVzYWdlIjp7InByb21wdF90b2tlbnMiOjEyLCJjb21wbGV0aW9uX3Rva2VucyI6NDgsInRvdGFsX3Rva2VucyI6NjB9fQo=
+  recorded_at: Thu, 16 Oct 2025 19:42:22 GMT
+recorded_with: VCR 6.3.1
