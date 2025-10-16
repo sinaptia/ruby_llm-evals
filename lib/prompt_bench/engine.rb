@@ -8,8 +8,12 @@ module PromptBench
 
     initializer "prompt_bench.assets" do |app|
       app.config.assets.paths << root.join("app/assets/stylesheets")
-      app.config.assets.paths << root.join("app/javascript")
-      app.config.assets.precompile += %w[prompt_bench_manifest]
+      app.config.assets.paths << root.join("app/assets/images")
+
+      app.config.assets.precompile += %w[
+        prompt_bench/application.css
+        prompt_bench/bulma.min.css
+      ]
     end
 
     initializer "prompt_bench.importmap", after: "importmap" do |app|

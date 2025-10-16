@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column field">
       <%= form.label :variables, class: "label" %>
-      <%= form.textarea :variables, value: form.object.variables.to_json, class: "textarea" %>
+      <%= form.text_area :variables, value: form.object.variables.to_json, class: "textarea" %>
       <p class="help is-danger"><%= form.object.errors.full_messages_for(:variables).join(", ") %></p>
     </div>
 
@@ -16,7 +16,7 @@
 
     <div class="column field">
       <%= form.label :expected_output, class: "label" %>
-      <%= form.textarea :expected_output, class: "textarea" %>
+      <%= form.text_area :expected_output, class: "textarea" %>
       <p class="help is-danger"><%= form.object.errors.full_messages_for(:expected_output).join(", ") %></p>
     </div>
 
