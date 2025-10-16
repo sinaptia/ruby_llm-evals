@@ -16,11 +16,11 @@
     </tr>
     <tr>
       <th>Instructions</th>
-      <td><%= @prompt.instructions %></td>
+      <td style="white-space: pre-wrap;"><%= @prompt.instructions %></td>
     </tr>
     <tr>
       <th>Message</th>
-      <td><%= @prompt.message %></td>
+      <td style="white-space: pre-wrap;"><%= @prompt.message %></td>
     </tr>
   </tbody>
 </table>
@@ -39,7 +39,7 @@
   <tbody>
     <% @prompt.eval_examples.each do |eval_example| %>
       <tr>
-        <td><pre><%= eval_example.variables.to_json %></pre></td>
+        <td><pre><%= JSON.pretty_generate eval_example.variables %></pre></td>
         <td><%= eval_example.eval_type %></td>
         <td><%= eval_example.expected_output %></td>
         <td>
