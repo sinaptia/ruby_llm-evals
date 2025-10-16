@@ -24,12 +24,12 @@
 
   <div class="field">
     <%= form.label :instructions, class: "label" %>
-    <%= form.textarea :instructions, class: "textarea" %>
+    <%= form.text_area :instructions, class: "textarea" %>
   </div>
 
   <div class="field">
     <%= form.label :message, class: "label" %>
-    <%= form.textarea :message, class: "textarea" %>
+    <%= form.text_area :message, class: "textarea" %>
     <p class="help is-danger"><%= prompt.errors.full_messages_for(:message).join(", ") %></p>
   </div>
 
