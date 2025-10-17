@@ -1,0 +1,37 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<OLLAMA_API_BASE>/chat/completions"
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma3","messages":[{"role":"user","content":"Analyze the
+        sentiment of this text and respond with: positive, negative, or neutral. Text:
+        This is great!"}],"stream":false}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 16 Oct 2025 19:42:22 GMT
+      Content-Length:
+      - '290'
+    body:
+      encoding: UTF-8
+      string: '{"id":"chatcmpl-302","object":"chat.completion","created":1760643742,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Positive\n"},"finish_reason":"stop"}],"usage":{"prompt_tokens":32,"completion_tokens":3,"total_tokens":35}}
+
+        '
+  recorded_at: Thu, 16 Oct 2025 19:42:22 GMT
+recorded_with: VCR 6.3.1

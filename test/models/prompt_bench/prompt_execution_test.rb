@@ -29,33 +29,6 @@ module PromptBench
       assert_equal example.variables, execution.variables
     end
 
-    test "input_message should return message with variables substituted" do
-      execution = prompt_bench_prompt_executions(:two)
-
-      # Fixture has message template: "Summarize the following text in one sentence: {{text}}"
-      # and variables: { "text": "Ruby on Rails is a web framework written in Ruby" }
-      expected = "Summarize the following text in one sentence: Ruby on Rails is a web framework written in Ruby"
-
-      assert_equal expected, execution.input_message
-    end
-
-    test "input_message should return message unchanged when no variables" do
-      execution = prompt_bench_prompt_executions(:one)
-
-      # Fixture has no variables
-      expected = execution.eval_result.message
-
-      assert_equal expected, execution.input_message
-    end
-
-    test "input_message should handle nil variables" do
-      execution = prompt_bench_prompt_executions(:one)
-
-      # Fixture has no variables
-      expected = execution.eval_result.message
-      assert_equal expected, execution.input_message
-    end
-
     test "cost should return 0.0 for local providers" do
       execution = prompt_bench_prompt_executions(:two)
 

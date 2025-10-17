@@ -17,8 +17,7 @@ module PromptBench
         value
       end
       super(parsed_value)
-    rescue JSON::ParserError => e
-      # Store invalid JSON as-is; validation can catch it if needed
+    rescue JSON::ParserError
       super(value)
     end
   end

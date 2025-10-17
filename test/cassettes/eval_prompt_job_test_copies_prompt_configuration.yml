@@ -26,14 +26,14 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 15 Oct 2025 21:10:40 GMT
+      - Thu, 16 Oct 2025 19:42:18 GMT
       Content-Length:
       - '356'
     body:
       encoding: UTF-8
-      string: '{"id":"chatcmpl-682","object":"chat.completion","created":1760562640,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Please
+      string: '{"id":"chatcmpl-261","object":"chat.completion","created":1760643738,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Please
         provide me with the image! I need to see the image to categorize it."},"finish_reason":"stop"}],"usage":{"prompt_tokens":61,"completion_tokens":18,"total_tokens":79}}
 
         '
-  recorded_at: Wed, 15 Oct 2025 21:10:40 GMT
+  recorded_at: Thu, 16 Oct 2025 19:42:18 GMT
 recorded_with: VCR 6.3.1

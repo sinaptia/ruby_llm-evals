@@ -116,10 +116,61 @@ Then you iterate over the prompt trying to find the best configuration possible.
 
 #### Using the prompt
 
-You can use the prompt with your data and use the result to your convenience.
+Once you've tested and refined your prompt, you can use it in your application code.
 
-> [!NOTE]
-> API not yet defined.
+##### Execute prompts by slug
+
+Execute prompts by their slug to get a response object with content and metadata:
+
+```ruby
+# Simple execution without variables
+response = PromptBench::Prompt.execute("image-categorization")
+response.content  # => "landscape"
+
+# With variables
+response = PromptBench::Prompt.execute(
+  "text-summarization",
+  variables: { "text" => "Long article content here..." }
+)
+response.content  # => "Brief summary of the article"
+
+# With file attachments
+response = PromptBench::Prompt.execute(
+  "image-categorization",
+  files: [image.attachment.blob]
+)
+response.content  # => "person"
+
+# Access token counts and metadata
+response = PromptBench::Prompt.execute(
+  "sentiment-analysis",
+  variables: { "text" => "I love this product!" }
+)
+response.content        # => "positive"
+response.input_tokens   # => 25
+response.output_tokens  # => 3
+```
+
+You can also execute a prompt directly on a Prompt instance:
+
+```ruby
+prompt = PromptBench::Prompt.find_by(slug: "sentiment-analysis")
+response = prompt.execute(variables: { "text" => "I love this product!" })
+response.content  # => "positive"
+```
+
+##### Example: Batch processing
+
+```ruby
+Image.where(category: nil).find_each do |image|
+  response = PromptBench::Prompt.execute(
+    "image-categorization",
+    files: [image.attachment.blob]
+  )
+
+  image.update(category: response.content)
+end
+```
 
 ## Contributing
 
