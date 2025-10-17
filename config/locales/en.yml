@@ -1,0 +1,7 @@
+en:
+  activemodel:
+    errors:
+      messages:
+        invalid_json: "is invalid JSON"
+        must_be_json_object: "must be a JSON object"
+        must_be_json_array: "must be a JSON array"
