@@ -101,5 +101,77 @@ module PromptBench
 
       assert_equal 0.0, result.accuracy
     end
+
+    test "should copy temperature from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(temperature: 0.8)
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-temp-snapshot"
+      )
+
+      assert_equal 0.8, result.temperature
+    end
+
+    test "should copy params from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(params: { "max_tokens" => 500 })
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-params-snapshot"
+      )
+
+      assert_equal({ "max_tokens" => 500 }, result.params)
+    end
+
+    test "should copy tools from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(tools: [ "Weather", "Calculator" ])
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-tools-snapshot"
+      )
+
+      assert_equal [ "Weather", "Calculator" ], result.tools
+    end
+
+    test "should copy nil temperature from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(temperature: nil)
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-nil-temp-snapshot"
+      )
+
+      assert_nil result.temperature
+    end
+
+    test "should copy empty params from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(params: {})
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-empty-params-snapshot"
+      )
+
+      assert_equal({}, result.params)
+    end
+
+    test "should copy empty tools from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(tools: [])
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-empty-tools-snapshot"
+      )
+
+      assert_equal [], result.tools
+    end
   end
 end

@@ -25,10 +25,12 @@ module PromptBench
       chat = RubyLLM.chat(model: model, provider: provider)
       chat.with_instructions(instructions_text) if instructions_text.present?
       chat.with_temperature(temperature) if temperature.present?
-      chat.with_params(params) if params.present?
+      chat.with_params(**params) if params.present?
 
-      tool_classes = tools.map { _1.constantize rescue nil }.compact
-      chat.with_tools(*tool_classes) if tool_classes.present?
+      if tools.present?
+        tool_classes = tools.map { _1.constantize rescue nil }.compact
+        chat.with_tools(*tool_classes)
+      end
 
       chat.ask(message_text, with: files)
     end
