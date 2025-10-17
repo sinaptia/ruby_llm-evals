@@ -7,6 +7,9 @@ class CreatePromptBenchEvalResults < ActiveRecord::Migration[8.0]
       t.timestamp :ended_at
       t.string :provider, null: false
       t.string :model, null: false
+      t.float :temperature
+      t.json :params
+      t.json :tools
       t.text :instructions
       t.text :message
 
