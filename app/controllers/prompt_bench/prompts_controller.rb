@@ -22,7 +22,7 @@ module PromptBench
       if @prompt.save
         redirect_to @prompt, notice: "Prompt was successfully created."
       else
-        render :new, status: :unprocessable_content
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -30,7 +30,7 @@ module PromptBench
       if @prompt.update(prompt_params)
         redirect_to @prompt, notice: "Prompt was successfully updated.", status: :see_other
       else
-        render :edit, status: :unprocessable_content
+        render :edit, status: :unprocessable_entity
       end
     end
 
