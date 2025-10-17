@@ -11,6 +11,18 @@
       <td><%= @eval_result.provider %>/<%= @eval_result.model %></td>
     </tr>
     <tr>
+      <th>Temperature</th>
+      <td><%= @eval_result.temperature %></td>
+    </tr>
+    <tr>
+      <th>Params</th>
+      <td><pre><%= JSON.pretty_generate @eval_result.params %></pre></td>
+    </tr>
+    <tr>
+      <th>Tools</th>
+      <td><pre><%= JSON.pretty_generate @eval_result.tools %></pre></td>
+    </tr>
+    <tr>
       <th>Instructions</th>
       <td style="white-space: pre-wrap;"><%= @eval_result.instructions %></td>
     </tr>

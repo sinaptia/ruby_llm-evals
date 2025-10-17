@@ -5,6 +5,9 @@ class CreatePromptBenchPrompts < ActiveRecord::Migration[<%= ActiveRecord::Migra
       t.string :slug, null: false
       t.string :provider, null: false
       t.string :model, null: false
+      t.float :temperature
+      t.json :params
+      t.json :tools
       t.text :instructions
       t.text :message
 

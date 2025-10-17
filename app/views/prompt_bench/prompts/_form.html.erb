@@ -23,6 +23,21 @@
   </div>
 
   <div class="field">
+    <%= form.label :temperature, class: "label" %>
+    <%= form.number_field :temperature, min: 0, max: 1, step: 0.1, class: "input" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :params, class: "label" %>
+    <%= form.text_area :params, class: "textarea" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :tools, class: "label" %>
+    <%= form.text_area :tools, class: "textarea" %>
+  </div>
+
+  <div class="field">
     <%= form.label :instructions, class: "label" %>
     <%= form.text_area :instructions, class: "textarea" %>
   </div>

@@ -51,6 +51,9 @@ module PromptBench
         :slug,
         :provider,
         :model,
+        :temperature,
+        :params,
+        :tools,
         :instructions,
         :message,
         eval_examples_attributes: [ :id, :_destroy, :eval_type, :expected_output, :variables, files: [] ]

@@ -10,10 +10,10 @@ module PromptBench
     end
 
     def create_migrations
-      migration_template "db/migrate/create_prompt_bench_prompts.rb", "db/migrate/create_prompt_bench_prompts.rb"
-      migration_template "db/migrate/create_prompt_bench_eval_examples.rb", "db/migrate/create_prompt_bench_eval_examples.rb"
-      migration_template "db/migrate/create_prompt_bench_eval_results.rb", "db/migrate/create_prompt_bench_eval_results.rb"
-      migration_template "db/migrate/create_prompt_bench_prompt_executions.rb", "db/migrate/create_prompt_bench_prompt_executions.rb"
+      migration_template "db/migrate/create_prompt_bench_prompts.rb", "db/migrate/create_prompt_bench_prompts.rb", force: true
+      migration_template "db/migrate/create_prompt_bench_eval_examples.rb", "db/migrate/create_prompt_bench_eval_examples.rb", force: true
+      migration_template "db/migrate/create_prompt_bench_eval_results.rb", "db/migrate/create_prompt_bench_eval_results.rb", force: true
+      migration_template "db/migrate/create_prompt_bench_prompt_executions.rb", "db/migrate/create_prompt_bench_prompt_executions.rb", force: true
     end
   end
 end
