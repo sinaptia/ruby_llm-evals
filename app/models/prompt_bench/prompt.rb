@@ -13,10 +13,33 @@ module PromptBench
 
     before_validation :set_slug
 
+    def self.execute(slug, variables: {}, files: [])
+      prompt = find_by!(slug: slug)
+      prompt.execute(variables: variables, files: files)
+    end
+
+    def execute(variables: {}, files: [])
+      message_text = substitute_variables(message, variables)
+      instructions_text = substitute_variables(instructions, variables) if instructions.present?
+
+      chat = RubyLLM.chat(model: model, provider: provider)
+      chat.with_instructions(instructions_text) if instructions_text.present?
+
+      chat.ask(message_text, with: files)
+    end
+
     private
 
     def set_slug
       self.slug = name&.parameterize
+    end
+
+    def substitute_variables(text, variables)
+      return text if text.blank? || variables.blank?
+
+      text.dup.tap do |result|
+        variables.each { |k, v| result.gsub!("{{#{k}}}", v.to_s) }
+      end
     end
   end
 end

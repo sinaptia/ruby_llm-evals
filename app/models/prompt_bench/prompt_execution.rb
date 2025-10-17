@@ -15,8 +15,7 @@ module PromptBench
     def self.execute(eval_example:, eval_result:)
       prompt_execution = create(eval_example:, eval_result:)
 
-      response = PromptExecutor.execute(
-        eval_example.prompt.slug,
+      response = eval_example.prompt.execute(
         variables: prompt_execution.variables,
         files: prompt_execution.files.map(&:blob)
       )
