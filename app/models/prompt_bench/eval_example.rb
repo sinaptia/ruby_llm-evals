@@ -9,16 +9,6 @@ module PromptBench
 
     validates :eval_type, presence: true
     validates :expected_output, presence: true, unless: ->(eval_example) { eval_example.human? }
-
-    def variables=(value)
-      parsed_value = if value.is_a?(String) && value.present?
-        JSON.parse(value)
-      else
-        value
-      end
-      super(parsed_value)
-    rescue JSON::ParserError
-      super(value)
-    end
+    validates :variables, json_object: true
   end
 end

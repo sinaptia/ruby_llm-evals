@@ -30,11 +30,13 @@
   <div class="field">
     <%= form.label :params, class: "label" %>
     <%= form.text_area :params, class: "textarea" %>
+    <p class="help is-danger"><%= prompt.errors.full_messages_for(:params).join(", ") %></p>
   </div>
 
   <div class="field">
     <%= form.label :tools, class: "label" %>
     <%= form.text_area :tools, class: "textarea" %>
+    <p class="help is-danger"><%= prompt.errors.full_messages_for(:tools).join(", ") %></p>
   </div>
 
   <div class="field">

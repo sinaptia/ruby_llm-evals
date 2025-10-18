@@ -8,8 +8,10 @@ module PromptBench
     validates :message, presence: true
     validates :model, presence: true
     validates :name, presence: true, uniqueness: true
+    validates :params, json_object: true
     validates :provider, presence: true
     validates :slug, presence: true, uniqueness: true
+    validates :tools, tools: true
 
     before_validation :set_slug
 
@@ -33,21 +35,6 @@ module PromptBench
       end
 
       chat.ask(message_text, with: files)
-    end
-
-    %i[params tools].each do |meth|
-      define_method :"#{meth}=" do |value|
-        begin
-          parsed_value = if value.is_a?(String) && value.present?
-            JSON.parse(value)
-          else
-            value
-          end
-          super(parsed_value)
-        rescue JSON::ParserError
-          super(value)
-        end
-      end
     end
 
     private

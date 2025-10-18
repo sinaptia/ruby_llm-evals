@@ -41,41 +41,45 @@
 
 <h2 class="mt-6 subtitle">Eval examples</h2>
 
-<table class="table is-fullwidth">
-  <thead>
-    <tr>
-      <th>Variables</th>
-      <th>Eval type</th>
-      <th>Expected output</th>
-      <th>Files</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @prompt.eval_examples.each do |eval_example| %>
+<% if @prompt.eval_examples.any? %>
+  <table class="table is-fullwidth">
+    <thead>
       <tr>
-        <td><pre><%= JSON.pretty_generate eval_example.variables %></pre></td>
-        <td><%= eval_example.eval_type %></td>
-        <td><%= eval_example.expected_output %></td>
-        <td>
-          <ul>
-            <% eval_example.files.each do |file| %>
-              <li>
-                <% if file.previewable? %>
-                  <%= image_tag main_app.url_for(file.preview(resize_to_limit: [400, 400]).processed) %>
-                <% elsif file.variable? %>
-                  <%= image_tag main_app.url_for(file.variant(resize_to_limit: [400, 400]).processed) %>
-                <% else %>
-                  <%= link_to file.filename, main_app.url_for(file) %>
-                <% end %>
-                <div><%= link_to file.filename, main_app.rails_blob_path(file, disposition: "attachment") %> (<%= number_to_human_size(file.byte_size) %>)</div>
-              </li>
-            <% end %>
-          </ul>
-        </td>
+        <th>Variables</th>
+        <th>Eval type</th>
+        <th>Expected output</th>
+        <th>Files</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @prompt.eval_examples.each do |eval_example| %>
+        <tr>
+          <td><pre><%= JSON.pretty_generate eval_example.variables %></pre></td>
+          <td><%= eval_example.eval_type %></td>
+          <td><%= eval_example.expected_output %></td>
+          <td>
+            <ul>
+              <% eval_example.files.each do |file| %>
+                <li>
+                  <% if file.previewable? %>
+                    <%= image_tag main_app.url_for(file.preview(resize_to_limit: [400, 400]).processed) %>
+                  <% elsif file.variable? %>
+                    <%= image_tag main_app.url_for(file.variant(resize_to_limit: [400, 400]).processed) %>
+                  <% else %>
+                    <%= link_to file.filename, main_app.url_for(file) %>
+                  <% end %>
+                  <div><%= link_to file.filename, main_app.rails_blob_path(file, disposition: "attachment") %> (<%= number_to_human_size(file.byte_size) %>)</div>
+                </li>
+              <% end %>
+            </ul>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="mt-6 has-text-centered is-size-4 has-text-grey">There are no eval examples</div>
+<% end %>
 
 <div class="mt-6 buttons">
   <%= link_to "Edit this prompt", edit_prompt_path(@prompt), class: "button" %>
