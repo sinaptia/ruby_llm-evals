@@ -70,6 +70,9 @@ A prompt represents an LLM prompt template with:
 * Model: see [available models](https://github.com/crmne/ruby_llm/blob/main/lib/ruby_llm/models.json). In case you're selecting a local provider (eg. Ollama), you can enter the model name in a text field.
 * Instructions: optional, the system prompt.
 * Message: message template.
+* Temperature: optional, controls randomness (0.0 to 1.0). Lower values make output more focused and deterministic.
+* Params: optional, additional provider-specific parameters as JSON (e.g., `{"max_tokens": 1000}`).
+* Tools: optional, array of tool class names that the LLM can use (e.g., `["Weather", "Calculator"]`). See how tools are defined in [RubyLLM](https://rubyllm.com/tools/).
 
 Both the instructions and the message template can contain variables that will be replaced at runtime. To add variables, enclose them with braces. Eg: `{{name}}`.
 
@@ -157,19 +160,6 @@ You can also execute a prompt directly on a Prompt instance:
 prompt = PromptBench::Prompt.find_by(slug: "sentiment-analysis")
 response = prompt.execute(variables: { "text" => "I love this product!" })
 response.content  # => "positive"
-```
-
-##### Example: Batch processing
-
-```ruby
-Image.where(category: nil).find_each do |image|
-  response = PromptBench::Prompt.execute(
-    "image-categorization",
-    files: [image.attachment.blob]
-  )
-
-  image.update(category: response.content)
-end
 ```
 
 ## Contributing

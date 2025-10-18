@@ -17,6 +17,18 @@
       <td><%= @prompt.model %></td>
     </tr>
     <tr>
+      <th>Temperature</th>
+      <td><%= @prompt.temperature %></td>
+    </tr>
+    <tr>
+      <th>Params</th>
+      <td><pre><%= JSON.pretty_generate @prompt.params %></pre></td>
+    </tr>
+    <tr>
+      <th>Tools</th>
+      <td><pre><%= JSON.pretty_generate @prompt.tools %></pre></td>
+    </tr>
+    <tr>
       <th>Instructions</th>
       <td style="white-space: pre-wrap;"><%= @prompt.instructions %></td>
     </tr>

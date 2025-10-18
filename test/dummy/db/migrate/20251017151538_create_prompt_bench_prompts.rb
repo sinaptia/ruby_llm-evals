@@ -5,12 +5,14 @@ class CreatePromptBenchPrompts < ActiveRecord::Migration[8.0]
       t.string :slug, null: false
       t.string :provider, null: false
       t.string :model, null: false
+      t.float :temperature
+      t.json :params
+      t.json :tools
       t.text :instructions
       t.text :message
 
       t.timestamps
     end
-
     add_index :prompt_bench_prompts, :name, unique: true
     add_index :prompt_bench_prompts, :slug, unique: true
   end

@@ -195,5 +195,138 @@ module PromptBench
         assert_respond_to response, :output_tokens
       end
     end
+
+    test "should parse tools from JSON string" do
+      prompt = Prompt.new(
+        name: "Tool Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        tools: '["Weather", "Calculator"]'
+      )
+      assert_equal [ "Weather", "Calculator" ], prompt.tools
+    end
+
+    test "should accept tools as array" do
+      prompt = Prompt.new(
+        name: "Tool Test Array",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        tools: [ "Weather", "Calculator" ]
+      )
+      assert_equal [ "Weather", "Calculator" ], prompt.tools
+    end
+
+    test "should handle invalid JSON for tools gracefully" do
+      prompt = Prompt.new(
+        name: "Invalid Tools",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        tools: "not valid json"
+      )
+      assert_equal "not valid json", prompt.tools
+    end
+
+    test "should accept empty tools array" do
+      prompt = Prompt.new(
+        name: "No Tools",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        tools: []
+      )
+      assert_equal [], prompt.tools
+    end
+
+    test "should parse params from JSON string" do
+      prompt = Prompt.new(
+        name: "Params Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        params: '{"max_tokens": 1000}'
+      )
+      assert_equal({ "max_tokens" => 1000 }, prompt.params)
+    end
+
+    test "should accept params as hash" do
+      prompt = Prompt.new(
+        name: "Params Test Hash",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        params: { "max_tokens" => 1000 }
+      )
+      assert_equal({ "max_tokens" => 1000 }, prompt.params)
+    end
+
+    test "should handle invalid JSON for params gracefully" do
+      prompt = Prompt.new(
+        name: "Invalid Params",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        params: "not valid json"
+      )
+      assert_equal "not valid json", prompt.params
+    end
+
+    test "should accept temperature as float" do
+      prompt = Prompt.new(
+        name: "Temperature Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        temperature: 0.7
+      )
+      assert_equal 0.7, prompt.temperature
+    end
+
+    test "should accept temperature as integer" do
+      prompt = Prompt.new(
+        name: "Temperature Test Int",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        temperature: 1
+      )
+      assert_equal 1.0, prompt.temperature
+    end
+
+    test ".execute should work with temperature" do
+      prompt = Prompt.create!(
+        name: "With Temperature",
+        slug: "with-temperature",
+        provider: "ollama",
+        model: "gemma3",
+        message: "Say hello",
+        temperature: 0.5
+      )
+
+      VCR.use_cassette("prompt_test_with_temperature") do
+        response = prompt.execute(variables: {})
+        assert_not_nil response
+        assert_not_nil response.content
+      end
+    end
+
+    test ".execute should work with params" do
+      prompt = Prompt.create!(
+        name: "With Params",
+        slug: "with-params",
+        provider: "ollama",
+        model: "gemma3",
+        message: "Say hello",
+        params: { "num_predict" => 50 }
+      )
+
+      VCR.use_cassette("prompt_test_with_params") do
+        response = prompt.execute(variables: {})
+        assert_not_nil response
+        assert_not_nil response.content
+      end
+    end
   end
 end
