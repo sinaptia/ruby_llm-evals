@@ -36,6 +36,8 @@ Rails.application.routes.draw do
 end
 ```
 
+Now you should be able to browse to `/prompt_bench/` and create, test, compare, and improve your LLM prompts. Continue reading to see out how a typical workflow looks like, and how you can leverage your app's data to add eval examples to your prompts.
+
 ![prompts](./assets/prompts.png)
 ![eval_results](./assets/eval_results.png)
 ![eval_result](./assets/eval_result.png)
