@@ -9,6 +9,5 @@ require "ruby_llm"
 module PromptBench
   include ActiveSupport::Configurable
 
-  config_accessor :base_controller_class, default: "ActionController::Base"
   config_accessor :importmap, default: Importmap::Map.new
 end
