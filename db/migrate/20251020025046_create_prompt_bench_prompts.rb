@@ -1,4 +1,4 @@
-class CreatePromptBenchPrompts < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+class CreatePromptBenchPrompts < ActiveRecord::Migration[7.0]
   def change
     create_table :prompt_bench_prompts do |t|
       t.string :name, null: false
