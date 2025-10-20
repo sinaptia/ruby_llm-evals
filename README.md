@@ -42,19 +42,48 @@ Now you should be able to browse to `/prompt_bench/` and create, test, compare, 
 ![eval_results](./assets/eval_results.png)
 ![eval_result](./assets/eval_result.png)
 
-## Configuration
-
 ### Authentication and authorization
 
 PromptBench leaves authentication and authorization to the user. If no authentication is enforced, `/prompt_bench` will be available to everyone.
 
-By default, PromptBench controllers inherit from the host app's `ApplicationController`. So if you implemented authentication and authorization in your `ApplicationController` you're all set. However, if you need to change the base class of the controller (for example if you want to restrict access to admin users), you need to set the `base_controller_class`:
+To enforce authentication, you can use route [constraints](https://guides.rubyonrails.org/routing.html#advanced-constraints), or set up a HTTP Basic auth middleware.
+
+For example, if you're using devise, you can do this:
 
 ```ruby
-# in config/initializers/prompt_bench.rb
+# config/routes.rb
+authenticate :user do
+  mount PromptBench::Engine, at: "/prompt_bench"
+end
+```
 
-PromptBench.configure do |config|
-  config.base_controller_class = "AdminController"
+See more examples [here](https://github.com/heartcombo/devise/wiki/How-To%3A-Define-resource-actions-that-require-authentication-using-routes.rb).
+
+However, if you're using Rails' default authentication generator, or an authentication solution that doesn't provide constraints, you need to roll out your own solution:
+
+```ruby
+# config/routes.rb
+constraints ->(request) { Constraints::Auth.authenticated?(request) } do
+  mount PromptBench::Engine, at: "/prompt_bench"
+end
+
+# lib/constraints/auth.rb
+class Constraints::Auth
+  def self.authenticated?(request)
+    cookies = ActionDispatch::Cookies::CookieJar.build(request, request.cookies)
+
+    Session.find_by id: cookies.signed[:session_id]
+  end
+end
+```
+
+You can also set up a HTTP Basic auth middleware in the engine:
+
+```ruby
+# config/initializers/prompt_bench.rb
+PromptBench::Engine.middleware.use(Rack::Auth::Basic) do |username, password|
+  ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.prompt_bench_username, username) &
+    ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.prompt_bench_password, password)
 end
 ```
 
@@ -79,7 +108,7 @@ A prompt represents an LLM prompt template with:
 Both the instructions and the message template can contain variables that will be replaced at runtime. To add variables, enclose them with braces. Eg: `{{name}}`.
 
 > [!NOTE]
-> In order to use a provider, you must have it configured in `config/initializer/ruby_llm.rb` as explained [here](https://rubyllm.com/configuration/#provider-configuration)
+> In order to use a provider, you must have it configured in `config/initializers/ruby_llm.rb` as explained [here](https://rubyllm.com/configuration/#provider-configuration)
 
 #### Add eval examples
 
