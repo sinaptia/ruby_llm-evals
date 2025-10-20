@@ -29,13 +29,15 @@
 
   <div class="field">
     <%= form.label :params, class: "label" %>
-    <%= form.text_area :params, class: "textarea" %>
+    <%= form.text_area :params, value: prompt.params&.to_json, class: "textarea" %>
     <p class="help is-danger"><%= prompt.errors.full_messages_for(:params).join(", ") %></p>
   </div>
 
   <div class="field">
     <%= form.label :tools, class: "label" %>
-    <%= form.text_area :tools, class: "textarea" %>
+    <div class="select is-multiple is-fullwidth">
+      <%= form.select :tools, options_for_select(available_tools, prompt.tools), {}, { multiple: true, size: 4 } %>
+    </div>
     <p class="help is-danger"><%= prompt.errors.full_messages_for(:tools).join(", ") %></p>
   </div>
 

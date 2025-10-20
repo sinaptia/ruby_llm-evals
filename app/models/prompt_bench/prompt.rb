@@ -8,10 +8,9 @@ module PromptBench
     validates :message, presence: true
     validates :model, presence: true
     validates :name, presence: true, uniqueness: true
-    validates :params, json_object: true
+    validates :params, json: true
     validates :provider, presence: true
     validates :slug, presence: true, uniqueness: true
-    validates :tools, tools: true
 
     before_validation :set_slug
 

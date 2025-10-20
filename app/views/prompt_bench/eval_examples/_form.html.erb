@@ -2,7 +2,7 @@
   <div class="columns">
     <div class="column field">
       <%= form.label :variables, class: "label" %>
-      <%= form.text_area :variables, value: form.object.variables.to_json, class: "textarea" %>
+      <%= form.text_area :variables, value: form.object.variables&.to_json, class: "textarea" %>
       <p class="help is-danger"><%= form.object.errors.full_messages_for(:variables).join(", ") %></p>
     </div>
 

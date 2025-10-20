@@ -9,6 +9,6 @@ module PromptBench
 
     validates :eval_type, presence: true
     validates :expected_output, presence: true, unless: ->(eval_example) { eval_example.human? }
-    validates :variables, json_object: true
+    validates :variables, json: true
   end
 end
