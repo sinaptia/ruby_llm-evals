@@ -3,8 +3,8 @@ require_relative "lib/prompt_bench/version"
 Gem::Specification.new do |spec|
   spec.name        = "prompt_bench"
   spec.version     = PromptBench::VERSION
-  spec.authors     = [ "Patricio Mac Adden" ]
-  spec.email       = [ "patriciomacadden@gmail.com" ]
+  spec.authors     = [ "Patricio Mac Adden", "Fernando Martinez" ]
+  spec.email       = [ "patriciomacadden@gmail.com", "fernando.martinez@sinaptia.dev" ]
   spec.homepage    = "https://github.com/sinaptia/prompt_bench"
   spec.summary     = "LLM evaluation engine for Rails."
   spec.description = "LLM evaluation engine for Rails."
