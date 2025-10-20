@@ -1,4 +1,4 @@
-class CreatePromptBenchEvalResults < ActiveRecord::Migration[8.0]
+class CreatePromptBenchEvalResults < ActiveRecord::Migration[7.0]
   def change
     create_table :prompt_bench_eval_results do |t|
       t.references :prompt_bench_prompt, null: false, foreign_key: true

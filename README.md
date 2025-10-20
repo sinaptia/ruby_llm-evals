@@ -17,13 +17,12 @@ And then execute:
 
 ```bash
 $ bundle
-$ rails g prompt_bench:install
 ```
 
-This will create the migrations for the PromptBench models. So make sure you run:
+To copy and migrate PromptBench's migrations, run:
 
-```bash
-$ rails db:migrate
+```
+$ rails prompt_bench:install:migrations db:migrate
 ```
 
 And then mount the engine in your `config/routes.rb`:
@@ -36,7 +35,7 @@ Rails.application.routes.draw do
 end
 ```
 
-Now you should be able to browse to `/prompt_bench/` and create, test, compare, and improve your LLM prompts. Continue reading to see out how a typical workflow looks like, and how you can leverage your app's data to add eval examples to your prompts.
+Now you should be able to browse to `/prompt_bench/` and create, test, compare, and improve your LLM prompts. Continue reading to see how a typical workflow looks like, and how you can leverage your app's data to add eval examples to your prompts.
 
 ![prompts](./assets/prompts.png)
 ![eval_results](./assets/eval_results.png)

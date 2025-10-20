@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_151539) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_20_025504) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -78,8 +78,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_151539) do
     t.boolean "passed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prompt_bench_eval_example_id"], name: "idx_on_prompt_bench_eval_example_id_e361863871"
-    t.index ["prompt_bench_eval_result_id"], name: "idx_on_prompt_bench_eval_result_id_1a669ecd62"
+    t.index ["prompt_bench_eval_example_id"], name: "index_pb_prompt_executions_on_pb_eval_example_id"
+    t.index ["prompt_bench_eval_result_id"], name: "index_pb_prompt_executions_on_pb_eval_result_id"
   end
 
   create_table "prompt_bench_prompts", force: :cascade do |t|
