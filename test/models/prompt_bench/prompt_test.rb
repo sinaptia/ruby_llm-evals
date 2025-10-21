@@ -285,5 +285,77 @@ module PromptBench
       assert_not prompt.valid?
       assert prompt.errors[:schema_other].present?
     end
+
+    test "should normalize empty hash params to nil" do
+      prompt = Prompt.create!(
+        name: "Empty Params Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        params: {}
+      )
+      assert_nil prompt.params
+      assert_nil prompt.reload.params
+    end
+
+    test "should normalize empty array tools to nil" do
+      prompt = Prompt.create!(
+        name: "Empty Tools Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        tools: []
+      )
+      assert_nil prompt.tools
+      assert_nil prompt.reload.tools
+    end
+
+    test "should normalize empty string schema_other to nil" do
+      prompt = Prompt.create!(
+        name: "Empty Schema Other Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        schema_other: ""
+      )
+      assert_nil prompt.schema_other
+      assert_nil prompt.reload.schema_other
+    end
+
+    test "should not normalize params with data" do
+      prompt = Prompt.create!(
+        name: "Params With Data Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        params: { "key" => "value" }
+      )
+      assert_equal({ "key" => "value" }, prompt.params)
+      assert_equal({ "key" => "value" }, prompt.reload.params)
+    end
+
+    test "should not normalize tools with data" do
+      prompt = Prompt.create!(
+        name: "Tools With Data Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        tools: [ "Calculator" ]
+      )
+      assert_equal([ "Calculator" ], prompt.tools)
+      assert_equal([ "Calculator" ], prompt.reload.tools)
+    end
+
+    test "should not normalize schema_other with data" do
+      prompt = Prompt.create!(
+        name: "Schema Other With Data Test",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        schema_other: { "type" => "object" }
+      )
+      assert_equal({ "type" => "object" }, prompt.schema_other)
+      assert_equal({ "type" => "object" }, prompt.reload.schema_other)
+    end
   end
 end

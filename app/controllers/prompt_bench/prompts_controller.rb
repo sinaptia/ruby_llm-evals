@@ -59,7 +59,9 @@ module PromptBench
         :schema_other,
         eval_examples_attributes: [ :id, :_destroy, :eval_type, :expected_output, :variables, files: [] ],
         tools: []
-      )
+      ).tap do |prompt_params|
+        prompt_params[:tools].try(:reject!, &:blank?)
+      end
     end
   end
 end

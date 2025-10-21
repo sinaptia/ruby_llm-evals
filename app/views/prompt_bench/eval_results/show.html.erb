@@ -18,11 +18,28 @@
     </tr>
     <tr>
       <th>Params</th>
-      <td><pre><%= JSON.pretty_generate @eval_result.params %></pre></td>
+      <td>
+        <% if @eval_result.params.present? %>
+          <pre><%= JSON.pretty_generate @eval_result.params %></pre></td>
+        <% end %>
     </tr>
     <tr>
       <th>Tools</th>
-      <td><pre><%= JSON.pretty_generate @eval_result.tools %></pre></td>
+      <td>
+        <% if @eval_result.tools.present? %>
+          <pre><%= JSON.pretty_generate @eval_result.tools %></pre>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th>Schema</th>
+      <td>
+        <% if @eval_result.schema_other.present? %>
+          <pre><%= JSON.pretty_generate @eval_result.schema_other %></pre>
+        <% elsif @eval_result.schema.present? %>
+          <%= @eval_result.schema %>
+        <% end %>
+      </td>
     </tr>
     <tr>
       <th>Instructions</th>
@@ -97,7 +114,9 @@
         </td>
         <td>
           <% if @eval_result.schema_other.present? || @eval_result.schema.present? %>
-            <pre><%= JSON.pretty_generate JSON.parse(prompt_execution.message) %></pre>
+            <% if prompt_execution.message.present? %>
+              <pre><%= JSON.pretty_generate JSON.parse(prompt_execution.message) %></pre>
+            <% end %>
           <% else %>
             <div style="white-space: pre-wrap;"><%= prompt_execution.message %></div>
           <% end %>

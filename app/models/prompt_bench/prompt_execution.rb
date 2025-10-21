@@ -10,6 +10,8 @@ module PromptBench
     validates :eval_type, presence: true
     validates :expected_output, presence: true, unless: ->(eval_example) { eval_example.human? }
 
+    normalizes :variables, with: ->(value) { value.blank? ? nil : value }
+
     before_validation :set_eval_example_attributes, on: :create
 
     def self.execute(eval_example:, eval_result:)

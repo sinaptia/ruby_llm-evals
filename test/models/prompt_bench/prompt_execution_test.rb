@@ -122,5 +122,55 @@ module PromptBench
       assert_equal eval_example.files.count, execution.files.count
       assert_equal "test.txt", execution.files.first.filename.to_s
     end
+
+    test "should normalize empty hash variables to nil" do
+      execution = PromptExecution.create!(
+        eval_example: prompt_bench_eval_examples(:one),
+        eval_result: prompt_bench_eval_results(:one)
+      )
+      execution.update_column(:variables, "{}")
+      execution.reload
+      execution.update(variables: {})
+
+      assert_nil execution.variables
+      assert_nil execution.reload.variables
+    end
+
+    test "should normalize empty array variables to nil" do
+      execution = PromptExecution.create!(
+        eval_example: prompt_bench_eval_examples(:one),
+        eval_result: prompt_bench_eval_results(:one)
+      )
+      execution.update_column(:variables, "[]")
+      execution.reload
+      execution.update(variables: [])
+
+      assert_nil execution.variables
+      assert_nil execution.reload.variables
+    end
+
+    test "should normalize empty string variables to nil" do
+      execution = PromptExecution.create!(
+        eval_example: prompt_bench_eval_examples(:one),
+        eval_result: prompt_bench_eval_results(:one)
+      )
+      execution.update_column(:variables, '""')
+      execution.reload
+      execution.update(variables: "")
+
+      assert_nil execution.variables
+      assert_nil execution.reload.variables
+    end
+
+    test "should not normalize variables with data" do
+      execution = PromptExecution.create!(
+        eval_example: prompt_bench_eval_examples(:one),
+        eval_result: prompt_bench_eval_results(:one)
+      )
+      execution.update(variables: { "key" => "value" })
+
+      assert_equal({ "key" => "value" }, execution.variables)
+      assert_equal({ "key" => "value" }, execution.reload.variables)
+    end
   end
 end

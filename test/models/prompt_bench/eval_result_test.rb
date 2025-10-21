@@ -150,7 +150,7 @@ module PromptBench
       assert_nil result.temperature
     end
 
-    test "should copy empty params from prompt on create" do
+    test "should copy normalized params from prompt on create" do
       prompt = prompt_bench_prompts(:one)
       prompt.update(params: {})
 
@@ -159,10 +159,12 @@ module PromptBench
         active_job_id: "test-empty-params-snapshot"
       )
 
-      assert_equal({}, result.params)
+      # Empty hash should be normalized to nil on the prompt
+      assert_nil prompt.params
+      assert_nil result.params
     end
 
-    test "should copy empty tools from prompt on create" do
+    test "should copy normalized tools from prompt on create" do
       prompt = prompt_bench_prompts(:one)
       prompt.update(tools: [])
 
@@ -171,7 +173,9 @@ module PromptBench
         active_job_id: "test-empty-tools-snapshot"
       )
 
-      assert_equal [], result.tools
+      # Empty array should be normalized to nil on the prompt
+      assert_nil prompt.tools
+      assert_nil result.tools
     end
 
     test "should copy schema from prompt on create" do
@@ -220,6 +224,50 @@ module PromptBench
       )
 
       assert_nil result.schema_other
+    end
+
+    test "should normalize empty hash params to nil" do
+      result = EvalResult.create!(
+        prompt: prompt_bench_prompts(:one),
+        active_job_id: "normalize-params-test"
+      )
+      result.update(params: {})
+
+      assert_nil result.params
+      assert_nil result.reload.params
+    end
+
+    test "should normalize empty array tools to nil" do
+      result = EvalResult.create!(
+        prompt: prompt_bench_prompts(:one),
+        active_job_id: "normalize-tools-test"
+      )
+      result.update(tools: [])
+
+      assert_nil result.tools
+      assert_nil result.reload.tools
+    end
+
+    test "should normalize empty string schema_other to nil" do
+      result = EvalResult.create!(
+        prompt: prompt_bench_prompts(:one),
+        active_job_id: "normalize-schema-other-test"
+      )
+      result.update(schema_other: "")
+
+      assert_nil result.schema_other
+      assert_nil result.reload.schema_other
+    end
+
+    test "should not normalize params with data" do
+      result = EvalResult.create!(
+        prompt: prompt_bench_prompts(:one),
+        active_job_id: "params-with-data-test"
+      )
+      result.update(params: { "key" => "value" })
+
+      assert_equal({ "key" => "value" }, result.params)
+      assert_equal({ "key" => "value" }, result.reload.params)
     end
   end
 end

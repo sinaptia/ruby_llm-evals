@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_20_025504) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_21_160630) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -102,6 +102,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_025504) do
     t.index ["slug"], name: "index_prompt_bench_prompts_on_slug", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "prompt_bench_eval_examples", "prompt_bench_prompts"
   add_foreign_key "prompt_bench_eval_results", "prompt_bench_prompts"
   add_foreign_key "prompt_bench_prompt_executions", "prompt_bench_eval_examples"

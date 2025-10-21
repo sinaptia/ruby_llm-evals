@@ -8,6 +8,8 @@ module PromptBench
     validates :model, presence: true
     validates :provider, presence: true
 
+    normalizes :params, :tools, :schema_other, with: ->(value) { value.blank? ? nil : value }
+
     before_validation :set_prompt_attributes, on: :create
 
     scope :finished, -> { where.not(ended_at: nil) }

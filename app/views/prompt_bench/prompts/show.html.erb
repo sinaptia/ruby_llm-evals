@@ -22,11 +22,18 @@
     </tr>
     <tr>
       <th>Params</th>
-      <td><pre><%= JSON.pretty_generate @prompt.params %></pre></td>
+      <td>
+        <% if @prompt.params.present? %>
+          <pre><%= JSON.pretty_generate @prompt.params %></pre>
+        <% end %>
+      </td>
     </tr>
     <tr>
       <th>Tools</th>
-      <td><pre><%= JSON.pretty_generate @prompt.tools %></pre></td>
+      <td>
+        <% if @prompt.tools.present? %>
+          <pre><%= JSON.pretty_generate @prompt.tools %></pre></td>
+        <% end %>
     </tr>
     <tr>
       <th>Schema</th>
@@ -35,8 +42,6 @@
           <pre><%= JSON.pretty_generate @prompt.schema_other %></pre>
         <% elsif @prompt.schema.present? %>
           <%= @prompt.schema %>
-        <% else %>
-          N/A
         <% end %>
       </td>
     </tr>

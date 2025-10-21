@@ -13,6 +13,8 @@ module PromptBench
     validates :schema_other, json: true
     validates :slug, presence: true, uniqueness: true
 
+    normalizes :params, :tools, :schema_other, with: ->(value) { value.blank? ? nil : value }
+
     before_validation :set_slug
 
     def self.execute(slug, variables: {}, files: [])
