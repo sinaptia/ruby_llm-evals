@@ -95,7 +95,13 @@
             <% end %>
           </ul>
         </td>
-        <td style="white-space: pre-wrap;"><%= prompt_execution.message %></td>
+        <td>
+          <% if @eval_result.schema_other.present? || @eval_result.schema.present? %>
+            <pre><%= JSON.pretty_generate JSON.parse(prompt_execution.message) %></pre>
+          <% else %>
+            <div style="white-space: pre-wrap;"><%= prompt_execution.message %></div>
+          <% end %>
+        </td>
         <td><%= prompt_execution.eval_type %></td>
         <td><%= prompt_execution.expected_output %></td>
         <td><%= prompt_execution.input %>/<%= prompt_execution.output %></td>

@@ -79,5 +79,75 @@ module PromptBench
         assert_response :unprocessable_entity
       end
     end
+
+    test "should create prompt with schema" do
+      assert_difference("Prompt.count") do
+        post prompts_url, params: {
+          prompt: {
+            name: "Prompt with Schema",
+            provider: "anthropic",
+            model: "claude-3-5-sonnet-20241022",
+            message: "Test message",
+            schema: "WeatherSchema"
+          }
+        }
+      end
+
+      assert_equal "WeatherSchema", Prompt.last.schema
+      assert_redirected_to prompt_url(Prompt.last)
+    end
+
+    test "should create prompt with schema_other" do
+      schema_other = { "type" => "object", "properties" => { "name" => { "type" => "string" } } }
+
+      assert_difference("Prompt.count") do
+        post prompts_url, params: {
+          prompt: {
+            name: "Prompt with Schema Other",
+            provider: "anthropic",
+            model: "claude-3-5-sonnet-20241022",
+            message: "Test message",
+            schema_other: schema_other.to_json
+          }
+        }
+      end
+
+      assert_equal schema_other, Prompt.last.schema_other
+      assert_redirected_to prompt_url(Prompt.last)
+    end
+
+    test "should update prompt with schema" do
+      patch prompt_url(@prompt), params: {
+        prompt: {
+          name: @prompt.name,
+          provider: @prompt.provider,
+          model: @prompt.model,
+          message: @prompt.message,
+          schema: "UserSchema"
+        }
+      }
+
+      @prompt.reload
+      assert_equal "UserSchema", @prompt.schema
+      assert_redirected_to prompt_url(@prompt)
+    end
+
+    test "should update prompt with schema_other" do
+      schema_other = { "type" => "array", "items" => { "type" => "string" } }
+
+      patch prompt_url(@prompt), params: {
+        prompt: {
+          name: @prompt.name,
+          provider: @prompt.provider,
+          model: @prompt.model,
+          message: @prompt.message,
+          schema_other: schema_other.to_json
+        }
+      }
+
+      @prompt.reload
+      assert_equal schema_other, @prompt.schema_other
+      assert_redirected_to prompt_url(@prompt)
+    end
   end
 end

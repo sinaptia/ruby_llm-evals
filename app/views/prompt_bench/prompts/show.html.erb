@@ -29,6 +29,18 @@
       <td><pre><%= JSON.pretty_generate @prompt.tools %></pre></td>
     </tr>
     <tr>
+      <th>Schema</th>
+      <td>
+        <% if @prompt.schema_other.present? %>
+          <pre><%= JSON.pretty_generate @prompt.schema_other %></pre>
+        <% elsif @prompt.schema.present? %>
+          <%= @prompt.schema %>
+        <% else %>
+          N/A
+        <% end %>
+      </td>
+    </tr>
+    <tr>
       <th>Instructions</th>
       <td style="white-space: pre-wrap;"><%= @prompt.instructions %></td>
     </tr>

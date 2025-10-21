@@ -251,5 +251,39 @@ module PromptBench
         assert_not_nil response.content
       end
     end
+
+    test "should accept schema as string" do
+      prompt = Prompt.new(
+        name: "With Schema",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        schema: "WeatherSchema"
+      )
+      assert_equal "WeatherSchema", prompt.schema
+    end
+
+    test "should accept schema_other as json" do
+      prompt = Prompt.new(
+        name: "With Schema Other",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test",
+        schema_other: { "type" => "object", "properties" => { "name" => { "type" => "string" } } }
+      )
+      assert_equal({ "type" => "object", "properties" => { "name" => { "type" => "string" } } }, prompt.schema_other)
+    end
+
+    test "should validate schema_other is valid json" do
+      prompt = Prompt.new(
+        name: "Invalid Schema Other",
+        provider: "anthropic",
+        model: "claude-3-5-sonnet-20241022",
+        message: "Test"
+      )
+      prompt.schema_other = "invalid json"
+      assert_not prompt.valid?
+      assert prompt.errors[:schema_other].present?
+    end
   end
 end

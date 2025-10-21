@@ -8,6 +8,8 @@ class CreatePromptBenchPrompts < ActiveRecord::Migration[7.0]
       t.float :temperature
       t.json :params
       t.json :tools
+      t.string :schema
+      t.json :schema_other
       t.text :instructions
       t.text :message
 

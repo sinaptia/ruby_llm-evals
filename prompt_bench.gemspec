@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name        = "prompt_bench"
   spec.version     = PromptBench::VERSION
   spec.authors     = [ "Patricio Mac Adden", "Fernando Martinez" ]
-  spec.email       = [ "patriciomacadden@gmail.com", "fernando.martinez@sinaptia.dev" ]
+  spec.email       = [ "patricio.macadden@sinaptia.dev", "fernando.martinez@sinaptia.dev" ]
   spec.homepage    = "https://github.com/sinaptia/prompt_bench"
   spec.summary     = "LLM evaluation engine for Rails."
   spec.description = "LLM evaluation engine for Rails."
@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "importmap-rails"
   spec.add_dependency "rails", ">= 7.0.0"
   spec.add_dependency "ruby_llm"
+  spec.add_dependency "ruby_llm-schema"
   spec.add_dependency "stimulus-rails"
   spec.add_dependency "turbo-rails"
 end

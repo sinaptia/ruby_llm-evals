@@ -20,16 +20,18 @@ module PromptBench
         files: prompt_execution.files.map(&:blob)
       )
 
+      message = response.content.is_a?(Hash) ? response.content.to_json : response.content.chomp
+
       passed = case prompt_execution.eval_type
-      when "contains" then response.content.chomp.include?(prompt_execution.expected_output)
-      when "exact" then response.content.chomp == prompt_execution.expected_output
-      when "regex" then Regexp.new(prompt_execution.expected_output, "i").match?(response.content.chomp)
+      when "contains" then message.include?(prompt_execution.expected_output)
+      when "exact" then message == prompt_execution.expected_output
+      when "regex" then Regexp.new(prompt_execution.expected_output, "i").match?(message)
       end
 
       prompt_execution.update(
         input: response.input_tokens,
         output: response.output_tokens,
-        message: response.content.chomp,
+        message:,
         passed:
       )
     end

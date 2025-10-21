@@ -10,6 +10,7 @@ module PromptBench
     validates :name, presence: true, uniqueness: true
     validates :params, json: true
     validates :provider, presence: true
+    validates :schema_other, json: true
     validates :slug, presence: true, uniqueness: true
 
     before_validation :set_slug
@@ -31,6 +32,12 @@ module PromptBench
       if tools.present?
         tool_classes = tools.map { _1.constantize rescue nil }.compact
         chat.with_tools(*tool_classes)
+      end
+
+      if schema_other.present?
+        chat.with_schema(**schema_other)
+      elsif schema.present?
+        chat.with_schema schema.constantize
       end
 
       chat.ask(message_text, with: files)

@@ -173,5 +173,53 @@ module PromptBench
 
       assert_equal [], result.tools
     end
+
+    test "should copy schema from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(schema: "WeatherSchema")
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-schema-snapshot"
+      )
+
+      assert_equal "WeatherSchema", result.schema
+    end
+
+    test "should copy schema_other from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(schema_other: { "type" => "object", "properties" => { "name" => { "type" => "string" } } })
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-schema-other-snapshot"
+      )
+
+      assert_equal({ "type" => "object", "properties" => { "name" => { "type" => "string" } } }, result.schema_other)
+    end
+
+    test "should copy nil schema from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(schema: nil)
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-nil-schema-snapshot"
+      )
+
+      assert_nil result.schema
+    end
+
+    test "should copy nil schema_other from prompt on create" do
+      prompt = prompt_bench_prompts(:one)
+      prompt.update(schema_other: nil)
+
+      result = EvalResult.create(
+        prompt: prompt,
+        active_job_id: "test-nil-schema-other-snapshot"
+      )
+
+      assert_nil result.schema_other
+    end
   end
 end
