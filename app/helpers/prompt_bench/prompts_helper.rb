@@ -14,8 +14,21 @@ module PromptBench
       RubyLLM::Schema.descendants.map(&:name).uniq.sort
     end
 
-    def schema_options_for_select(selected = nil)
+    def schema_options_for_select(prompt)
       options = available_schemas.map { |s| [ s, s ] } + [ [ "Other", "" ] ]
+
+      # Determine what should be selected:
+      # * If schema is present and in available schemas, select it
+      # * If schema is blank but schema_other is present, select "Other" (empty string)
+      # * Otherwise, select nothing (nil)
+      selected = if prompt.schema.present? && available_schemas.include?(prompt.schema)
+        prompt.schema
+      elsif prompt.schema.blank? && prompt.schema_other.present?
+        ""
+      else
+        nil
+      end
+
       options_for_select(options, selected)
     end
   end

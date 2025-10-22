@@ -45,7 +45,7 @@
     <%= form.label :schema, class: "label" %>
     <div class="control">
       <div class="select is-fullwidth">
-        <%= form.select :schema, schema_options_for_select(prompt.schema), { include_blank: true }, data: { schema_selector_target: "schemaSelect", action: "change->schema-selector#schemaChanged" } %>
+        <%= form.select :schema, schema_options_for_select(prompt), { include_blank: true }, data: { schema_selector_target: "schemaSelect", action: "change->schema-selector#schemaChanged" } %>
       </div>
     </div>
     <p class="help is-danger"><%= prompt.errors.full_messages_for(:schema).join(", ") %></p>
