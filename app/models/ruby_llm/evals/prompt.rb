@@ -24,11 +24,10 @@ module RubyLLM
       end
 
       def execute(variables: {}, files: [])
-        message_text = substitute_variables(message, variables)
-        instructions_text = substitute_variables(instructions, variables) if instructions.present?
-
         chat = RubyLLM.chat(model: model, provider: provider)
-        chat.with_instructions(instructions_text) if instructions_text.present?
+
+        chat.with_instructions Liquid::Template.parse(instructions).render(variables) if instructions.present?
+
         chat.with_temperature(temperature) if temperature.present?
         chat.with_params(**params) if params.present?
 
@@ -43,21 +42,13 @@ module RubyLLM
           chat.with_schema schema.constantize
         end
 
-        chat.ask(message_text, with: files)
+        chat.ask Liquid::Template.parse(message).render(variables), with: files
       end
 
       private
 
       def set_slug
         self.slug = name&.parameterize
-      end
-
-      def substitute_variables(text, variables)
-        return text if text.blank? || variables.blank?
-
-        text.dup.tap do |result|
-          variables.each { |k, v| result.gsub!("{{#{k}}}", v.to_s) }
-        end
       end
     end
   end

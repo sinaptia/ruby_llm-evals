@@ -105,7 +105,7 @@ A prompt represents an LLM prompt template with:
 * Tools: optional, array of tool class names that the LLM can use (e.g., `["Weather", "Calculator"]`). See how tools are defined in [RubyLLM](https://rubyllm.com/tools/).
 * Schema: optional, a Ruby class name (e.g., `User`) to structure the LLM's response, or use "other" to provide a custom JSON schema in the Schema Other field. See [RubyLLM structured output](https://rubyllm.com/structured-output/).
 
-Both the instructions and the message template can contain variables that will be replaced at runtime. To add variables, enclose them with braces. Eg: `{{name}}`.
+Both the instructions and the message template can contain liquid tags that will be rendered at runtime. To add variables, enclose them with braces. Eg: `{{name}}`.
 
 > [!NOTE]
 > In order to use a provider, you must have it configured in `config/initializers/ruby_llm.rb` as explained [here](https://rubyllm.com/configuration/#provider-configuration)
