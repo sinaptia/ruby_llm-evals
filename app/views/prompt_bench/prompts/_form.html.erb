@@ -29,11 +29,7 @@
 
   <div class="field">
     <%= form.label :params, class: "label" %>
-    <div data-controller="json-editor" data-json-editor-height-value="200px">
-      <div data-json-editor-target="editor" class="json-editor"></div>
-      <%= form.text_area :params, value: prompt.params&.to_json, class: "textarea", data: { json_editor_target: "textarea" } %>
-      <p class="help is-danger is-hidden" data-json-editor-target="error"></p>
-    </div>
+    <%= form.text_area :params, value: prompt.params&.to_json, class: "textarea" %>
     <p class="help is-danger"><%= prompt.errors.full_messages_for(:params).join(", ") %></p>
   </div>
 
@@ -58,11 +54,7 @@
   <div class="field is-hidden" data-schema-selector-target="schemaOtherField">
     <%= form.label :schema_other, "Custom schema", class: "label" %>
     <div class="control">
-      <div data-controller="json-editor" data-json-editor-height-value="250px">
-        <div data-json-editor-target="editor" class="json-editor"></div>
-        <%= form.text_area :schema_other, value: prompt.schema_other&.to_json, class: "textarea", data: { json_editor_target: "textarea" } %>
-        <p class="help is-danger is-hidden" data-json-editor-target="error"></p>
-      </div>
+      <%= form.text_area :schema_other, value: prompt.schema_other&.to_json, class: "textarea" %>
     </div>
     <p class="help is-danger"><%= prompt.errors.full_messages_for(:schema_other).join(", ") %></p>
   </div>
