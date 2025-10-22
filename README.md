@@ -38,8 +38,8 @@ end
 Now you should be able to browse to `/prompt_bench/` and create, test, compare, and improve your LLM prompts. Continue reading to see how a typical workflow looks like, and how you can leverage your app's data to add samples to your prompts.
 
 ![prompts](./assets/prompts.png)
-![eval_results](./assets/eval_results.png)
-![eval_result](./assets/eval_result.png)
+![runs](./assets/runs.png)
+![run](./assets/run.png)
 
 ### Authentication and authorization
 
@@ -121,13 +121,13 @@ When creating/editing a prompt you can add samples, where you can define:
 
 #### Run evaluations
 
-Once you have a prompt with its examples you can run the evaluations. This will enqueue a job that will create an eval result and run each sample with the current prompt configuration.
+Once you have a prompt with its examples you can run the evaluations. This will enqueue a job that will create an run and run each sample with the current prompt configuration.
 
-The eval result will save the current prompt configuration for later analysis, such as the current provider/model, instructions, messages, variables, etc.
+The run will save the current prompt configuration for later analysis, such as the current provider/model, instructions, messages, variables, etc.
 
 #### Analyze the results
 
-You can view the accuracy, cost, and duration of the entire eval result and each individual prompt execution.
+You can view the accuracy, cost, and duration of the entire run and each individual prompt execution.
 
 If you chose the human review eval type, it's now that you can review if an eval passed or not.
 

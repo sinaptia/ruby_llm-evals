@@ -1,11 +1,11 @@
 module PromptBench
-  class EvalResultsController < ApplicationController
-    before_action :set_eval_result, only: %i[show destroy]
+  class RunsController < ApplicationController
+    before_action :set_run, only: %i[show destroy]
     before_action :set_filters, only: %i[index]
     before_action :set_prompt, only: %i[create]
 
     def index
-      @eval_results = Page.new EvalResult.where(@filters), page: params[:page].to_i
+      @runs = Page.new Run.where(@filters), page: params[:page].to_i
     end
 
     def show
@@ -13,12 +13,12 @@ module PromptBench
 
     def create
       EvalPromptJob.perform_later prompt_id: @prompt.id
-      redirect_to eval_results_path(filter: { prompt_bench_prompt_id: @prompt.id }), notice: "Prompt is being evaluated."
+      redirect_to runs_path(filter: { prompt_bench_prompt_id: @prompt.id }), notice: "Prompt is being evaluated."
     end
 
     def destroy
-      @eval_result.destroy!
-      redirect_to prompt_eval_results_path(@eval_result.prompt), notice: "Eval result was successfully destroyed.", status: :see_other
+      @run.destroy!
+      redirect_to prompt_runs_path(@run.prompt), notice: "Eval result was successfully destroyed.", status: :see_other
     end
 
     private
@@ -28,8 +28,8 @@ module PromptBench
     end
     helper_method :filter_param
 
-    def set_eval_result
-      @eval_result = EvalResult.find params[:id]
+    def set_run
+      @run = Run.find params[:id]
     end
 
     def set_filters

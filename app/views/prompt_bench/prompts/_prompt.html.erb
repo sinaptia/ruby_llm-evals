@@ -4,11 +4,11 @@
   <td><%= truncate prompt.instructions %></td>
   <td><%= truncate prompt.message %></td>
   <td>
-    <%= link_to pluralize(prompt.eval_results.count, "eval result"), eval_results_path(filter: { prompt_bench_prompt_id: prompt.id }) %>
+    <%= link_to pluralize(prompt.runs.count, "eval result"), runs_path(filter: { prompt_bench_prompt_id: prompt.id }) %>
   </td>
   <td>
     <div class="buttons is-right">
-      <%= button_to "Eval", prompt_eval_results_path(prompt), method: :post, class: "button is-success is-light" %>
+      <%= button_to "Eval", prompt_runs_path(prompt), method: :post, class: "button is-success is-light" %>
       <%= link_to "Edit", edit_prompt_path(prompt), class: "button" %>
       <%= button_to "Destroy", prompt, method: :delete, class: "button is-danger" %>
     </div>

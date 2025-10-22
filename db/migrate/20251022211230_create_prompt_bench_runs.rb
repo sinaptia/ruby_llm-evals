@@ -1,6 +1,6 @@
-class CreatePromptBenchEvalResults < ActiveRecord::Migration[7.0]
+class CreatePromptBenchRuns < ActiveRecord::Migration[7.0]
   def change
-    create_table :prompt_bench_eval_results do |t|
+    create_table :prompt_bench_runs do |t|
       t.references :prompt_bench_prompt, null: false, foreign_key: true
       t.string :active_job_id, null: false
       t.timestamp :started_at

@@ -5,7 +5,7 @@ module PromptBench
     def toggle
       @prompt_execution.toggle! :passed
 
-      redirect_to @prompt_execution.eval_result, notice: "Prompt execution was successfully toggled.", status: :see_other
+      redirect_to @prompt_execution.run, notice: "Prompt execution was successfully toggled.", status: :see_other
     end
 
     private

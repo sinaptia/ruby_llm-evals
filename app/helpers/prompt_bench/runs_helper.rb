@@ -1,4 +1,4 @@
 module PromptBench
-  module EvalResultsHelper
+  module RunsHelper
   end
 end

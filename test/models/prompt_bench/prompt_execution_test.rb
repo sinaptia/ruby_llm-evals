@@ -5,7 +5,7 @@ module PromptBench
     test "should be valid with required attributes" do
       execution = PromptExecution.new(
         sample: prompt_bench_samples(:one),
-        eval_result: prompt_bench_eval_results(:one),
+        run: prompt_bench_runs(:one),
         eval_type: "exact",
         expected_output: "test",
         message: "test"
@@ -32,7 +32,7 @@ module PromptBench
     test "cost should return 0.0 for local providers" do
       execution = prompt_bench_prompt_executions(:two)
 
-      assert_equal "ollama", execution.eval_result.provider
+      assert_equal "ollama", execution.run.provider
       assert_equal 0.0, execution.cost
     end
 
@@ -40,7 +40,7 @@ module PromptBench
       execution = prompt_bench_prompt_executions(:one)
 
       # Fixture has gemini provider with input: 1500, output: 20
-      assert_equal "gemini", execution.eval_result.provider
+      assert_equal "gemini", execution.run.provider
       assert_equal 1500, execution.input
       assert_equal 20, execution.output
 
@@ -51,7 +51,7 @@ module PromptBench
     test "cost should return 0.0 when input and output are nil" do
       execution = PromptExecution.new(
         sample: prompt_bench_samples(:one),
-        eval_result: prompt_bench_eval_results(:one),
+        run: prompt_bench_runs(:one),
         eval_type: "exact",
         expected_output: "test",
         message: "test",
@@ -79,15 +79,15 @@ module PromptBench
     test "execute should create prompt execution with API response" do
       VCR.use_cassette("prompt_execution_test_execute_exact_match") do
         sample = prompt_bench_samples(:one)
-        eval_result = prompt_bench_eval_results(:one)
+        run = prompt_bench_runs(:one)
 
         assert_difference "PromptExecution.count", 1 do
-          PromptExecution.execute(sample:, eval_result:)
+          PromptExecution.execute(sample:, run:)
         end
 
         execution = PromptExecution.last
         assert_equal sample, execution.sample
-        assert_equal eval_result, execution.eval_result
+        assert_equal run, execution.run
         assert_not_nil execution.message
         assert_not_nil execution.input
         assert_not_nil execution.output
@@ -97,9 +97,9 @@ module PromptBench
     test "execute should copy variables from sample" do
       VCR.use_cassette("prompt_execution_test_execute_with_variables") do
         sample = prompt_bench_samples(:two)
-        eval_result = prompt_bench_eval_results(:two)
+        run = prompt_bench_runs(:two)
 
-        PromptExecution.execute(sample:, eval_result:)
+        PromptExecution.execute(sample:, run:)
 
         execution = PromptExecution.last
         assert_equal sample.variables, execution.variables
@@ -108,7 +108,7 @@ module PromptBench
 
     test "should copy file attachments from sample on create" do
       sample = prompt_bench_samples(:one)
-      eval_result = prompt_bench_eval_results(:one)
+      run = prompt_bench_runs(:one)
 
       # Attach a file to sample
       sample.files.attach(
@@ -117,7 +117,7 @@ module PromptBench
         content_type: "text/plain"
       )
 
-      execution = PromptExecution.create(sample:, eval_result:)
+      execution = PromptExecution.create(sample:, run:)
 
       assert_equal sample.files.count, execution.files.count
       assert_equal "test.txt", execution.files.first.filename.to_s
@@ -126,7 +126,7 @@ module PromptBench
     test "should normalize empty hash variables to nil" do
       execution = PromptExecution.create!(
         sample: prompt_bench_samples(:one),
-        eval_result: prompt_bench_eval_results(:one)
+        run: prompt_bench_runs(:one)
       )
       execution.update_column(:variables, "{}")
       execution.reload
@@ -139,7 +139,7 @@ module PromptBench
     test "should normalize empty array variables to nil" do
       execution = PromptExecution.create!(
         sample: prompt_bench_samples(:one),
-        eval_result: prompt_bench_eval_results(:one)
+        run: prompt_bench_runs(:one)
       )
       execution.update_column(:variables, "[]")
       execution.reload
@@ -152,7 +152,7 @@ module PromptBench
     test "should normalize empty string variables to nil" do
       execution = PromptExecution.create!(
         sample: prompt_bench_samples(:one),
-        eval_result: prompt_bench_eval_results(:one)
+        run: prompt_bench_runs(:one)
       )
       execution.update_column(:variables, '""')
       execution.reload
@@ -165,7 +165,7 @@ module PromptBench
     test "should not normalize variables with data" do
       execution = PromptExecution.create!(
         sample: prompt_bench_samples(:one),
-        eval_result: prompt_bench_eval_results(:one)
+        run: prompt_bench_runs(:one)
       )
       execution.update(variables: { "key" => "value" })
 

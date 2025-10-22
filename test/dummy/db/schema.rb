@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_22_205460) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_211231) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,28 +39,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_205460) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "prompt_bench_eval_results", force: :cascade do |t|
-    t.integer "prompt_bench_prompt_id", null: false
-    t.string "active_job_id", null: false
-    t.datetime "started_at"
-    t.datetime "ended_at"
-    t.string "provider", null: false
-    t.string "model", null: false
-    t.float "temperature"
-    t.json "params"
-    t.json "tools"
-    t.string "schema"
-    t.json "schema_other"
-    t.text "instructions"
-    t.text "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["prompt_bench_prompt_id"], name: "index_prompt_bench_eval_results_on_prompt_bench_prompt_id"
-  end
-
   create_table "prompt_bench_prompt_executions", force: :cascade do |t|
     t.integer "prompt_bench_sample_id", null: false
-    t.integer "prompt_bench_eval_result_id", null: false
+    t.integer "prompt_bench_run_id", null: false
     t.string "eval_type", null: false
     t.text "expected_output"
     t.json "variables"
@@ -70,7 +51,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_205460) do
     t.boolean "passed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prompt_bench_eval_result_id"], name: "index_pb_prompt_executions_on_pb_eval_result_id"
+    t.index ["prompt_bench_run_id"], name: "index_pb_prompt_executions_on_pb_run_id"
     t.index ["prompt_bench_sample_id"], name: "index_pb_prompt_executions_on_pb_sample_id"
   end
 
@@ -92,6 +73,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_205460) do
     t.index ["slug"], name: "index_prompt_bench_prompts_on_slug", unique: true
   end
 
+  create_table "prompt_bench_runs", force: :cascade do |t|
+    t.integer "prompt_bench_prompt_id", null: false
+    t.string "active_job_id", null: false
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.string "provider", null: false
+    t.string "model", null: false
+    t.float "temperature"
+    t.json "params"
+    t.json "tools"
+    t.string "schema"
+    t.json "schema_other"
+    t.text "instructions"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["prompt_bench_prompt_id"], name: "index_prompt_bench_runs_on_prompt_bench_prompt_id"
+  end
+
   create_table "prompt_bench_samples", force: :cascade do |t|
     t.integer "prompt_bench_prompt_id", null: false
     t.string "eval_type", null: false
@@ -104,8 +104,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_205460) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "prompt_bench_eval_results", "prompt_bench_prompts"
-  add_foreign_key "prompt_bench_prompt_executions", "prompt_bench_eval_results"
+  add_foreign_key "prompt_bench_prompt_executions", "prompt_bench_runs"
   add_foreign_key "prompt_bench_prompt_executions", "prompt_bench_samples"
+  add_foreign_key "prompt_bench_runs", "prompt_bench_prompts"
   add_foreign_key "prompt_bench_samples", "prompt_bench_prompts"
 end

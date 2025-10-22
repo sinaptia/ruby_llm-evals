@@ -1,12 +1,12 @@
-<% content_for :title, "Eval results" %>
+<% content_for :title, "Runs" %>
 
-<h1 class="title">Eval results</h1>
+<h1 class="title">Runs</h1>
 
-<% if @eval_results.records.any? %>
+<% if @runs.records.any? %>
   <table class="table is-hoverable is-fullwidth">
     <thead>
       <tr>
-        <th>Eval result</th>
+        <th>Run</th>
         <th>Prompt</th>
         <th>Provider/Model</th>
         <th>Instructions</th>
@@ -20,11 +20,11 @@
       </tr>
     </thead>
     <tbody>
-      <%= render partial: "prompt_bench/eval_results/eval_result", collection: @eval_results.records %>
+      <%= render partial: "prompt_bench/runs/run", collection: @runs.records %>
     </tbody>
   </table>
 <% else %>
   <div class="mt-6 has-text-centered is-size-4 has-text-grey">There are no eval results</div>
 <% end %>
 
-<%= render "prompt_bench/application/pagination", page: @eval_results %>
+<%= render "prompt_bench/application/pagination", page: @runs %>

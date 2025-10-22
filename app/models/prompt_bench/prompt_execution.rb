@@ -1,7 +1,7 @@
 module PromptBench
   class PromptExecution < ApplicationRecord
     belongs_to :sample, foreign_key: :prompt_bench_sample_id
-    belongs_to :eval_result, foreign_key: :prompt_bench_eval_result_id
+    belongs_to :run, foreign_key: :prompt_bench_run_id
 
     has_many_attached :files
 
@@ -14,8 +14,8 @@ module PromptBench
 
     before_validation :set_sample_attributes, on: :create
 
-    def self.execute(sample:, eval_result:)
-      prompt_execution = create(sample:, eval_result:)
+    def self.execute(sample:, run:)
+      prompt_execution = create(sample:, run:)
 
       response = sample.prompt.execute(
         variables: prompt_execution.variables,
@@ -39,7 +39,7 @@ module PromptBench
     end
 
     def cost
-      model, provider = RubyLLM.models.resolve eval_result.model, provider: eval_result.provider
+      model, provider = RubyLLM.models.resolve run.model, provider: run.provider
 
       return 0.0 if provider.local? || [ input, output ].all?(nil)
 

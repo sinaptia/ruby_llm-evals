@@ -1,9 +1,9 @@
 require "test_helper"
 
 module PromptBench
-  class EvalResultTest < ActiveSupport::TestCase
+  class RunTest < ActiveSupport::TestCase
     test "should be valid with all required attributes" do
-      result = EvalResult.new(
+      result = Run.new(
         prompt: prompt_bench_prompts(:one),
         active_job_id: "test-job-id",
         provider: "anthropic",
@@ -14,7 +14,7 @@ module PromptBench
     end
 
     test "should require active_job_id" do
-      result = EvalResult.new(
+      result = Run.new(
         prompt: prompt_bench_prompts(:one),
         provider: "anthropic",
         model: "claude-3-5-sonnet-20241022",
@@ -24,26 +24,26 @@ module PromptBench
     end
 
     test "should require provider when manually set" do
-      result = prompt_bench_eval_results(:one)
+      result = prompt_bench_runs(:one)
       result.provider = nil
       assert_not result.valid?
     end
 
     test "should require model when manually set" do
-      result = prompt_bench_eval_results(:one)
+      result = prompt_bench_runs(:one)
       result.model = nil
       assert_not result.valid?
     end
 
     test "should require message when manually set" do
-      result = prompt_bench_eval_results(:one)
+      result = prompt_bench_runs(:one)
       result.message = nil
       assert_not result.valid?
     end
 
     test "should copy prompt attributes on create" do
       prompt = prompt_bench_prompts(:one)
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-job-id-new"
       )
@@ -55,37 +55,37 @@ module PromptBench
     end
 
     test "finished? should return true when ended_at is present" do
-      result = prompt_bench_eval_results(:one)
+      result = prompt_bench_runs(:one)
       assert result.finished?
     end
 
     test "finished? should return false when ended_at is nil" do
-      result = prompt_bench_eval_results(:two)
+      result = prompt_bench_runs(:two)
       assert_not result.finished?
     end
 
     test "accuracy should calculate percentage of passed executions" do
-      result = prompt_bench_eval_results(:one)
+      result = prompt_bench_runs(:one)
 
       assert_equal 100.0, result.accuracy
     end
 
     test "accuracy should handle multiple executions" do
-      result = prompt_bench_eval_results(:three)
+      result = prompt_bench_runs(:three)
 
       expected_accuracy = (1 * 100.0 / 2).round(2)
       assert_equal expected_accuracy, result.accuracy
     end
 
     test "cost should sum all execution costs" do
-      result = prompt_bench_eval_results(:one)
+      result = prompt_bench_runs(:one)
 
       expected_cost = result.prompt_executions.sum(&:cost)
       assert_equal expected_cost, result.cost
     end
 
     test "cost should return 0.0 when no executions" do
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt_bench_prompts(:one),
         active_job_id: "test-no-executions"
       )
@@ -94,7 +94,7 @@ module PromptBench
     end
 
     test "accuracy should return 0.0 when no executions" do
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt_bench_prompts(:one),
         active_job_id: "test-no-executions-accuracy"
       )
@@ -106,7 +106,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(temperature: 0.8)
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-temp-snapshot"
       )
@@ -118,7 +118,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(params: { "max_tokens" => 500 })
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-params-snapshot"
       )
@@ -130,7 +130,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(tools: [ "Weather", "Calculator" ])
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-tools-snapshot"
       )
@@ -142,7 +142,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(temperature: nil)
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-nil-temp-snapshot"
       )
@@ -154,7 +154,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(params: {})
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-empty-params-snapshot"
       )
@@ -168,7 +168,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(tools: [])
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-empty-tools-snapshot"
       )
@@ -182,7 +182,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(schema: "WeatherSchema")
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-schema-snapshot"
       )
@@ -194,7 +194,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(schema_other: { "type" => "object", "properties" => { "name" => { "type" => "string" } } })
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-schema-other-snapshot"
       )
@@ -206,7 +206,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(schema: nil)
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-nil-schema-snapshot"
       )
@@ -218,7 +218,7 @@ module PromptBench
       prompt = prompt_bench_prompts(:one)
       prompt.update(schema_other: nil)
 
-      result = EvalResult.create(
+      result = Run.create(
         prompt: prompt,
         active_job_id: "test-nil-schema-other-snapshot"
       )
@@ -227,7 +227,7 @@ module PromptBench
     end
 
     test "should normalize empty hash params to nil" do
-      result = EvalResult.create!(
+      result = Run.create!(
         prompt: prompt_bench_prompts(:one),
         active_job_id: "normalize-params-test"
       )
@@ -238,7 +238,7 @@ module PromptBench
     end
 
     test "should normalize empty array tools to nil" do
-      result = EvalResult.create!(
+      result = Run.create!(
         prompt: prompt_bench_prompts(:one),
         active_job_id: "normalize-tools-test"
       )
@@ -249,7 +249,7 @@ module PromptBench
     end
 
     test "should normalize empty string schema_other to nil" do
-      result = EvalResult.create!(
+      result = Run.create!(
         prompt: prompt_bench_prompts(:one),
         active_job_id: "normalize-schema-other-test"
       )
@@ -260,7 +260,7 @@ module PromptBench
     end
 
     test "should not normalize params with data" do
-      result = EvalResult.create!(
+      result = Run.create!(
         prompt: prompt_bench_prompts(:one),
         active_job_id: "params-with-data-test"
       )

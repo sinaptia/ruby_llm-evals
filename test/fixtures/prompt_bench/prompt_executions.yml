@@ -1,6 +1,6 @@
 one:
   sample: one
-  eval_result: one
+  run: one
   eval_type: exact
   expected_output: car
   variables: {}
@@ -11,7 +11,7 @@ one:
 
 two:
   sample: two
-  eval_result: two
+  run: two
   eval_type: contains
   expected_output: "Rails"
   variables: { "text": "Ruby on Rails is a web framework written in Ruby" }
@@ -22,7 +22,7 @@ two:
 
 three:
   sample: three
-  eval_result: three
+  run: three
   eval_type: regex
   expected_output: "(positive|negative|neutral)"
   variables: { "text": "This product is amazing! I love it." }
@@ -33,7 +33,7 @@ three:
 
 four:
   sample: four
-  eval_result: three
+  run: three
   eval_type: human
   expected_output: null
   variables: { "text": "The weather is nice today." }

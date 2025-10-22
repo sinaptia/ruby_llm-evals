@@ -1,7 +1,7 @@
 module PromptBench
-  class EvalResult < ApplicationRecord
+  class Run < ApplicationRecord
     belongs_to :prompt, foreign_key: :prompt_bench_prompt_id
-    has_many :prompt_executions, foreign_key: :prompt_bench_eval_result_id, dependent: :destroy
+    has_many :prompt_executions, foreign_key: :prompt_bench_run_id, dependent: :destroy
 
     validates :active_job_id, presence: true
     validates :message, presence: true

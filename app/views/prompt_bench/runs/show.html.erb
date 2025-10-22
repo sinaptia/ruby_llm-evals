@@ -1,77 +1,77 @@
-<% content_for :title, "Eval result ##{@eval_result.id}" %>
+<% content_for :title, "Run ##{@run.id}" %>
 
-<h1 class="title">Eval result #<%= @eval_result.id %></h1>
+<h1 class="title">Run #<%= @run.id %></h1>
 
 <table class="table">
   <tbody>
     <tr>
       <th>Prompt</th>
-      <td><%= link_to @eval_result.prompt.name, @eval_result.prompt %></td>
+      <td><%= link_to @run.prompt.name, @run.prompt %></td>
     </tr>
     <tr>
       <th>Provider/Model</th>
-      <td><%= @eval_result.provider %>/<%= @eval_result.model %></td>
+      <td><%= @run.provider %>/<%= @run.model %></td>
     </tr>
     <tr>
       <th>Temperature</th>
-      <td><%= @eval_result.temperature %></td>
+      <td><%= @run.temperature %></td>
     </tr>
     <tr>
       <th>Params</th>
       <td>
-        <% if @eval_result.params.present? %>
-          <pre><%= JSON.pretty_generate @eval_result.params %></pre></td>
+        <% if @run.params.present? %>
+          <pre><%= JSON.pretty_generate @run.params %></pre></td>
         <% end %>
     </tr>
     <tr>
       <th>Tools</th>
       <td>
-        <% if @eval_result.tools.present? %>
-          <pre><%= JSON.pretty_generate @eval_result.tools %></pre>
+        <% if @run.tools.present? %>
+          <pre><%= JSON.pretty_generate @run.tools %></pre>
         <% end %>
       </td>
     </tr>
     <tr>
       <th>Schema</th>
       <td>
-        <% if @eval_result.schema_other.present? %>
-          <pre><%= JSON.pretty_generate @eval_result.schema_other %></pre>
-        <% elsif @eval_result.schema.present? %>
-          <%= @eval_result.schema %>
+        <% if @run.schema_other.present? %>
+          <pre><%= JSON.pretty_generate @run.schema_other %></pre>
+        <% elsif @run.schema.present? %>
+          <%= @run.schema %>
         <% end %>
       </td>
     </tr>
     <tr>
       <th>Instructions</th>
-      <td style="white-space: pre-wrap;"><%= @eval_result.instructions %></td>
+      <td style="white-space: pre-wrap;"><%= @run.instructions %></td>
     </tr>
     <tr>
       <th>Message</th>
-      <td style="white-space: pre-wrap;"><%= @eval_result.message %></td>
+      <td style="white-space: pre-wrap;"><%= @run.message %></td>
     </tr>
     <tr>
       <th>ActiveJob ID</th>
-      <td><%= @eval_result.active_job_id %></td>
+      <td><%= @run.active_job_id %></td>
     </tr>
     <tr>
       <th>Started at</th>
-      <td><%= @eval_result.started_at %></td>
+      <td><%= @run.started_at %></td>
     </tr>
     <tr>
       <th>Ended at</th>
-      <td><%= @eval_result.ended_at %></td>
+      <td><%= @run.ended_at %></td>
     </tr>
     <tr>
       <th>Duration</th>
-      <td><%= @eval_result.finished? ? distance_of_time_in_words(@eval_result.started_at, @eval_result.ended_at, include_seconds: true) : "N/A" %></td>
+      <td><%= @run.finished? ? distance_of_time_in_words(@run.started_at, @run.ended_at, include_seconds: true) : "N/A" %></td>
     </tr>
     <tr>
       <th>Accuracy</th>
-      <td><%= @eval_result.finished? ? "#{@eval_result.accuracy}%" : "N/A" %></td>
+      <td><%= @run.finished? ? "#{@run.accuracy}%" : "N/A" %></td>
     </tr>
     <tr>
       <th>Cost</th>
-      <td>$<%= @eval_result.cost %></td>
+      <td>$<%= @run.cost %></td>
     </tr>
   </tbody>
 </table>
@@ -93,7 +93,7 @@
     </tr>
   </thead>
   <tbody>
-  <% @eval_result.prompt_executions.each do |prompt_execution| %>
+  <% @run.prompt_executions.each do |prompt_execution| %>
       <tr>
         <td><pre><%= JSON.pretty_generate prompt_execution.variables %></pre></td>
         <td>
@@ -113,7 +113,7 @@
           </ul>
         </td>
         <td>
-          <% if @eval_result.schema_other.present? || @eval_result.schema.present? %>
+          <% if @run.schema_other.present? || @run.schema.present? %>
             <% if prompt_execution.message.present? %>
               <pre><%= JSON.pretty_generate JSON.parse(prompt_execution.message) %></pre>
             <% end %>
@@ -137,5 +137,5 @@
 </table>
 
 <div class="mt-6 buttons">
-  <%= button_to "Destroy this eval result", @eval_result, method: :delete, class: "button is-danger" %>
+  <%= button_to "Destroy this eval result", @run, method: :delete, class: "button is-danger" %>
 </div>
