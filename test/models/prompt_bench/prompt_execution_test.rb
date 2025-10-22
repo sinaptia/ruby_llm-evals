@@ -4,7 +4,7 @@ module PromptBench
   class PromptExecutionTest < ActiveSupport::TestCase
     test "should be valid with required attributes" do
       execution = PromptExecution.new(
-        eval_example: prompt_bench_eval_examples(:one),
+        sample: prompt_bench_samples(:one),
         eval_result: prompt_bench_eval_results(:one),
         eval_type: "exact",
         expected_output: "test",
@@ -19,14 +19,14 @@ module PromptBench
       assert_not execution.valid?
     end
 
-    test "should copy eval_example attributes on create" do
-      # Test via fixtures - the fixture should have copied attributes from eval_example
+    test "should copy sample attributes on create" do
+      # Test via fixtures - the fixture should have copied attributes from sample
       execution = prompt_bench_prompt_executions(:one)
-      example = execution.eval_example
+      sample = execution.sample
 
-      assert_equal example.eval_type, execution.eval_type
-      assert_equal example.expected_output, execution.expected_output
-      assert_equal example.variables, execution.variables
+      assert_equal sample.eval_type, execution.eval_type
+      assert_equal sample.expected_output, execution.expected_output
+      assert_equal sample.variables, execution.variables
     end
 
     test "cost should return 0.0 for local providers" do
@@ -50,7 +50,7 @@ module PromptBench
 
     test "cost should return 0.0 when input and output are nil" do
       execution = PromptExecution.new(
-        eval_example: prompt_bench_eval_examples(:one),
+        sample: prompt_bench_samples(:one),
         eval_result: prompt_bench_eval_results(:one),
         eval_type: "exact",
         expected_output: "test",
@@ -78,15 +78,15 @@ module PromptBench
 
     test "execute should create prompt execution with API response" do
       VCR.use_cassette("prompt_execution_test_execute_exact_match") do
-        eval_example = prompt_bench_eval_examples(:one)
+        sample = prompt_bench_samples(:one)
         eval_result = prompt_bench_eval_results(:one)
 
         assert_difference "PromptExecution.count", 1 do
-          PromptExecution.execute(eval_example:, eval_result:)
+          PromptExecution.execute(sample:, eval_result:)
         end
 
         execution = PromptExecution.last
-        assert_equal eval_example, execution.eval_example
+        assert_equal sample, execution.sample
         assert_equal eval_result, execution.eval_result
         assert_not_nil execution.message
         assert_not_nil execution.input
@@ -94,38 +94,38 @@ module PromptBench
       end
     end
 
-    test "execute should copy variables from eval_example" do
+    test "execute should copy variables from sample" do
       VCR.use_cassette("prompt_execution_test_execute_with_variables") do
-        eval_example = prompt_bench_eval_examples(:two)
+        sample = prompt_bench_samples(:two)
         eval_result = prompt_bench_eval_results(:two)
 
-        PromptExecution.execute(eval_example:, eval_result:)
+        PromptExecution.execute(sample:, eval_result:)
 
         execution = PromptExecution.last
-        assert_equal eval_example.variables, execution.variables
+        assert_equal sample.variables, execution.variables
       end
     end
 
-    test "should copy file attachments from eval_example on create" do
-      eval_example = prompt_bench_eval_examples(:one)
+    test "should copy file attachments from sample on create" do
+      sample = prompt_bench_samples(:one)
       eval_result = prompt_bench_eval_results(:one)
 
-      # Attach a file to eval_example
-      eval_example.files.attach(
+      # Attach a file to sample
+      sample.files.attach(
         io: StringIO.new("test file content"),
         filename: "test.txt",
         content_type: "text/plain"
       )
 
-      execution = PromptExecution.create(eval_example:, eval_result:)
+      execution = PromptExecution.create(sample:, eval_result:)
 
-      assert_equal eval_example.files.count, execution.files.count
+      assert_equal sample.files.count, execution.files.count
       assert_equal "test.txt", execution.files.first.filename.to_s
     end
 
     test "should normalize empty hash variables to nil" do
       execution = PromptExecution.create!(
-        eval_example: prompt_bench_eval_examples(:one),
+        sample: prompt_bench_samples(:one),
         eval_result: prompt_bench_eval_results(:one)
       )
       execution.update_column(:variables, "{}")
@@ -138,7 +138,7 @@ module PromptBench
 
     test "should normalize empty array variables to nil" do
       execution = PromptExecution.create!(
-        eval_example: prompt_bench_eval_examples(:one),
+        sample: prompt_bench_samples(:one),
         eval_result: prompt_bench_eval_results(:one)
       )
       execution.update_column(:variables, "[]")
@@ -151,7 +151,7 @@ module PromptBench
 
     test "should normalize empty string variables to nil" do
       execution = PromptExecution.create!(
-        eval_example: prompt_bench_eval_examples(:one),
+        sample: prompt_bench_samples(:one),
         eval_result: prompt_bench_eval_results(:one)
       )
       execution.update_column(:variables, '""')
@@ -164,7 +164,7 @@ module PromptBench
 
     test "should not normalize variables with data" do
       execution = PromptExecution.create!(
-        eval_example: prompt_bench_eval_examples(:one),
+        sample: prompt_bench_samples(:one),
         eval_result: prompt_bench_eval_results(:one)
       )
       execution.update(variables: { "key" => "value" })

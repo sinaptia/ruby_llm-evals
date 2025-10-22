@@ -11,13 +11,13 @@ module PromptBench
       end
     end
 
-    test "job executes all eval_examples" do
+    test "job executes all samples" do
       VCR.use_cassette("eval_prompt_job_test_executes_all_examples") do
         prompt = prompt_bench_prompts(:two)
         EvalPromptJob.perform_now(prompt_id: prompt.id)
 
         eval_result = EvalResult.last
-        assert_equal prompt.eval_examples.count, eval_result.prompt_executions.count
+        assert_equal prompt.samples.count, eval_result.prompt_executions.count
       end
     end
 
@@ -52,16 +52,16 @@ module PromptBench
       end
     end
 
-    test "job creates prompt_executions for all examples" do
+    test "job creates prompt_executions for all samples" do
       VCR.use_cassette("eval_prompt_job_test_creates_prompts_executions") do
         prompt = prompt_bench_prompts(:two)
         EvalPromptJob.perform_now(prompt_id: prompt.id)
 
         eval_result = EvalResult.last
-        assert_equal prompt.eval_examples.count, eval_result.prompt_executions.count
+        assert_equal prompt.samples.count, eval_result.prompt_executions.count
 
-        prompt.eval_examples.each do |example|
-          assert eval_result.prompt_executions.exists?(eval_example: example)
+        prompt.samples.each do |sample|
+          assert eval_result.prompt_executions.exists?(sample: sample)
         end
       end
     end

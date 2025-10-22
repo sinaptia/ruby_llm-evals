@@ -70,22 +70,22 @@
     <p class="help is-danger"><%= prompt.errors.full_messages_for(:message).join(", ") %></p>
   </div>
 
-  <h2 class="mt-6 subtitle">Eval examples</h2>
+  <h2 class="mt-6 subtitle">Samples</h2>
 
   <template data-nested-form-target="template">
-    <%= form.fields_for :eval_examples, PromptBench::EvalExample.new, child_index: "NEW_RECORD" do |eval_example_fields| %>
-      <%= render "prompt_bench/eval_examples/form", form: eval_example_fields %>
+    <%= form.fields_for :samples, PromptBench::Sample.new, child_index: "NEW_RECORD" do |sample_fields| %>
+      <%= render "prompt_bench/samples/form", form: sample_fields %>
     <% end %>
   </template>
 
-  <%= form.fields_for :eval_examples do |eval_example_fields| %>
-    <%= render "prompt_bench/eval_examples/form", form: eval_example_fields %>
+  <%= form.fields_for :samples do |sample_fields| %>
+    <%= render "prompt_bench/samples/form", form: sample_fields %>
   <% end %>
 
   <div data-nested-form-target="target"></div>
 
   <div class="field">
-    <button type="button" class="button" data-action="nested-form#add">Add eval example</button>
+    <button type="button" class="button" data-action="nested-form#add">Add sample</button>
   </div>
 
   <div class="mt-6">

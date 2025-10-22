@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 end
 ```
 
-Now you should be able to browse to `/prompt_bench/` and create, test, compare, and improve your LLM prompts. Continue reading to see how a typical workflow looks like, and how you can leverage your app's data to add eval examples to your prompts.
+Now you should be able to browse to `/prompt_bench/` and create, test, compare, and improve your LLM prompts. Continue reading to see how a typical workflow looks like, and how you can leverage your app's data to add samples to your prompts.
 
 ![prompts](./assets/prompts.png)
 ![eval_results](./assets/eval_results.png)
@@ -110,9 +110,9 @@ Both the instructions and the message template can contain variables that will b
 > [!NOTE]
 > In order to use a provider, you must have it configured in `config/initializers/ruby_llm.rb` as explained [here](https://rubyllm.com/configuration/#provider-configuration)
 
-#### Add eval examples
+#### Add samples
 
-When creating/editing a prompt you can add eval examples, where you can define:
+When creating/editing a prompt you can add samples, where you can define:
 
 * Variables: a JSON that contains the values to use when executing the prompt. Eg: `{ "name": "Patricio" }`
 * Eval type: the evaluation criteria: exact match, contains, regex, or human review.
@@ -121,7 +121,7 @@ When creating/editing a prompt you can add eval examples, where you can define:
 
 #### Run evaluations
 
-Once you have a prompt with its examples you can run the evaluations. This will enqueue a job that will create an eval result and run each eval example with the current prompt configuration.
+Once you have a prompt with its examples you can run the evaluations. This will enqueue a job that will create an eval result and run each sample with the current prompt configuration.
 
 The eval result will save the current prompt configuration for later analysis, such as the current provider/model, instructions, messages, variables, etc.
 
@@ -133,7 +133,7 @@ If you chose the human review eval type, it's now that you can review if an eval
 
 ### Beyond a typical workflow
 
-#### Using your data to create prompts/eval examples
+#### Using your data to create prompts/samples
 
 Suppose you want to categorize images. You can have a prompt (eg. `image-categorization`) and then add your data to the eval set:
 

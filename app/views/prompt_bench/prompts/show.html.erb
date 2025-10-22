@@ -56,9 +56,9 @@
   </tbody>
 </table>
 
-<h2 class="mt-6 subtitle">Eval examples</h2>
+<h2 class="mt-6 subtitle">Samples</h2>
 
-<% if @prompt.eval_examples.any? %>
+<% if @prompt.samples.any? %>
   <table class="table is-fullwidth">
     <thead>
       <tr>
@@ -69,14 +69,14 @@
       </tr>
     </thead>
     <tbody>
-      <% @prompt.eval_examples.each do |eval_example| %>
+      <% @prompt.samples.each do |sample| %>
         <tr>
-          <td><pre><%= JSON.pretty_generate eval_example.variables %></pre></td>
-          <td><%= eval_example.eval_type %></td>
-          <td><%= eval_example.expected_output %></td>
+          <td><pre><%= JSON.pretty_generate sample.variables %></pre></td>
+          <td><%= sample.eval_type %></td>
+          <td><%= sample.expected_output %></td>
           <td>
             <ul>
-              <% eval_example.files.each do |file| %>
+              <% sample.files.each do |file| %>
                 <li>
                   <% if file.previewable? %>
                     <%= image_tag main_app.url_for(file.preview(resize_to_limit: [400, 400]).processed) %>
@@ -95,7 +95,7 @@
     </tbody>
   </table>
 <% else %>
-  <div class="mt-6 has-text-centered is-size-4 has-text-grey">There are no eval examples</div>
+  <div class="mt-6 has-text-centered is-size-4 has-text-grey">There are no samples</div>
 <% end %>
 
 <div class="mt-6 buttons">

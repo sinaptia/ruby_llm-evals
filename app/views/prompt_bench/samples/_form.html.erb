@@ -9,7 +9,7 @@
     <div class="column field">
       <%= form.label :eval_type, class: "label" %>
       <div class="select is-fullwidth">
-        <%= form.select :eval_type, PromptBench::EvalExample.eval_types %>
+        <%= form.select :eval_type, PromptBench::Sample.eval_types %>
       </div>
       <p class="help is-danger"><%= form.object.errors.full_messages_for(:eval_type).join(", ") %></p>
     </div>
@@ -56,7 +56,7 @@
   </div>
 
   <div class="field">
-    <button type="button" class="button is-danger is-outlined" data-action="nested-form#remove">Remove eval example</button>
+    <button type="button" class="button is-danger is-outlined" data-action="nested-form#remove">Remove sample</button>
   </div>
 
   <%= form.hidden_field :_destroy %>

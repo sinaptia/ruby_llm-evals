@@ -127,7 +127,7 @@
         <td>$<%= prompt_execution.cost %></td>
         <td><%= prompt_execution.passed.nil? ? "N/A" : (prompt_execution.passed? ? "🟢" : "🔴") %></td>
         <td>
-          <% if prompt_execution.eval_example.human? %>
+          <% if prompt_execution.sample.human? %>
             <%= button_to "Toggle", toggle_prompt_execution_path(prompt_execution), method: :patch, class: "button" %>
           <% end %>
         </td>

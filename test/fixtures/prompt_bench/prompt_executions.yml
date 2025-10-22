@@ -1,5 +1,5 @@
 one:
-  eval_example: one
+  sample: one
   eval_result: one
   eval_type: exact
   expected_output: car
@@ -10,7 +10,7 @@ one:
   passed: true
 
 two:
-  eval_example: two
+  sample: two
   eval_result: two
   eval_type: contains
   expected_output: "Rails"
@@ -21,7 +21,7 @@ two:
   passed: true
 
 three:
-  eval_example: three
+  sample: three
   eval_result: three
   eval_type: regex
   expected_output: "(positive|negative|neutral)"
@@ -32,7 +32,7 @@ three:
   passed: true
 
 four:
-  eval_example: four
+  sample: four
   eval_result: three
   eval_type: human
   expected_output: null
