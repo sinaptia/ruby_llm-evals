@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    prompt_bench (0.1.0)
+    ruby_llm-evals (0.1.0)
       importmap-rails
       rails (>= 7.0.0)
       ruby_llm
@@ -305,10 +305,10 @@ PLATFORMS
 DEPENDENCIES
   debug (>= 1.0.0)
   dotenv
-  prompt_bench!
   propshaft
   puma
   rubocop-rails-omakase
+  ruby_llm-evals!
   sqlite3
   vcr
   webmock

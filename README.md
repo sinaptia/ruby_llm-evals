@@ -1,4 +1,4 @@
-# PromptBench
+# RubyLLM::Evals
 
 Test, compare, and improve your LLM prompts within your Rails application.
 
@@ -10,7 +10,7 @@ Test, compare, and improve your LLM prompts within your Rails application.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "prompt_bench"
+gem "ruby_llm-evals"
 ```
 
 And then execute:
@@ -19,10 +19,10 @@ And then execute:
 $ bundle
 ```
 
-To copy and migrate PromptBench's migrations, run:
+To copy and migrate RubyLLM::Evals's migrations, run:
 
 ```
-$ rails prompt_bench:install:migrations db:migrate
+$ rails ruby_llm-evals:install:migrations db:migrate
 ```
 
 And then mount the engine in your `config/routes.rb`:
@@ -31,11 +31,11 @@ And then mount the engine in your `config/routes.rb`:
 Rails.application.routes.draw do
   # ...
 
-  mount PromptBench::Engine, at: "/prompt_bench"
+  mount RubyLLM::Evals::Engine, at: "/ruby_llm-evals"
 end
 ```
 
-Now you should be able to browse to `/prompt_bench/` and create, test, compare, and improve your LLM prompts. Continue reading to see how a typical workflow looks like, and how you can leverage your app's data to add samples to your prompts.
+Now you should be able to browse to `/ruby_llm-evals/` and create, test, compare, and improve your LLM prompts. Continue reading to see how a typical workflow looks like, and how you can leverage your app's data to add samples to your prompts.
 
 ![prompts](./assets/prompts.png)
 ![runs](./assets/runs.png)
@@ -43,7 +43,7 @@ Now you should be able to browse to `/prompt_bench/` and create, test, compare, 
 
 ### Authentication and authorization
 
-PromptBench leaves authentication and authorization to the user. If no authentication is enforced, `/prompt_bench` will be available to everyone.
+RubyLLM::Evals leaves authentication and authorization to the user. If no authentication is enforced, `/ruby_llm-evals` will be available to everyone.
 
 To enforce authentication, you can use route [constraints](https://guides.rubyonrails.org/routing.html#advanced-constraints), or set up a HTTP Basic auth middleware.
 
@@ -52,7 +52,7 @@ For example, if you're using devise, you can do this:
 ```ruby
 # config/routes.rb
 authenticate :user do
-  mount PromptBench::Engine, at: "/prompt_bench"
+  mount RubyLLM::Evals::Engine, at: "/ruby_llm-evals"
 end
 ```
 
@@ -63,7 +63,7 @@ However, if you're using Rails' default authentication generator, or an authenti
 ```ruby
 # config/routes.rb
 constraints ->(request) { Constraints::Auth.authenticated?(request) } do
-  mount PromptBench::Engine, at: "/prompt_bench"
+  mount RubyLLM::Evals::Engine, at: "/ruby_llm-evals"
 end
 
 # lib/constraints/auth.rb
@@ -79,10 +79,10 @@ end
 You can also set up a HTTP Basic auth middleware in the engine:
 
 ```ruby
-# config/initializers/prompt_bench.rb
-PromptBench::Engine.middleware.use(Rack::Auth::Basic) do |username, password|
-  ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.prompt_bench_username, username) &
-    ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.prompt_bench_password, password)
+# config/initializers/ruby_llm-evals.rb
+RubyLLM::Evals::Engine.middleware.use(Rack::Auth::Basic) do |username, password|
+  ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.ruby_llm-evals_username, username) &
+    ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.ruby_llm-evals_password, password)
 end
 ```
 
@@ -138,7 +138,7 @@ If you chose the human review eval type, it's now that you can review if an eval
 Suppose you want to categorize images. You can have a prompt (eg. `image-categorization`) and then add your data to the eval set:
 
 ```ruby
-prompt = PromptBench::Prompt.find_by slug: "image-categorization"
+prompt = RubyLLM::Evals::Prompt.find_by slug: "image-categorization"
 
 Image.where(category: nil).take(50).each do |image|
   eval_example = prompt.eval_examples.create eval_type: :human
@@ -158,25 +158,25 @@ Execute prompts by their slug to get a response object with content and metadata
 
 ```ruby
 # Simple execution without variables
-response = PromptBench::Prompt.execute("image-categorization")
+response = RubyLLM::Evals::Prompt.execute("image-categorization")
 response.content  # => "landscape"
 
 # With variables
-response = PromptBench::Prompt.execute(
+response = RubyLLM::Evals::Prompt.execute(
   "text-summarization",
   variables: { "text" => "Long article content here..." }
 )
 response.content  # => "Brief summary of the article"
 
 # With file attachments
-response = PromptBench::Prompt.execute(
+response = RubyLLM::Evals::Prompt.execute(
   "image-categorization",
   files: [image.attachment.blob]
 )
 response.content  # => "person"
 
 # Access token counts and metadata
-response = PromptBench::Prompt.execute(
+response = RubyLLM::Evals::Prompt.execute(
   "sentiment-analysis",
   variables: { "text" => "I love this product!" }
 )
@@ -188,7 +188,7 @@ response.output_tokens  # => 3
 You can also execute a prompt directly on a Prompt instance:
 
 ```ruby
-prompt = PromptBench::Prompt.find_by(slug: "sentiment-analysis")
+prompt = RubyLLM::Evals::Prompt.find_by(slug: "sentiment-analysis")
 response = prompt.execute(variables: { "text" => "I love this product!" })
 response.content  # => "positive"
 ```

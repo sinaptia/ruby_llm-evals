@@ -39,9 +39,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_211231) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "prompt_bench_prompt_executions", force: :cascade do |t|
-    t.integer "prompt_bench_sample_id", null: false
-    t.integer "prompt_bench_run_id", null: false
+  create_table "ruby_llm_evals_prompt_executions", force: :cascade do |t|
+    t.integer "ruby_llm_evals_sample_id", null: false
+    t.integer "ruby_llm_evals_run_id", null: false
     t.string "eval_type", null: false
     t.text "expected_output"
     t.json "variables"
@@ -51,11 +51,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_211231) do
     t.boolean "passed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prompt_bench_run_id"], name: "index_pb_prompt_executions_on_pb_run_id"
-    t.index ["prompt_bench_sample_id"], name: "index_pb_prompt_executions_on_pb_sample_id"
+    t.index ["ruby_llm_evals_run_id"], name: "index_rle_prompt_executions_on_rle_run_id"
+    t.index ["ruby_llm_evals_sample_id"], name: "index_rle_prompt_executions_on_rle_sample_id"
   end
 
-  create_table "prompt_bench_prompts", force: :cascade do |t|
+  create_table "ruby_llm_evals_prompts", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
     t.string "provider", null: false
@@ -69,12 +69,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_211231) do
     t.text "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_prompt_bench_prompts_on_name", unique: true
-    t.index ["slug"], name: "index_prompt_bench_prompts_on_slug", unique: true
+    t.index ["name"], name: "index_ruby_llm_evals_prompts_on_name", unique: true
+    t.index ["slug"], name: "index_ruby_llm_evals_prompts_on_slug", unique: true
   end
 
-  create_table "prompt_bench_runs", force: :cascade do |t|
-    t.integer "prompt_bench_prompt_id", null: false
+  create_table "ruby_llm_evals_runs", force: :cascade do |t|
+    t.integer "ruby_llm_evals_prompt_id", null: false
     t.string "active_job_id", null: false
     t.datetime "started_at"
     t.datetime "ended_at"
@@ -89,23 +89,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_211231) do
     t.text "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prompt_bench_prompt_id"], name: "index_prompt_bench_runs_on_prompt_bench_prompt_id"
+    t.index ["ruby_llm_evals_prompt_id"], name: "index_ruby_llm_evals_runs_on_ruby_llm_evals_prompt_id"
   end
 
-  create_table "prompt_bench_samples", force: :cascade do |t|
-    t.integer "prompt_bench_prompt_id", null: false
+  create_table "ruby_llm_evals_samples", force: :cascade do |t|
+    t.integer "ruby_llm_evals_prompt_id", null: false
     t.string "eval_type", null: false
     t.text "expected_output"
     t.json "variables"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prompt_bench_prompt_id"], name: "index_prompt_bench_samples_on_prompt_bench_prompt_id"
+    t.index ["ruby_llm_evals_prompt_id"], name: "index_ruby_llm_evals_samples_on_ruby_llm_evals_prompt_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "prompt_bench_prompt_executions", "prompt_bench_runs"
-  add_foreign_key "prompt_bench_prompt_executions", "prompt_bench_samples"
-  add_foreign_key "prompt_bench_runs", "prompt_bench_prompts"
-  add_foreign_key "prompt_bench_samples", "prompt_bench_prompts"
+  add_foreign_key "ruby_llm_evals_prompt_executions", "ruby_llm_evals_runs"
+  add_foreign_key "ruby_llm_evals_prompt_executions", "ruby_llm_evals_samples"
+  add_foreign_key "ruby_llm_evals_runs", "ruby_llm_evals_prompts"
+  add_foreign_key "ruby_llm_evals_samples", "ruby_llm_evals_prompts"
 end

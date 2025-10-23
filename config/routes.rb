@@ -1,4 +1,4 @@
-PromptBench::Engine.routes.draw do
+RubyLLM::Evals::Engine.routes.draw do
   resources :runs, only: %i[destroy index show]
 
   resources :prompt_executions, only: [] do

@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount PromptBench::Engine => "/prompt_bench"
+  mount RubyLLM::Evals::Engine => "/evals"
 end

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RubyLLM Evals - <%= content_for(:title) %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="turbo-cache-control" content="no-cache">
+
+  <%= yield :head %>
+
+  <%= stylesheet_link_tag "ruby_llm/evals/bulma.min" %>
+  <%= stylesheet_link_tag "ruby_llm/evals/application", media: "all" %>
+  <%= javascript_importmap_tags importmap: RubyLLM::Evals.importmap %>
+</head>
+<body>
+
+  <section class="section">
+    <div class="container">
+      <%= render "ruby_llm/evals/application/flashes" %>
+      <%= render "ruby_llm/evals/application/nav" %>
+      <%= render "ruby_llm/evals/application/tabs" %>
+      <%= yield %>
+    </div>
+  </section>
+
+</body>
+</html>
