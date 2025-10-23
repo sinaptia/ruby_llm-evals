@@ -31,7 +31,7 @@ And then mount the engine in your `config/routes.rb`:
 Rails.application.routes.draw do
   # ...
 
-  mount RubyLLM::Evals::Engine, at: "/ruby_llm-evals"
+  mount RubyLLM::Evals::Engine, at: "/evals"
 end
 ```
 
@@ -52,7 +52,7 @@ For example, if you're using devise, you can do this:
 ```ruby
 # config/routes.rb
 authenticate :user do
-  mount RubyLLM::Evals::Engine, at: "/ruby_llm-evals"
+  mount RubyLLM::Evals::Engine, at: "/evals"
 end
 ```
 
@@ -63,7 +63,7 @@ However, if you're using Rails' default authentication generator, or an authenti
 ```ruby
 # config/routes.rb
 constraints ->(request) { Constraints::Auth.authenticated?(request) } do
-  mount RubyLLM::Evals::Engine, at: "/ruby_llm-evals"
+  mount RubyLLM::Evals::Engine, at: "/evals"
 end
 
 # lib/constraints/auth.rb
