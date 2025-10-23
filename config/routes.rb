@@ -1,5 +1,5 @@
-PromptBench::Engine.routes.draw do
-  resources :eval_results, only: %i[destroy index show]
+RubyLLM::Evals::Engine.routes.draw do
+  resources :runs, only: %i[destroy index show]
 
   resources :prompt_executions, only: [] do
     member do
@@ -8,7 +8,7 @@ PromptBench::Engine.routes.draw do
   end
 
   resources :prompts do
-    resources :eval_results, only: %i[create]
+    resources :runs, only: %i[create]
   end
 
   root to: "prompts#index"

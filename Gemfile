@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in prompt_bench.gemspec.
+# Specify your gem's dependencies in ruby_llm-evals.gemspec.
 gemspec
 
 gem "puma"

@@ -1,0 +1,5 @@
+module RubyLLM
+  module Evals
+    VERSION = "0.1.0"
+  end
+end

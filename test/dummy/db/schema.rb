@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_21_160630) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_211231) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,18 +39,42 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_21_160630) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "prompt_bench_eval_examples", force: :cascade do |t|
-    t.integer "prompt_bench_prompt_id", null: false
+  create_table "ruby_llm_evals_prompt_executions", force: :cascade do |t|
+    t.integer "ruby_llm_evals_sample_id", null: false
+    t.integer "ruby_llm_evals_run_id", null: false
     t.string "eval_type", null: false
     t.text "expected_output"
     t.json "variables"
+    t.integer "input"
+    t.integer "output"
+    t.text "message"
+    t.boolean "passed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prompt_bench_prompt_id"], name: "index_prompt_bench_eval_examples_on_prompt_bench_prompt_id"
+    t.index ["ruby_llm_evals_run_id"], name: "index_rle_prompt_executions_on_rle_run_id"
+    t.index ["ruby_llm_evals_sample_id"], name: "index_rle_prompt_executions_on_rle_sample_id"
   end
 
-  create_table "prompt_bench_eval_results", force: :cascade do |t|
-    t.integer "prompt_bench_prompt_id", null: false
+  create_table "ruby_llm_evals_prompts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "provider", null: false
+    t.string "model", null: false
+    t.float "temperature"
+    t.json "params"
+    t.json "tools"
+    t.string "schema"
+    t.json "schema_other"
+    t.text "instructions"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_ruby_llm_evals_prompts_on_name", unique: true
+    t.index ["slug"], name: "index_ruby_llm_evals_prompts_on_slug", unique: true
+  end
+
+  create_table "ruby_llm_evals_runs", force: :cascade do |t|
+    t.integer "ruby_llm_evals_prompt_id", null: false
     t.string "active_job_id", null: false
     t.datetime "started_at"
     t.datetime "ended_at"
@@ -65,47 +89,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_21_160630) do
     t.text "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prompt_bench_prompt_id"], name: "index_prompt_bench_eval_results_on_prompt_bench_prompt_id"
+    t.index ["ruby_llm_evals_prompt_id"], name: "index_ruby_llm_evals_runs_on_ruby_llm_evals_prompt_id"
   end
 
-  create_table "prompt_bench_prompt_executions", force: :cascade do |t|
-    t.integer "prompt_bench_eval_example_id", null: false
-    t.integer "prompt_bench_eval_result_id", null: false
+  create_table "ruby_llm_evals_samples", force: :cascade do |t|
+    t.integer "ruby_llm_evals_prompt_id", null: false
     t.string "eval_type", null: false
     t.text "expected_output"
     t.json "variables"
-    t.integer "input"
-    t.integer "output"
-    t.text "message"
-    t.boolean "passed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["prompt_bench_eval_example_id"], name: "index_pb_prompt_executions_on_pb_eval_example_id"
-    t.index ["prompt_bench_eval_result_id"], name: "index_pb_prompt_executions_on_pb_eval_result_id"
-  end
-
-  create_table "prompt_bench_prompts", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "slug", null: false
-    t.string "provider", null: false
-    t.string "model", null: false
-    t.float "temperature"
-    t.json "params"
-    t.json "tools"
-    t.string "schema"
-    t.json "schema_other"
-    t.text "instructions"
-    t.text "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_prompt_bench_prompts_on_name", unique: true
-    t.index ["slug"], name: "index_prompt_bench_prompts_on_slug", unique: true
+    t.index ["ruby_llm_evals_prompt_id"], name: "index_ruby_llm_evals_samples_on_ruby_llm_evals_prompt_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "prompt_bench_eval_examples", "prompt_bench_prompts"
-  add_foreign_key "prompt_bench_eval_results", "prompt_bench_prompts"
-  add_foreign_key "prompt_bench_prompt_executions", "prompt_bench_eval_examples"
-  add_foreign_key "prompt_bench_prompt_executions", "prompt_bench_eval_results"
+  add_foreign_key "ruby_llm_evals_prompt_executions", "ruby_llm_evals_runs"
+  add_foreign_key "ruby_llm_evals_prompt_executions", "ruby_llm_evals_samples"
+  add_foreign_key "ruby_llm_evals_runs", "ruby_llm_evals_prompts"
+  add_foreign_key "ruby_llm_evals_samples", "ruby_llm_evals_prompts"
 end
