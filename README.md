@@ -22,7 +22,7 @@ $ bundle
 To copy and migrate RubyLLM::Evals's migrations, run:
 
 ```
-$ rails ruby_llm-evals:install:migrations db:migrate
+$ rails ruby_llm_evals:install:migrations db:migrate
 ```
 
 And then mount the engine in your `config/routes.rb`:
