@@ -19,7 +19,7 @@ module RubyLLM
 
       def destroy
         @run.destroy!
-        redirect_to prompt_runs_path(@run.prompt), notice: "Eval result was successfully destroyed.", status: :see_other
+        redirect_to prompt_runs_path(@run.prompt), notice: "Run was successfully destroyed.", status: :see_other
       end
 
       private
