@@ -141,12 +141,12 @@ Suppose you want to categorize images. You can have a prompt (eg. `image-categor
 prompt = RubyLLM::Evals::Prompt.find_by slug: "image-categorization"
 
 Image.where(category: nil).take(50).each do |image|
-  eval_example = prompt.eval_examples.create eval_type: :human
-  eval_example.files.attach image.attachment.blob
+  sample = prompt.samples.create eval_type: :human
+  sample.files.attach image.attachment.blob
 end
 ```
 
-Then you iterate over the prompt trying to find the best configuration possible.
+Then you can iterate over the prompt trying to find the best configuration possible.
 
 #### Using the prompt
 
