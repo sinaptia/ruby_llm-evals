@@ -22,24 +22,17 @@
     </tr>
     <tr>
       <th>Params</th>
-      <td>
-        <% if @prompt.params.present? %>
-          <pre><%= JSON.pretty_generate @prompt.params %></pre>
-        <% end %>
-      </td>
+      <td><%= json @prompt.params %></td>
     </tr>
     <tr>
       <th>Tools</th>
-      <td>
-        <% if @prompt.tools.present? %>
-          <pre><%= JSON.pretty_generate @prompt.tools %></pre></td>
-        <% end %>
+      <td><%= @prompt.tools.try :to_sentence %></td>
     </tr>
     <tr>
       <th>Schema</th>
       <td>
         <% if @prompt.schema_other.present? %>
-          <pre><%= JSON.pretty_generate @prompt.schema_other %></pre>
+          <%= json @prompt.schema_other %>
         <% elsif @prompt.schema.present? %>
           <%= @prompt.schema %>
         <% end %>
@@ -71,7 +64,7 @@
     <tbody>
       <% @prompt.samples.each do |sample| %>
         <tr>
-          <td><pre><%= JSON.pretty_generate sample.variables %></pre></td>
+          <td><%= json sample.variables %></td>
           <td><%= sample.eval_type %></td>
           <td><%= sample.expected_output %></td>
           <td>

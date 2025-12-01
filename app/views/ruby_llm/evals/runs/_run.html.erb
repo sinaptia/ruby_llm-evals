@@ -6,8 +6,8 @@
   <td><%= truncate run.message %></td>
   <td><%= run.started_at %></td>
   <td><%= run.ended_at %></td>
-  <td><%= run.finished? ? distance_of_time_in_words(run.started_at, run.ended_at, include_seconds: true) : "N/A" %></td>
-  <td><%= run.finished? ? "#{run.accuracy}%" : "N/A" %></td>
+  <td><%= duration run %></td>
+  <td><%= accuracy run %></td>
   <td>$<%= run.cost %></td>
   <td><%= button_to "Destroy", run, method: :delete, class: "button is-danger" %></td>
 </tr>

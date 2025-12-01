@@ -18,24 +18,17 @@
     </tr>
     <tr>
       <th>Params</th>
-      <td>
-        <% if @run.params.present? %>
-          <pre><%= JSON.pretty_generate @run.params %></pre></td>
-        <% end %>
+      <td><%= json @run.params %></td>
     </tr>
     <tr>
       <th>Tools</th>
-      <td>
-        <% if @run.tools.present? %>
-          <pre><%= JSON.pretty_generate @run.tools %></pre>
-        <% end %>
-      </td>
+      <td><%= @run.tools.try :to_sentence %></td>
     </tr>
     <tr>
       <th>Schema</th>
       <td>
         <% if @run.schema_other.present? %>
-          <pre><%= JSON.pretty_generate @run.schema_other %></pre>
+          <%= json @run.schema_other %>
         <% elsif @run.schema.present? %>
           <%= @run.schema %>
         <% end %>
@@ -63,11 +56,11 @@
     </tr>
     <tr>
       <th>Duration</th>
-      <td><%= @run.finished? ? distance_of_time_in_words(@run.started_at, @run.ended_at, include_seconds: true) : "N/A" %></td>
+      <td><%= duration @run %></td>
     </tr>
     <tr>
       <th>Accuracy</th>
-      <td><%= @run.finished? ? "#{@run.accuracy}%" : "N/A" %></td>
+      <td><%= accuracy @run %></td>
     </tr>
     <tr>
       <th>Cost</th>
@@ -95,7 +88,7 @@
   <tbody>
   <% @run.prompt_executions.each do |prompt_execution| %>
       <tr>
-        <td><pre><%= JSON.pretty_generate prompt_execution.variables %></pre></td>
+        <td><%= json prompt_execution.variables %></td>
         <td>
           <ul>
             <% prompt_execution.files.each do |file| %>
@@ -115,7 +108,7 @@
         <td>
           <% if @run.schema_other.present? || @run.schema.present? %>
             <% if prompt_execution.message.present? %>
-              <pre><%= JSON.pretty_generate JSON.parse(prompt_execution.message) %></pre>
+              <%= json JSON.parse(prompt_execution.message) %>
             <% end %>
           <% else %>
             <div style="white-space: pre-wrap;"><%= prompt_execution.message %></div>
