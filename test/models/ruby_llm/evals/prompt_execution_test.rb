@@ -8,7 +8,8 @@ module RubyLLM::Evals
         run: ruby_llm_evals_runs(:one),
         eval_type: "exact",
         expected_output: "test",
-        message: "test"
+        message: "test",
+        active_job_id: "test-job-id"
       )
       assert execution.valid?
     end
@@ -87,7 +88,7 @@ module RubyLLM::Evals
         content_type: "text/plain"
       )
 
-      execution = PromptExecution.create(sample:, run:)
+      execution = PromptExecution.create(sample:, run:, active_job_id: "test-job-id")
 
       assert_equal sample.files.count, execution.files.count
       assert_equal "test.txt", execution.files.first.filename.to_s
@@ -96,7 +97,8 @@ module RubyLLM::Evals
     test "should normalize empty hash variables to nil" do
       execution = PromptExecution.create!(
         sample: ruby_llm_evals_samples(:one),
-        run: ruby_llm_evals_runs(:one)
+        run: ruby_llm_evals_runs(:one),
+        active_job_id: "test-job-id"
       )
       execution.update_column(:variables, "{}")
       execution.reload
@@ -109,7 +111,8 @@ module RubyLLM::Evals
     test "should normalize empty array variables to nil" do
       execution = PromptExecution.create!(
         sample: ruby_llm_evals_samples(:one),
-        run: ruby_llm_evals_runs(:one)
+        run: ruby_llm_evals_runs(:one),
+        active_job_id: "test-job-id"
       )
       execution.update_column(:variables, "[]")
       execution.reload
@@ -122,7 +125,8 @@ module RubyLLM::Evals
     test "should normalize empty string variables to nil" do
       execution = PromptExecution.create!(
         sample: ruby_llm_evals_samples(:one),
-        run: ruby_llm_evals_runs(:one)
+        run: ruby_llm_evals_runs(:one),
+        active_job_id: "test-job-id"
       )
       execution.update_column(:variables, '""')
       execution.reload
@@ -135,7 +139,8 @@ module RubyLLM::Evals
     test "should not normalize variables with data" do
       execution = PromptExecution.create!(
         sample: ruby_llm_evals_samples(:one),
-        run: ruby_llm_evals_runs(:one)
+        run: ruby_llm_evals_runs(:one),
+        active_job_id: "test-job-id"
       )
       execution.update(variables: { "key" => "value" })
 

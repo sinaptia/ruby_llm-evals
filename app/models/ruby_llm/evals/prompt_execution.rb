@@ -1,6 +1,8 @@
 module RubyLLM
   module Evals
     class PromptExecution < ApplicationRecord
+      include JobTrackable
+
       belongs_to :sample, class_name: "RubyLLM::Evals::Sample", foreign_key: :ruby_llm_evals_sample_id
       belongs_to :run, class_name: "RubyLLM::Evals::Run", foreign_key: :ruby_llm_evals_run_id
 

@@ -7,7 +7,9 @@ module RubyLLM
         run = Run.find run_id
         sample = Sample.find sample_id
 
-        prompt_execution = PromptExecution.create!(active_job_id: job_id, run:, sample:, started_at: Time.current)
+        prompt_execution = PromptExecution.find_or_create_by(active_job_id: job_id, run:, sample:)
+        prompt_execution.update(started_at: Time.current, error_message: nil)
+
         prompt_execution.execute
 
         prompt_execution.update ended_at: Time.current
@@ -17,6 +19,7 @@ module RubyLLM
         end
       rescue StandardError => e
         prompt_execution&.update error_message: e.message
+        raise
       end
     end
   end
