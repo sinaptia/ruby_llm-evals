@@ -20,7 +20,7 @@ module RubyLLM
       end
 
       test "should enqueue job when creating run via nested route" do
-        assert_enqueued_with(job: EvalPromptJob) do
+        assert_enqueued_with(job: PerformRunJob) do
           post prompt_runs_url(@run.prompt)
         end
 

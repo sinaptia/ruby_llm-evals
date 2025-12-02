@@ -1,0 +1,36 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<OLLAMA_API_BASE>/chat/completions"
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma3","messages":[{"role":"system","content":"You are a
+        summarization expert."},{"role":"user","content":"Summarize the following
+        text in one sentence: Ruby on Rails is a web framework written in Ruby"}],"stream":false}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.0
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Dec 2025 02:54:04 GMT
+      Content-Length:
+      - '560'
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJpZCI6ImNoYXRjbXBsLTU5Iiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uIiwiY3JlYXRlZCI6MTc2NDY0NDA0NCwibW9kZWwiOiJnZW1tYTMiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF9vbGxhbWEiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwibWVzc2FnZSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IlJ1Ynkgb24gUmFpbHMgaXMgYSBwb3B1bGFyIHdlYiBmcmFtZXdvcmsgYnVpbHQgdXNpbmcgdGhlIFJ1YnkgcHJvZ3JhbW1pbmcgbGFuZ3VhZ2UuIFxuXG4oVGhhdCdzIGEgc2xpZ2h0bHkgbW9yZSBkZXRhaWxlZCwgYnV0IHN0aWxsIGNvbmNpc2UsIG9uZS1zZW50ZW5jZSBzdW1tYXJ5ISkg8J+YiiBcblxuRG8geW91IHdhbnQgbWUgdG8gc3VtbWFyaXplIHNvbWV0aGluZyBlbHNlLCBvciBwZXJoYXBzIGdpdmUgeW91IHNvbWUgdGlwcyBvbiBob3cgSSBhcHByb2FjaCBzdW1tYXJpemF0aW9uPyJ9LCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XSwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6NDAsImNvbXBsZXRpb25fdG9rZW5zIjo2MSwidG90YWxfdG9rZW5zIjoxMDF9fQo=
+  recorded_at: Tue, 02 Dec 2025 02:54:04 GMT
+recorded_with: VCR 6.3.1

@@ -8,7 +8,8 @@ module RubyLLM::Evals
         run: ruby_llm_evals_runs(:one),
         eval_type: "exact",
         expected_output: "test",
-        message: "test"
+        message: "test",
+        active_job_id: "test-job-id"
       )
       assert execution.valid?
     end
@@ -76,36 +77,6 @@ module RubyLLM::Evals
       assert execution.output > 0
     end
 
-    test "execute should create prompt execution with API response" do
-      VCR.use_cassette("prompt_execution_test_execute_exact_match") do
-        sample = ruby_llm_evals_samples(:one)
-        run = ruby_llm_evals_runs(:one)
-
-        assert_difference "PromptExecution.count", 1 do
-          PromptExecution.execute(sample:, run:)
-        end
-
-        execution = PromptExecution.last
-        assert_equal sample, execution.sample
-        assert_equal run, execution.run
-        assert_not_nil execution.message
-        assert_not_nil execution.input
-        assert_not_nil execution.output
-      end
-    end
-
-    test "execute should copy variables from sample" do
-      VCR.use_cassette("prompt_execution_test_execute_with_variables") do
-        sample = ruby_llm_evals_samples(:two)
-        run = ruby_llm_evals_runs(:two)
-
-        PromptExecution.execute(sample:, run:)
-
-        execution = PromptExecution.last
-        assert_equal sample.variables, execution.variables
-      end
-    end
-
     test "should copy file attachments from sample on create" do
       sample = ruby_llm_evals_samples(:one)
       run = ruby_llm_evals_runs(:one)
@@ -117,7 +88,7 @@ module RubyLLM::Evals
         content_type: "text/plain"
       )
 
-      execution = PromptExecution.create(sample:, run:)
+      execution = PromptExecution.create(sample:, run:, active_job_id: "test-job-id")
 
       assert_equal sample.files.count, execution.files.count
       assert_equal "test.txt", execution.files.first.filename.to_s
@@ -126,7 +97,8 @@ module RubyLLM::Evals
     test "should normalize empty hash variables to nil" do
       execution = PromptExecution.create!(
         sample: ruby_llm_evals_samples(:one),
-        run: ruby_llm_evals_runs(:one)
+        run: ruby_llm_evals_runs(:one),
+        active_job_id: "test-job-id"
       )
       execution.update_column(:variables, "{}")
       execution.reload
@@ -139,7 +111,8 @@ module RubyLLM::Evals
     test "should normalize empty array variables to nil" do
       execution = PromptExecution.create!(
         sample: ruby_llm_evals_samples(:one),
-        run: ruby_llm_evals_runs(:one)
+        run: ruby_llm_evals_runs(:one),
+        active_job_id: "test-job-id"
       )
       execution.update_column(:variables, "[]")
       execution.reload
@@ -152,7 +125,8 @@ module RubyLLM::Evals
     test "should normalize empty string variables to nil" do
       execution = PromptExecution.create!(
         sample: ruby_llm_evals_samples(:one),
-        run: ruby_llm_evals_runs(:one)
+        run: ruby_llm_evals_runs(:one),
+        active_job_id: "test-job-id"
       )
       execution.update_column(:variables, '""')
       execution.reload
@@ -165,7 +139,8 @@ module RubyLLM::Evals
     test "should not normalize variables with data" do
       execution = PromptExecution.create!(
         sample: ruby_llm_evals_samples(:one),
-        run: ruby_llm_evals_runs(:one)
+        run: ruby_llm_evals_runs(:one),
+        active_job_id: "test-job-id"
       )
       execution.update(variables: { "key" => "value" })
 

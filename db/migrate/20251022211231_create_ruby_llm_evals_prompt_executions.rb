@@ -10,6 +10,10 @@ class CreateRubyLLMEvalsPromptExecutions < ActiveRecord::Migration[7.0]
       t.integer :output
       t.text :message
       t.boolean :passed
+      t.string :active_job_id, null: true
+      t.timestamp :started_at
+      t.timestamp :ended_at
+      t.text :error_message
 
       t.timestamps
     end

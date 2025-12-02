@@ -13,7 +13,7 @@ module RubyLLM
       end
 
       def create
-        EvalPromptJob.perform_later prompt_id: @prompt.id
+        PerformRunJob.perform_later prompt_id: @prompt.id
         redirect_to runs_path(filter: { ruby_llm_evals_prompt_id: @prompt.id }), notice: "Prompt is being evaluated."
       end
 

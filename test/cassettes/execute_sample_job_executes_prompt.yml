@@ -25,16 +25,15 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 16 Oct 2025 19:42:16 GMT
+      - Tue, 02 Dec 2025 02:54:05 GMT
       Content-Length:
-      - '488'
+      - '423'
     body:
       encoding: UTF-8
-      string: '{"id":"chatcmpl-793","object":"chat.completion","created":1760643736,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Ruby
+      string: '{"id":"chatcmpl-495","object":"chat.completion","created":1764644045,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Ruby
         on Rails is a popular web framework built using the Ruby programming language.
-        \n\n---\n\nDo you want me to summarize a different text, or would you like
-        me to offer a more detailed summary of this one?"},"finish_reason":"stop"}],"usage":{"prompt_tokens":40,"completion_tokens":45,"total_tokens":85}}
+        \n\n---\n\nIs there anything else I can summarize for you?"},"finish_reason":"stop"}],"usage":{"prompt_tokens":40,"completion_tokens":30,"total_tokens":70}}
 
         '
-  recorded_at: Thu, 16 Oct 2025 19:42:16 GMT
+  recorded_at: Tue, 02 Dec 2025 02:54:05 GMT
 recorded_with: VCR 6.3.1

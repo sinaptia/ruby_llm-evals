@@ -25,13 +25,13 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 16 Oct 2025 19:42:22 GMT
+      - Tue, 02 Dec 2025 02:28:26 GMT
       Content-Length:
       - '290'
     body:
       encoding: UTF-8
-      string: '{"id":"chatcmpl-302","object":"chat.completion","created":1760643742,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Positive\n"},"finish_reason":"stop"}],"usage":{"prompt_tokens":32,"completion_tokens":3,"total_tokens":35}}
+      string: '{"id":"chatcmpl-921","object":"chat.completion","created":1764642506,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Positive\n"},"finish_reason":"stop"}],"usage":{"prompt_tokens":32,"completion_tokens":3,"total_tokens":35}}
 
         '
-  recorded_at: Thu, 16 Oct 2025 19:42:22 GMT
+  recorded_at: Tue, 02 Dec 2025 02:28:26 GMT
 recorded_with: VCR 6.3.1
