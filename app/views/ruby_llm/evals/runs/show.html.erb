@@ -130,7 +130,15 @@
         <td><%= prompt_execution.passed.nil? ? "N/A" : (prompt_execution.passed? ? "🟢" : "🔴") %></td>
         <td>
           <% if prompt_execution.sample.human? %>
-            <%= button_to "Toggle", toggle_prompt_execution_path(prompt_execution), method: :patch, class: "button" %>
+            <% if prompt_execution.passed.nil? %>
+              <div class="buttons">
+                <%= button_to "Pass", pass_prompt_execution_path(prompt_execution), method: :patch, class: "button is-success is-light" %>
+                <%= button_to "Fail", fail_prompt_execution_path(prompt_execution), method: :patch, class: "button is-danger is-light" %>
+              </div>
+            <% else %>
+              <% target_action = prompt_execution.passed? ? :fail : :pass %>
+              <%= button_to "Toggle", send("#{target_action}_prompt_execution_path", prompt_execution), method: :patch, class: "button" %>
+            <% end %>
           <% end %>
         </td>
       </tr>

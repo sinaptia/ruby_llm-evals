@@ -3,7 +3,8 @@ RubyLLM::Evals::Engine.routes.draw do
 
   resources :prompt_executions, only: [] do
     member do
-      patch :toggle
+      patch :fail
+      patch :pass
     end
   end
 
