@@ -23,12 +23,12 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 17 Oct 2025 15:23:59 GMT
+      - Tue, 02 Dec 2025 02:28:23 GMT
       Content-Length:
-      - '330'
+      - '316'
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        eyJpZCI6ImNoYXRjbXBsLTM2Iiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uIiwiY3JlYXRlZCI6MTc2MDcxNDYzOSwibW9kZWwiOiJnZW1tYTMiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF9vbGxhbWEiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwibWVzc2FnZSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IkhlbGxvIHRoZXJlISDwn5iKIFxuXG5Ib3cncyB5b3VyIGRheSBnb2luZyBzbyBmYXI/In0sImZpbmlzaF9yZWFzb24iOiJzdG9wIn1dLCJ1c2FnZSI6eyJwcm9tcHRfdG9rZW5zIjoxMSwiY29tcGxldGlvbl90b2tlbnMiOjE2LCJ0b3RhbF90b2tlbnMiOjI3fX0K
-  recorded_at: Fri, 17 Oct 2025 15:23:59 GMT
+        eyJpZCI6ImNoYXRjbXBsLTY4MSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbiIsImNyZWF0ZWQiOjE3NjQ2NDI1MDMsIm1vZGVsIjoiZ2VtbWEzIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfb2xsYW1hIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsIm1lc3NhZ2UiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiJIZWxsbyB0aGVyZSEg8J+YiiBIb3figJlzIGl0IGdvaW5nPyJ9LCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XSwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6MTEsImNvbXBsZXRpb25fdG9rZW5zIjoxMSwidG90YWxfdG9rZW5zIjoyMn19Cg==
+  recorded_at: Tue, 02 Dec 2025 02:28:23 GMT
 recorded_with: VCR 6.3.1

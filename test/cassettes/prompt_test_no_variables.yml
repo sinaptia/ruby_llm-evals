@@ -24,12 +24,16 @@ http_interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 16 Oct 2025 19:42:22 GMT
+      - Tue, 02 Dec 2025 02:28:28 GMT
       Content-Length:
-      - '467'
+      - '486'
     body:
-      encoding: ASCII-8BIT
-      string: !binary |-
-        eyJpZCI6ImNoYXRjbXBsLTc3MSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbiIsImNyZWF0ZWQiOjE3NjA2NDM3NDIsIm1vZGVsIjoiZ2VtbWEzIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfb2xsYW1hIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsIm1lc3NhZ2UiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiJPa2F5ISBKdXN0IGxldCBtZSBrbm93IHdoYXQgeW91IG5lZWQuIEknbSBoZXJlIHRvIGhlbHAgaW4gYW55IHdheSBJIGNhbiwgd2l0aG91dCBzdWJzdGl0dXRpbmcgYW55dGhpbmcuIPCfmIogXG5cbkRvIHlvdSBoYXZlIGEgcXVlc3Rpb24sIG5lZWQgbWUgdG8gd3JpdGUgc29tZXRoaW5nLCBvciBqdXN0IHdhbnQgdG8gY2hhdD8ifSwiZmluaXNoX3JlYXNvbiI6InN0b3AifV0sInVzYWdlIjp7InByb21wdF90b2tlbnMiOjEyLCJjb21wbGV0aW9uX3Rva2VucyI6NDgsInRvdGFsX3Rva2VucyI6NjB9fQo=
-  recorded_at: Thu, 16 Oct 2025 19:42:22 GMT
+      encoding: UTF-8
+      string: '{"id":"chatcmpl-504","object":"chat.completion","created":1764642508,"model":"gemma3","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"Okay,
+        great! I understand. I won''t use any substitutions. \n\nHow can I help you
+        today? Do you want me to:\n\n*   Continue a conversation?\n*   Answer a question?\n*   Generate
+        some text based on a prompt?"},"finish_reason":"stop"}],"usage":{"prompt_tokens":12,"completion_tokens":56,"total_tokens":68}}
+
+        '
+  recorded_at: Tue, 02 Dec 2025 02:28:28 GMT
 recorded_with: VCR 6.3.1

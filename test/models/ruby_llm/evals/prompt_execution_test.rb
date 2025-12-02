@@ -76,36 +76,6 @@ module RubyLLM::Evals
       assert execution.output > 0
     end
 
-    test "execute should create prompt execution with API response" do
-      VCR.use_cassette("prompt_execution_test_execute_exact_match") do
-        sample = ruby_llm_evals_samples(:one)
-        run = ruby_llm_evals_runs(:one)
-
-        assert_difference "PromptExecution.count", 1 do
-          PromptExecution.execute(sample:, run:)
-        end
-
-        execution = PromptExecution.last
-        assert_equal sample, execution.sample
-        assert_equal run, execution.run
-        assert_not_nil execution.message
-        assert_not_nil execution.input
-        assert_not_nil execution.output
-      end
-    end
-
-    test "execute should copy variables from sample" do
-      VCR.use_cassette("prompt_execution_test_execute_with_variables") do
-        sample = ruby_llm_evals_samples(:two)
-        run = ruby_llm_evals_runs(:two)
-
-        PromptExecution.execute(sample:, run:)
-
-        execution = PromptExecution.last
-        assert_equal sample.variables, execution.variables
-      end
-    end
-
     test "should copy file attachments from sample on create" do
       sample = ruby_llm_evals_samples(:one)
       run = ruby_llm_evals_runs(:one)

@@ -11,6 +11,7 @@ one:
   output: 20
   message: car
   passed: true
+  active_job_id: test-job-1
 
 two:
   sample: two
@@ -22,6 +23,7 @@ two:
   output: 150
   message: "Rails is a popular web framework."
   passed: true
+  active_job_id: test-job-2
 
 three:
   sample: three
@@ -33,6 +35,7 @@ three:
   output: 10
   message: positive
   passed: true
+  active_job_id: test-job-3
 
 four:
   sample: four
@@ -44,3 +47,4 @@ four:
   output: 8
   message: neutral
   passed: null
+  active_job_id: test-job-4

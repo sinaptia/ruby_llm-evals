@@ -13,6 +13,12 @@ two:
   expected_output: "Rails"
   variables: { "text": "Ruby on Rails is a web framework written in Ruby" }
 
+two_b:
+  prompt: two
+  eval_type: contains
+  expected_output: "framework"
+  variables: { "text": "Django is a Python web framework for building web applications" }
+
 three:
   prompt: three
   eval_type: regex

@@ -15,30 +15,6 @@ module RubyLLM
 
       before_validation :set_sample_attributes, on: :create
 
-      def self.execute(sample:, run:)
-        prompt_execution = create(sample:, run:)
-
-        response = sample.prompt.execute(
-          variables: prompt_execution.variables,
-          files: prompt_execution.files.map(&:blob)
-        )
-
-        message = response.content.is_a?(Hash) ? response.content.to_json : response.content.chomp
-
-        passed = case prompt_execution.eval_type
-        when "contains" then message.include?(prompt_execution.expected_output)
-        when "exact" then message == prompt_execution.expected_output
-        when "regex" then Regexp.new(prompt_execution.expected_output, "i").match?(message)
-        end
-
-        prompt_execution.update(
-          input: response.input_tokens,
-          output: response.output_tokens,
-          message:,
-          passed:
-        )
-      end
-
       def cost
         model, provider = RubyLLM.models.resolve run.model, provider: run.provider
 
@@ -48,6 +24,28 @@ module RubyLLM
         output_cost = output / 1_000_000.0 * model.output_price_per_million
 
         (input_cost + output_cost).round(4)
+      end
+
+      def execute
+        response = sample.prompt.execute(
+          variables: variables,
+          files: files.map(&:blob)
+        )
+
+        message = response.content.is_a?(Hash) ? response.content.to_json : response.content.chomp
+
+        passed = case eval_type
+        when "contains" then message.include?(expected_output)
+        when "exact" then message == expected_output
+        when "regex" then Regexp.new(expected_output, "i").match?(message)
+        end
+
+        update(
+          input: response.input_tokens,
+          output: response.output_tokens,
+          message:,
+          passed:
+        )
       end
 
       private
