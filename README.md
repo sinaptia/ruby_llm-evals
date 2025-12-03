@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 end
 ```
 
-Now you should be able to browse to `/ruby_llm-evals/` and create, test, compare, and improve your LLM prompts. Continue reading to see how a typical workflow looks like, and how you can leverage your app's data to add samples to your prompts.
+Now you should be able to browse to `/evals` and create, test, compare, and improve your LLM prompts. Continue reading to see how a typical workflow looks like, and how you can leverage your app's data to add samples to your prompts.
 
 ![prompts](./assets/prompts.png)
 ![runs](./assets/runs.png)
