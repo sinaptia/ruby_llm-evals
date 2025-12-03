@@ -1,15 +1,13 @@
 <% content_for :title, "Prompts" %>
 
-<h1 class="title">
-  <div class="level">
-    <div class="level-left">
-      Prompts
-    </div>
-    <div class="level-right">
-      <%= link_to "New prompt", new_prompt_path, class: "button is-link" %>
-    </div>
+<div class="level">
+  <div class="level-left">
+    <%= render "filters", clear_path: prompts_path %>
   </div>
-</h1>
+  <div class="level-right is-align-self-flex-end">
+    <%= link_to "New prompt", new_prompt_path, class: "button is-link" %>
+  </div>
+</div>
 
 <% if @prompts.records.any? %>
   <table class="table is-hoverable is-fullwidth">

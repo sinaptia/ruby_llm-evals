@@ -1,10 +1,13 @@
 module RubyLLM
   module Evals
     class PromptsController < ApplicationController
+      before_action :set_filters, only: %i[ index ]
       before_action :set_prompt, only: %i[ show edit update destroy ]
 
       def index
-        @prompts = Page.new Prompt.all, page: params[:page].to_i
+        prompts = Prompt.all
+        prompts = prompts.where("name LIKE ?", "%#{Prompt.sanitize_sql_like(@filters[:name])}%") if @filters[:name].present?
+        @prompts = Page.new prompts, page: params[:page].to_i
       end
 
       def show
@@ -42,8 +45,8 @@ module RubyLLM
 
       private
 
-      def set_prompt
-        @prompt = Prompt.find(params[:id])
+      def filter_param
+        { filter: @filters }
       end
 
       def prompt_params
@@ -63,6 +66,16 @@ module RubyLLM
         ).tap do |prompt_params|
           prompt_params[:tools].try(:reject!, &:blank?)
         end
+      end
+
+      def set_filters
+        @filters = {
+          name: params.dig(:filter, :name).presence
+        }.compact
+      end
+
+      def set_prompt
+        @prompt = Prompt.find(params[:id])
       end
     end
   end

@@ -1,0 +1,17 @@
+<div class="level">
+  <div class="level-left">
+    <%= form_with scope: :filter, url: runs_path, method: :get, data: {controller: "auto-submit"} do |form| %>
+      <div class="field is-grouped">
+        <div>
+          <%= form.label :ruby_llm_evals_prompt_id, "Prompt", class: "label" %>
+          <div class="select">
+            <%= form.collection_select :ruby_llm_evals_prompt_id, RubyLLM::Evals::Prompt.all, :id, :name, {selected: filter_param.dig(:filter, :ruby_llm_evals_prompt_id), include_blank: true}, data: {action: "auto-submit#submit"} %>
+          </div>
+        </div>
+        <div class="is-align-self-flex-end">
+          <%= link_to "Clear", clear_path, class: "button" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

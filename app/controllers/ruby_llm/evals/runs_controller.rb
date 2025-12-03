@@ -27,7 +27,6 @@ module RubyLLM
       def filter_param
         { filter: @filters }
       end
-      helper_method :filter_param
 
       def set_run
         @run = Run.find params[:id]

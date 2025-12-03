@@ -1,0 +1,15 @@
+<div class="level">
+  <div class="level-left">
+    <%= form_with scope: :filter, url: prompts_path, method: :get, data: {controller: "auto-submit"} do |form| %>
+      <div class="field is-grouped">
+        <div>
+          <%= form.label :name, "Name", class: "label" %>
+          <%= form.text_field :name, value: filter_param.dig(:filter, :name), class: "input", data: {action: "auto-submit#submit"} %>
+        </div>
+        <div class="is-align-self-flex-end">
+          <%= link_to "Clear", clear_path, class: "button" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

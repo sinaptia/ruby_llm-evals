@@ -1,6 +1,6 @@
 <% content_for :title, "Runs" %>
 
-<h1 class="title">Runs</h1>
+<%= render "filters", clear_path: runs_path %>
 
 <% if @runs.records.any? %>
   <table class="table is-hoverable is-fullwidth">
