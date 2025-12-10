@@ -43,7 +43,7 @@ Now you should be able to browse to `/evals` and create, test, compare, and impr
 
 ### Authentication and authorization
 
-RubyLLM::Evals leaves authentication and authorization to the user. If no authentication is enforced, `/ruby_llm-evals` will be available to everyone.
+RubyLLM::Evals leaves authentication and authorization to the user. If no authentication is enforced, `/evals` will be available to everyone.
 
 To enforce authentication, you can use route [constraints](https://guides.rubyonrails.org/routing.html#advanced-constraints), or set up a HTTP Basic auth middleware.
 
@@ -81,8 +81,8 @@ You can also set up a HTTP Basic auth middleware in the engine:
 ```ruby
 # config/initializers/ruby_llm-evals.rb
 RubyLLM::Evals::Engine.middleware.use(Rack::Auth::Basic) do |username, password|
-  ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.ruby_llm-evals_username, username) &
-    ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.ruby_llm-evals_password, password)
+  ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.ruby_llm_evals_username, username) &
+    ActiveSupport::SecurityUtils.secure_compare(Rails.application.credentials.ruby_llm_evals_password, password)
 end
 ```
 
