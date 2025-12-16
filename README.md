@@ -2,6 +2,16 @@
 
 Test, compare, and improve your LLM prompts within your Rails application.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Workflow](#workflow)
+  - [Beyond a typical workflow](#beyond-a-typical-workflow)
+  - [CI Integration](#ci-integration)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Installation
 
 > [!NOTE]
@@ -191,6 +201,91 @@ You can also execute a prompt directly on a Prompt instance:
 prompt = RubyLLM::Evals::Prompt.find_by(slug: "sentiment-analysis")
 response = prompt.execute(variables: { "text" => "I love this product!" })
 response.content  # => "positive"
+```
+
+### CI Integration
+
+You can use RubyLLM::Evals in your CI pipeline to catch prompt regressions before they reach production. This ensures that changes to prompts, models, or configurations don't degrade performance.
+
+#### Example
+
+Create a rake task to run evaluations and fail if accuracy drops below a threshold:
+
+```ruby
+# lib/tasks/evals.rake
+namespace :evals do
+  desc "Run prompt evaluations and fail if accuracy drops below threshold"
+  task ci: :environment do
+    threshold = ENV.fetch("PROMPT_ACCURACY_THRESHOLD", "0.8").to_f
+    failed_prompts = []
+
+    RubyLLM::Evals::Prompt.find_each do |prompt|
+      next if prompt.samples.empty?
+
+      print "Evaluating '#{prompt.slug}'... "
+
+      run = RubyLLM::Evals::Run.create!(prompt: prompt)
+      prompt.samples.each do |sample|
+        RubyLLM::Evals::ExecuteSampleJob.perform_now(run_id: run.id, sample_id: sample.id)
+      end
+      run.reload
+
+      if run.accuracy >= threshold
+        puts "✓ #{(run.accuracy * 100).round(1)}%"
+      else
+        puts "✗ #{(run.accuracy * 100).round(1)}% (below #{(threshold * 100).round(1)}%)"
+        failed_prompts << { slug: prompt.slug, accuracy: run.accuracy }
+      end
+    end
+
+    if failed_prompts.any?
+      puts "\nFailed prompts:"
+      failed_prompts.each do |p|
+        puts "  - #{p[:slug]}: #{(p[:accuracy] * 100).round(1)}%"
+      end
+      exit 1
+    else
+      puts "\nAll prompts passed evaluation!"
+    end
+  end
+end
+```
+
+Then add a GitHub Actions workflow that runs when seeds change:
+
+```yaml
+# .github/workflows/prompt-evals.yml
+name: Prompt Evaluations
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for seed changes
+        id: seeds
+        run: |
+          if git diff --name-only ${{ github.event.before || 'HEAD~1' }} HEAD | grep -q '^db/seeds/'; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      - uses: ruby/setup-ruby@v1
+        if: steps.seeds.outputs.changed == 'true'
+        with:
+          bundler-cache: true
+      - run: bin/rails db:prepare db:seed
+        if: steps.seeds.outputs.changed == 'true'
+      - run: bin/rails evals:ci
+        if: steps.seeds.outputs.changed == 'true'
 ```
 
 ## Contributing
