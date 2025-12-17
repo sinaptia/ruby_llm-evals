@@ -123,7 +123,7 @@
           <% end %>
         </td>
         <td><%= prompt_execution.eval_type %></td>
-        <td><%= prompt_execution.expected_output %></td>
+        <td><%= expected_output prompt_execution %></td>
         <td><%= prompt_execution.input %>/<%= prompt_execution.output %></td>
         <td><%= duration prompt_execution %></td>
         <td>$<%= prompt_execution.cost %></td>
