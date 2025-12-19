@@ -43,10 +43,10 @@ module RubyLLM::Evals
       assert_not sample.valid?
     end
 
-    test "should not require expected_output for human eval_type" do
+    test "should not require expected_output for human_judge eval_type" do
       sample = Sample.new(
         prompt: ruby_llm_evals_prompts(:one),
-        eval_type: "human"
+        eval_type: "human_judge"
       )
       assert sample.valid?
     end

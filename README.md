@@ -141,7 +141,7 @@ Suppose you want to categorize images. You can have a prompt (eg. `image-categor
 prompt = RubyLLM::Evals::Prompt.find_by slug: "image-categorization"
 
 Image.where(category: nil).take(50).each do |image|
-  sample = prompt.samples.create eval_type: :human
+  sample = prompt.samples.create eval_type: :human_judge
   sample.files.attach image.attachment.blob
 end
 ```

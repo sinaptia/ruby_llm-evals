@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="column field" data-eval-type-selector-target="expectedOutput" style="<%= 'display: none;' if form.object.human? %>">
+    <div class="column field" data-eval-type-selector-target="expectedOutput" style="<%= 'display: none;' if form.object.human_judge? %>">
       <%= form.label :expected_output, class: "label" %>
       <%= form.text_area :expected_output, class: "textarea", placeholder: "For llm_judge: describe what makes a correct response" %>
       <p class="help is-danger"><%= form.object.errors.full_messages_for(:expected_output).join(", ") %></p>

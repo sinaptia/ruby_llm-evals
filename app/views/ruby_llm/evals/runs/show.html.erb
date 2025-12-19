@@ -163,7 +163,7 @@
         </td>
         <td><%= prompt_execution.passed.nil? ? "N/A" : (prompt_execution.passed? ? "🟢" : "🔴") %></td>
         <td>
-          <% if prompt_execution.sample.human? %>
+          <% if prompt_execution.sample.human_judge? %>
             <% if prompt_execution.passed.nil? %>
               <div class="buttons">
                 <%= button_to "Pass", pass_prompt_execution_path(prompt_execution), method: :patch, class: "button is-success is-light" %>

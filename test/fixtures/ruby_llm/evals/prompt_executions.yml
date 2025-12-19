@@ -40,7 +40,7 @@ three:
 four:
   sample: four
   run: three
-  eval_type: human
+  eval_type: human_judge
   expected_output: null
   variables: { "text": "The weather is nice today." }
   input: 1600
