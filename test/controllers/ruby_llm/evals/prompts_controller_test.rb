@@ -117,6 +117,50 @@ module RubyLLM
         assert_redirected_to prompt_url(Prompt.last)
       end
 
+      test "should create prompt with nested samples" do
+        assert_difference("Prompt.count", 1) do
+          assert_difference("Sample.count", 3) do
+            post prompts_url, params: {
+              prompt: {
+                name: "Prompt with Multiple Samples",
+                provider: "ollama",
+                model: "gemma3",
+                message: "Test",
+                samples_attributes: [
+                  { eval_type: "exact", expected_output: "output1", variables: {}.to_json },
+                  { eval_type: "contains", expected_output: "output2", variables: {}.to_json },
+                  { eval_type: "regex", expected_output: "(yes|no)", variables: {}.to_json }
+                ]
+              }
+            }
+          end
+        end
+
+        prompt = Prompt.last
+        assert_equal 3, prompt.samples.count
+        assert_redirected_to prompt_url(prompt)
+      end
+
+      test "should reject blank samples when creating prompt" do
+        assert_difference("Prompt.count", 1) do
+          assert_no_difference("Sample.count") do
+            post prompts_url, params: {
+              prompt: {
+                name: "Prompt with Blank Sample",
+                provider: "ollama",
+                model: "gemma3",
+                message: "Test",
+                samples_attributes: [
+                  { eval_type: "", expected_output: "", variables: "" }
+                ]
+              }
+            }
+          end
+        end
+
+        assert_redirected_to prompt_url(Prompt.last)
+      end
+
       test "should update prompt with schema" do
         patch prompt_url(@prompt), params: {
           prompt: {
@@ -148,6 +192,85 @@ module RubyLLM
 
         @prompt.reload
         assert_equal schema_other, @prompt.schema_other
+        assert_redirected_to prompt_url(@prompt)
+      end
+
+      test "should update prompt and add new sample" do
+        initial_sample_count = @prompt.samples.count
+
+        assert_difference("Sample.count", 1) do
+          patch prompt_url(@prompt), params: {
+            prompt: {
+              name: @prompt.name,
+              provider: @prompt.provider,
+              model: @prompt.model,
+              message: @prompt.message,
+              samples_attributes: [
+                {
+                  eval_type: "contains",
+                  expected_output: "new test",
+                  variables: {}.to_json
+                }
+              ]
+            }
+          }
+        end
+
+        @prompt.reload
+        assert_equal initial_sample_count + 1, @prompt.samples.count
+        assert_redirected_to prompt_url(@prompt)
+      end
+
+      test "should update prompt and remove sample via destroy" do
+        sample = @prompt.samples.first
+
+        assert_difference("Sample.count", -1) do
+          patch prompt_url(@prompt), params: {
+            prompt: {
+              name: @prompt.name,
+              provider: @prompt.provider,
+              model: @prompt.model,
+              message: @prompt.message,
+              samples_attributes: [
+                {
+                  id: sample.id,
+                  _destroy: "1"
+                }
+              ]
+            }
+          }
+        end
+
+        @prompt.reload
+        assert_not @prompt.samples.exists?(sample.id)
+        assert_redirected_to prompt_url(@prompt)
+      end
+
+      test "should update prompt and modify existing sample" do
+        sample = @prompt.samples.first
+        new_expected_output = "modified output"
+
+        assert_no_difference("Sample.count") do
+          patch prompt_url(@prompt), params: {
+            prompt: {
+              name: @prompt.name,
+              provider: @prompt.provider,
+              model: @prompt.model,
+              message: @prompt.message,
+              samples_attributes: [
+                {
+                  id: sample.id,
+                  eval_type: sample.eval_type,
+                  expected_output: new_expected_output,
+                  variables: sample.variables.to_json
+                }
+              ]
+            }
+          }
+        end
+
+        sample.reload
+        assert_equal new_expected_output, sample.expected_output
         assert_redirected_to prompt_url(@prompt)
       end
     end
