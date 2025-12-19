@@ -6,10 +6,12 @@ module RubyLLM
 
       has_many_attached :files
 
-      enum :eval_type, %w[exact contains regex human].index_by(&:itself)
+      enum :eval_type, %w[exact contains regex human llm_judge].index_by(&:itself)
 
       validates :eval_type, presence: true
-      validates :expected_output, presence: true, unless: ->(sample) { sample.human? }
+      validates :expected_output, presence: true, unless: :human?
+      validates :judge_model, presence: true, if: :llm_judge?
+      validates :judge_provider, presence: true, if: :llm_judge?
       validates :variables, json: true
 
       normalizes :variables, with: ->(value) { value.blank? ? nil : value }

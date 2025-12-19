@@ -30,3 +30,11 @@ four:
   eval_type: human
   expected_output: null
   variables: { "text": "The weather is nice today." }
+
+five:
+  prompt: three
+  eval_type: llm_judge
+  expected_output: "The output should correctly answer the question asked"
+  judge_model: "gemini-2.0-flash-001"
+  judge_provider: "gemini"
+  variables: { "text": "What is the capital of France?" }

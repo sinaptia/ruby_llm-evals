@@ -14,6 +14,11 @@ class CreateRubyLLMEvalsPromptExecutions < ActiveRecord::Migration[7.0]
       t.timestamp :started_at
       t.timestamp :ended_at
       t.text :error_message
+      t.string :judge_provider
+      t.string :judge_model
+      t.json :judge_message
+      t.integer :judge_input
+      t.integer :judge_output
 
       t.timestamps
     end

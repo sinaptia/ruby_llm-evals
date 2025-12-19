@@ -26,6 +26,14 @@ module RubyLLM
         prompt_executions.sum(&:cost).round(4)
       end
 
+      def judge_cost
+        prompt_executions.sum(&:judge_cost).round(4)
+      end
+
+      def total_cost
+        (cost + judge_cost).round(4)
+      end
+
       private
 
       def set_prompt_attributes

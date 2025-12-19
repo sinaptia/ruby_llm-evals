@@ -1,4 +1,4 @@
-<div class="box nested-form-wrapper" data-new-record="<%= form.object.new_record? %>">
+<div class="box nested-form-wrapper" data-new-record="<%= form.object.new_record? %>" data-controller="eval-type-selector">
   <div class="columns">
     <div class="column field">
       <%= form.label :variables, class: "label" %>
@@ -10,17 +10,38 @@
       <p class="help is-danger"><%= form.object.errors.full_messages_for(:variables).join(", ") %></p>
     </div>
 
-    <div class="column field">
-      <%= form.label :eval_type, class: "label" %>
-      <div class="select is-fullwidth">
-        <%= form.select :eval_type, RubyLLM::Evals::Sample.eval_types %>
+    <div class="column">
+      <div class="field">
+        <%= form.label :eval_type, class: "label" %>
+        <div class="select is-fullwidth">
+          <%= form.select :eval_type, RubyLLM::Evals::Sample.eval_types, {}, data: { action: "change->eval-type-selector#toggle", eval_type_selector_target: "select" } %>
+        </div>
+        <p class="help is-danger"><%= form.object.errors.full_messages_for(:eval_type).join(", ") %></p>
       </div>
-      <p class="help is-danger"><%= form.object.errors.full_messages_for(:eval_type).join(", ") %></p>
+
+      <div data-eval-type-selector-target="judgeFields" data-controller="provider-model" data-provider-model-models-by-provider-value="<%= models_by_provider_data %>" style="<%= 'display: none;' unless form.object.llm_judge? %>">
+        <div class="field">
+          <%= form.label :judge_provider, class: "label" %>
+          <div class="select is-fullwidth">
+            <%= form.select :judge_provider, options_for_select(RubyLLM.providers.map { [_1.name, _1.slug] }, form.object.judge_provider), { include_blank: true }, data: { provider_model_target: "provider", action: "change->provider-model#provider-changed" } %>
+          </div>
+          <p class="help is-danger"><%= form.object.errors.full_messages_for(:judge_provider).join(", ") %></p>
+        </div>
+
+        <div class="field">
+          <%= form.label :judge_model, class: "label" %>
+          <div class="select is-fullwidth is-hidden" data-provider-model-target="modelSelectWrapper">
+            <%= form.select :judge_model, [], {}, { class: "input", name: nil, data: { provider_model_target: "modelSelect", action: "change->provider-model#syncToInput" } } %>
+          </div>
+          <%= form.text_field :judge_model, class: "input", placeholder: "e.g., gpt-4o, claude-sonnet-4-20250514", data: { provider_model_target: "modelInput" } %>
+          <p class="help is-danger"><%= form.object.errors.full_messages_for(:judge_model).join(", ") %></p>
+        </div>
+      </div>
     </div>
 
-    <div class="column field">
+    <div class="column field" data-eval-type-selector-target="expectedOutput" style="<%= 'display: none;' if form.object.human? %>">
       <%= form.label :expected_output, class: "label" %>
-      <%= form.text_area :expected_output, class: "textarea" %>
+      <%= form.text_area :expected_output, class: "textarea", placeholder: "For llm_judge: describe what makes a correct response" %>
       <p class="help is-danger"><%= form.object.errors.full_messages_for(:expected_output).join(", ") %></p>
     </div>
 

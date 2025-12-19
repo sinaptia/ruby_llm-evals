@@ -73,7 +73,7 @@ module RubyLLM::Evals
     test "accuracy should handle multiple executions" do
       result = ruby_llm_evals_runs(:three)
 
-      expected_accuracy = (1 * 100.0 / 2).round(2)
+      expected_accuracy = (2 * 100.0 / 3).round(2)
       assert_equal expected_accuracy, result.accuracy
     end
 

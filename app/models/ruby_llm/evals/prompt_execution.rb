@@ -3,29 +3,58 @@ module RubyLLM
     class PromptExecution < ApplicationRecord
       include JobTrackable
 
+      JUDGE_PROMPT_TEMPLATE = <<~TEMPLATE.freeze
+        You are an expert evaluator. Determine if the output correctly fulfills the task.
+
+        ## Task Given
+        {{rendered_message}}
+
+        ## Output to Evaluate
+        {{output}}
+
+        ## Evaluation Criteria
+        {{criteria}}
+
+        Return whether the output PASSED or FAILED based on the criteria.
+      TEMPLATE
+
       belongs_to :sample, class_name: "RubyLLM::Evals::Sample", foreign_key: :ruby_llm_evals_sample_id
       belongs_to :run, class_name: "RubyLLM::Evals::Run", foreign_key: :ruby_llm_evals_run_id
 
       has_many_attached :files
 
-      enum :eval_type, %w[exact contains regex human].index_by(&:itself)
+      enum :eval_type, %w[exact contains regex human llm_judge].index_by(&:itself)
 
       validates :eval_type, presence: true
-      validates :expected_output, presence: true, unless: ->(sample) { sample.human? }
+      validates :expected_output, presence: true, unless: :human?
 
+      normalizes :judge_message, with: ->(value) { value.blank? ? nil : value }
       normalizes :variables, with: ->(value) { value.blank? ? nil : value }
 
       before_validation :set_sample_attributes, on: :create
 
       def cost
-        model, provider = RubyLLM.models.resolve run.model, provider: run.provider
+        calculate_cost(
+          model_name: run.model,
+          provider_name: run.provider,
+          input_tokens: input,
+          output_tokens: output
+        )
+      end
 
-        return 0.0 if provider.local? || [ input, output ].all?(nil)
+      def judge_cost
+        return 0.0 if judge_model.blank?
 
-        input_cost = input / 1_000_000.0 * model.input_price_per_million
-        output_cost = output / 1_000_000.0 * model.output_price_per_million
+        calculate_cost(
+          model_name: judge_model,
+          provider_name: judge_provider,
+          input_tokens: judge_input,
+          output_tokens: judge_output
+        )
+      end
 
-        (input_cost + output_cost).round(4)
+      def total_cost
+        (cost + judge_cost).round(4)
       end
 
       def execute
@@ -40,6 +69,7 @@ module RubyLLM
         when "contains" then message.include?(expected_output)
         when "exact" then message == expected_output
         when "regex" then Regexp.new(expected_output, "i").match?(message)
+        when "llm_judge" then judge(message)
         end
 
         update(
@@ -52,8 +82,45 @@ module RubyLLM
 
       private
 
+      def calculate_cost(model_name:, provider_name:, input_tokens:, output_tokens:)
+        return 0.0 if [ input_tokens, output_tokens ].all?(nil)
+
+        model, provider = RubyLLM.models.resolve(model_name, provider: provider_name)
+        return 0.0 if provider.nil? || provider.local?
+
+        input_cost = input_tokens.to_f / 1_000_000.0 * model.input_price_per_million
+        output_cost = output_tokens.to_f / 1_000_000.0 * model.output_price_per_million
+
+        (input_cost + output_cost).round(4)
+      end
+
+      def judge(output)
+        rendered_message = Liquid::Template.parse(run.message).render(variables)
+
+        chat = RubyLLM.chat(model: judge_model, provider: judge_provider).with_schema(JudgeVerdictSchema)
+
+        judge_prompt = Liquid::Template.parse(JUDGE_PROMPT_TEMPLATE).render(
+          "rendered_message" => rendered_message,
+          "output" => output,
+          "criteria" => expected_output
+        )
+
+        judge_response = chat.ask(judge_prompt)
+        verdict = judge_response.content
+
+        assign_attributes(
+          judge_message: verdict,
+          judge_input: judge_response.input_tokens,
+          judge_output: judge_response.output_tokens
+        )
+
+        verdict["passed"]
+      end
+
       def set_sample_attributes
-        %i[eval_type expected_output variables].each { |attribute| send :"#{attribute}=", sample.send(:"#{attribute}") }
+        %i[eval_type expected_output judge_model judge_provider variables].each do |attribute|
+          send(:"#{attribute}=", sample.send(:"#{attribute}"))
+        end
 
         sample.files.each { |file| files.attach file.blob }
       end
