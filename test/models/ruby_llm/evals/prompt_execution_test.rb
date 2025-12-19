@@ -30,6 +30,34 @@ module RubyLLM::Evals
       assert_equal sample.variables, execution.variables
     end
 
+    test "should copy judge fields from sample on create" do
+      sample = ruby_llm_evals_samples(:five)
+      run = ruby_llm_evals_runs(:one)
+
+      execution = PromptExecution.create!(
+        sample: sample,
+        run: run,
+        active_job_id: "test-job-id"
+      )
+
+      assert_equal sample.judge_model, execution.judge_model
+      assert_equal sample.judge_provider, execution.judge_provider
+    end
+
+    test "should handle nil judge fields from sample on create" do
+      sample = ruby_llm_evals_samples(:one)
+      run = ruby_llm_evals_runs(:one)
+
+      execution = PromptExecution.create!(
+        sample: sample,
+        run: run,
+        active_job_id: "test-job-id"
+      )
+
+      assert_nil execution.judge_model
+      assert_nil execution.judge_provider
+    end
+
     test "cost should return 0.0 for local providers" do
       execution = ruby_llm_evals_prompt_executions(:two)
 
@@ -146,6 +174,121 @@ module RubyLLM::Evals
 
       assert_equal({ "key" => "value" }, execution.variables)
       assert_equal({ "key" => "value" }, execution.reload.variables)
+    end
+
+    test "should normalize empty hash judge_message to nil" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_column(:judge_message, "{}")
+      execution.reload
+      execution.update(judge_message: {})
+
+      assert_nil execution.judge_message
+      assert_nil execution.reload.judge_message
+    end
+
+    test "should normalize empty array judge_message to nil" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_column(:judge_message, "[]")
+      execution.reload
+      execution.update(judge_message: [])
+
+      assert_nil execution.judge_message
+      assert_nil execution.reload.judge_message
+    end
+
+    test "should normalize empty string judge_message to nil" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_column(:judge_message, '""')
+      execution.reload
+      execution.update(judge_message: "")
+
+      assert_nil execution.judge_message
+      assert_nil execution.reload.judge_message
+    end
+
+    test "should not normalize judge_message with data" do
+      execution = ruby_llm_evals_prompt_executions(:five)
+
+      assert_not_nil execution.judge_message
+      assert_equal true, execution.judge_message["passed"]
+      assert_equal "Correctly identifies Paris as the capital of France", execution.judge_message["reasoning"]
+    end
+
+    test "judge_cost should return 0.0 when judge_model is blank" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_columns(judge_model: nil, judge_provider: nil, judge_input: 100, judge_output: 50)
+
+      assert_equal 0.0, execution.judge_cost
+    end
+
+    test "judge_cost should return 0.0 for local judge providers" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_columns(
+        judge_model: "llama3.2",
+        judge_provider: "ollama",
+        judge_input: 100,
+        judge_output: 50
+      )
+
+      assert_equal 0.0, execution.judge_cost
+    end
+
+    test "judge_cost should calculate correctly for paid API judge providers" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_columns(
+        judge_model: "gemini-2.0-flash-001",
+        judge_provider: "gemini",
+        judge_input: 1000,
+        judge_output: 100
+      )
+
+      # Cost should be calculated based on gemini pricing
+      assert execution.judge_cost > 0.0
+    end
+
+    test "judge_cost should return 0.0 when judge_input and judge_output are nil" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_columns(
+        judge_model: "gemini-2.0-flash-001",
+        judge_provider: "gemini",
+        judge_input: nil,
+        judge_output: nil
+      )
+
+      assert_equal 0.0, execution.judge_cost
+    end
+
+    test "total_cost should sum cost and judge_cost" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_columns(
+        input: 1500,
+        output: 20,
+        judge_model: "gemini-2.0-flash-001",
+        judge_provider: "gemini",
+        judge_input: 1000,
+        judge_output: 100
+      )
+
+      base_cost = execution.cost
+      judge_cost = execution.judge_cost
+
+      assert base_cost > 0.0
+      assert judge_cost > 0.0
+      assert_equal (base_cost + judge_cost).round(4), execution.total_cost
+    end
+
+    test "total_cost should equal cost when there is no judge_cost" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      execution.update_columns(
+        input: 1500,
+        output: 20,
+        judge_model: nil,
+        judge_provider: nil,
+        judge_input: nil,
+        judge_output: nil
+      )
+
+      assert_equal execution.cost, execution.total_cost
     end
   end
 end

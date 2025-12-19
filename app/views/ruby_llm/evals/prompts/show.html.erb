@@ -65,7 +65,12 @@
       <% @prompt.samples.each do |sample| %>
         <tr>
           <td><%= json sample.variables %></td>
-          <td><%= sample.eval_type %></td>
+          <td>
+            <%= sample.eval_type %>
+            <% if sample.llm_judge? %>
+              <div>(<%= sample.judge_provider %>/<%= sample.judge_model %>)</div>
+            <% end %>
+          </td>
           <td><%= expected_output sample %></td>
           <td>
             <ul>

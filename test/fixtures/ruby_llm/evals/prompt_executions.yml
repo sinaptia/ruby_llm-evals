@@ -40,7 +40,7 @@ three:
 four:
   sample: four
   run: three
-  eval_type: human
+  eval_type: human_judge
   expected_output: null
   variables: { "text": "The weather is nice today." }
   input: 1600
@@ -48,3 +48,20 @@ four:
   message: neutral
   passed: null
   active_job_id: test-job-4
+
+five:
+  sample: five
+  run: three
+  eval_type: llm_judge
+  expected_output: "The output should correctly answer the question asked"
+  judge_model: "gemini-2.0-flash-001"
+  judge_provider: "gemini"
+  variables: { "question": "What is the capital of France?" }
+  input: 1200
+  output: 15
+  judge_input: 800
+  judge_output: 50
+  message: "Paris"
+  judge_message: { "passed": true, "reasoning": "Correctly identifies Paris as the capital of France" }
+  passed: true
+  active_job_id: test-job-5

@@ -47,6 +47,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_22_211231) do
     t.string "eval_type", null: false
     t.text "expected_output"
     t.integer "input"
+    t.integer "judge_input"
+    t.json "judge_message"
+    t.string "judge_model"
+    t.integer "judge_output"
+    t.string "judge_provider"
     t.text "message"
     t.integer "output"
     t.boolean "passed"
@@ -100,6 +105,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_22_211231) do
     t.datetime "created_at", null: false
     t.string "eval_type", null: false
     t.text "expected_output"
+    t.string "judge_model"
+    t.string "judge_provider"
     t.integer "ruby_llm_evals_prompt_id", null: false
     t.datetime "updated_at", null: false
     t.json "variables"
