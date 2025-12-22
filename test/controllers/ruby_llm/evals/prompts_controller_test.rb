@@ -273,6 +273,11 @@ module RubyLLM
         assert_equal new_expected_output, sample.expected_output
         assert_redirected_to prompt_url(@prompt)
       end
+
+      test "should get compare" do
+        get compare_prompt_url(@prompt)
+        assert_response :success
+      end
     end
   end
 end

@@ -10,6 +10,10 @@ RubyLLM::Evals::Engine.routes.draw do
 
   resources :prompts do
     resources :runs, only: %i[create]
+
+    member do
+      get :compare
+    end
   end
 
   root to: "prompts#index"

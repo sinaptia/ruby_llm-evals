@@ -161,7 +161,7 @@
             <div>$<%= prompt_execution.judge_cost %> (judge)</div>
           <% end %>
         </td>
-        <td><%= prompt_execution.passed.nil? ? "N/A" : (prompt_execution.passed? ? "🟢" : "🔴") %></td>
+        <td><%= status_indicator(prompt_execution) %></td>
         <td>
           <% if prompt_execution.sample.human_judge? %>
             <% if prompt_execution.passed.nil? %>
