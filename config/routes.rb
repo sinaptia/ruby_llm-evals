@@ -5,6 +5,7 @@ RubyLLM::Evals::Engine.routes.draw do
     member do
       patch :fail
       patch :pass
+      patch :retry
     end
   end
 
