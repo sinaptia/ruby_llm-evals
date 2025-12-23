@@ -152,8 +152,6 @@ Then you can iterate over the prompt trying to find the best configuration possi
 
 Once you've tested and refined your prompt, you can use it in your application code.
 
-##### Execute prompts by slug
-
 Execute prompts by their slug to get a response object with content and metadata:
 
 ```ruby
