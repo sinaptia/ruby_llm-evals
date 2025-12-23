@@ -55,6 +55,7 @@
   <table class="table is-fullwidth">
     <thead>
       <tr>
+        <th>Sample</th>
         <th>Variables</th>
         <th>Eval type</th>
         <th>Expected output</th>
@@ -64,6 +65,7 @@
     <tbody>
       <% @prompt.samples.each do |sample| %>
         <tr>
+          <td>#<%= sample.id %></td>
           <td><%= json sample.variables %></td>
           <td>
             <%= sample.eval_type %>
@@ -97,6 +99,9 @@
 <% end %>
 
 <div class="mt-6 buttons">
+  <% if @prompt.runs.any? %>
+    <%= link_to "Compare runs", compare_prompt_path(@prompt), class: "button" %>
+  <% end %>
   <%= link_to "Edit this prompt", edit_prompt_path(@prompt), class: "button" %>
   <%= button_to "Destroy this prompt", @prompt, method: :delete, class: "button is-danger" %>
 </div>

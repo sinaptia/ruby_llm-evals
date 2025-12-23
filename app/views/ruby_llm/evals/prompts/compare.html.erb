@@ -1,0 +1,90 @@
+<% content_for :title, "#{@prompt.name} - Runs Comparison" %>
+
+<h1 class="title"><%= @prompt.name %> - Runs Comparison</h1>
+
+<% if @runs.any? %>
+  <div style="overflow-x: auto;">
+    <table class="table is-bordered is-striped is-fullwidth">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <% @runs.each do |run| %>
+            <th>
+              <%= link_to "Run ##{run.id}", run_path(run) %>
+              <div class="is-size-7 has-text-grey">
+                <%= run.created_at %>
+              </div>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Provider/Model</th>
+          <% @runs.each do |run| %>
+            <td><%= run.provider %>/<%= run.model %></td>
+          <% end %>
+        </tr>
+
+        <tr>
+          <th>Temperature</th>
+          <% @runs.each do |run| %>
+            <td><%= run.temperature || "N/A" %></td>
+          <% end %>
+        </tr>
+
+        <tr>
+          <th>Instructions</th>
+          <% @runs.each do |run| %>
+            <td><%= truncate run.instructions %></td>
+          <% end %>
+        </tr>
+
+        <tr>
+          <th>Message</th>
+          <% @runs.each do |run| %>
+            <td><%= truncate run.message %></td>
+          <% end %>
+        </tr>
+
+        <tr>
+          <th>Accuracy</th>
+          <% @runs.each do |run| %>
+            <td><%= accuracy(run) %></td>
+          <% end %>
+        </tr>
+
+        <tr>
+          <th>Cost</th>
+          <% @runs.each do |run| %>
+            <td>$<%= run.total_cost %></td>
+          <% end %>
+        </tr>
+
+        <tr>
+          <th>Duration</th>
+          <% @runs.each do |run| %>
+            <td><%= duration(run) %></td>
+          <% end %>
+        </tr>
+
+        <% if @samples.any? %>
+          <% @samples.each_with_index do |sample, sample_index| %>
+            <tr>
+              <th>
+                Sample #<%= sample.id %>
+              </th>
+              <% @runs.each do |run| %>
+                <td class="has-text-centered">
+                  <%= status_indicator run.prompt_executions.find { |pe| pe.sample.id == sample.id } %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="mt-6 has-text-centered is-size-4 has-text-grey">There are no runs</div>
+<% end %>

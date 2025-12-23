@@ -2,7 +2,7 @@ module RubyLLM
   module Evals
     class PromptsController < ApplicationController
       before_action :set_filters, only: %i[ index ]
-      before_action :set_prompt, only: %i[ show edit update destroy ]
+      before_action :set_prompt, only: %i[ show edit update destroy compare ]
 
       def index
         prompts = Prompt.all
@@ -41,6 +41,11 @@ module RubyLLM
       def destroy
         @prompt.destroy!
         redirect_to prompts_path, notice: "Prompt was successfully destroyed.", status: :see_other
+      end
+
+      def compare
+        @runs = @prompt.runs.includes(prompt_executions: :sample).order(created_at: :asc)
+        @samples = @prompt.samples.order(id: :asc)
       end
 
       private
