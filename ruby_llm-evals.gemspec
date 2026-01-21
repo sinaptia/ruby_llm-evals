@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "importmap-rails"
   spec.add_dependency "liquid"
-  spec.add_dependency "rails", ">= 7.0.0"
+  spec.add_dependency "rails", ">= 7.2.0"
   spec.add_dependency "ruby_llm"
   spec.add_dependency "ruby_llm-schema"
   spec.add_dependency "stimulus-rails"

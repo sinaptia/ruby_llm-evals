@@ -4,7 +4,7 @@ PATH
     ruby_llm-evals (0.1.0)
       importmap-rails
       liquid
-      rails (>= 7.0.0)
+      rails (>= 7.2.0)
       ruby_llm
       ruby_llm-schema
       stimulus-rails

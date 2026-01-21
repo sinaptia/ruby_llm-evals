@@ -24,12 +24,22 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # services:
-    #  redis:
-    #    image: redis
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
+        rails-version: ["rails-7.2", "rails-8.0", "rails-8.1"]
+        exclude:
+          - ruby-version: "3.1"
+            rails-version: "rails-8.0"
+          - ruby-version: "3.1"
+            rails-version: "rails-8.1"
+
+    name: Test (ruby-${{ matrix.ruby-version }}, ${{ matrix.rails-version }})
+
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.rails-version }}.gemfile
+
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y build-essential git libyaml-dev pkg-config google-chrome-stable
@@ -40,25 +50,15 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ruby-3.4.6
+          ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
       - name: Setup database
         env:
           RAILS_ENV: test
-          # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:setup
 
       - name: Run tests
         env:
           RAILS_ENV: test
-          # REDIS_URL: redis://localhost:6379/0
         run: bin/rails test
-
-      # - name: Keep screenshots from failed system tests
-      #   uses: actions/upload-artifact@v4
-      #   if: failure()
-      #   with:
-      #     name: screenshots
-      #     path: ${{ github.workspace }}/tmp/screenshots
-      #     if-no-files-found: ignore
