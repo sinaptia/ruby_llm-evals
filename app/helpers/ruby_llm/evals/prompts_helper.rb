@@ -12,7 +12,7 @@ module RubyLLM
 
       def available_schemas
         Rails.application.eager_load! unless Rails.application.config.eager_load
-        RubyLLM::Schema.descendants.map(&:name).uniq.sort
+        RubyLLM::Schema.descendants.map(&:name).reject { |name| name.start_with? "RubyLLM::Evals::" }.uniq.sort
       end
 
       def schema_options_for_select(prompt)
