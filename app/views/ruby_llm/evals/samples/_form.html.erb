@@ -33,7 +33,7 @@
           <div class="select is-fullwidth is-hidden" data-provider-model-target="modelSelectWrapper">
             <%= form.select :judge_model, [], {}, { class: "input", name: nil, data: { provider_model_target: "modelSelect", action: "change->provider-model#syncToInput" } } %>
           </div>
-          <%= form.text_field :judge_model, class: "input", placeholder: "e.g., gpt-4o, claude-sonnet-4-20250514", data: { provider_model_target: "modelInput" } %>
+          <%= form.text_field :judge_model, class: "input", data: { provider_model_target: "modelInput" } %>
           <p class="help is-danger"><%= form.object.errors.full_messages_for(:judge_model).join(", ") %></p>
         </div>
       </div>
@@ -41,7 +41,7 @@
 
     <div class="column field" data-eval-type-selector-target="expectedOutput" style="<%= 'display: none;' if form.object.human_judge? %>">
       <%= form.label :expected_output, class: "label" %>
-      <%= form.text_area :expected_output, class: "textarea", placeholder: "For llm_judge: describe what makes a correct response" %>
+      <%= form.text_area :expected_output, class: "textarea" %>
       <p class="help is-danger"><%= form.object.errors.full_messages_for(:expected_output).join(", ") %></p>
     </div>
 
