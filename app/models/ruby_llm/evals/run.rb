@@ -15,6 +15,7 @@ module RubyLLM
       before_validation :set_prompt_attributes, on: :create
 
       scope :finished, -> { where.not(ended_at: nil) }
+      scope :running, -> { where(ended_at: nil) }
 
       def accuracy
         return 0.0 if prompt_executions.none?

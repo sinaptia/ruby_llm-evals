@@ -2,10 +2,10 @@ RubyLLM::Evals::Engine.routes.draw do
   resources :runs, only: %i[destroy index show]
 
   resources :prompt_executions, only: [] do
-    member do
-      patch :fail
-      patch :pass
-      patch :retry
+    scope module: :prompt_executions do
+      resource :failure, only: %i[create]
+      resource :passage, only: %i[create]
+      resource :retry, only: %i[create]
     end
   end
 
