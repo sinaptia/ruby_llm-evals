@@ -165,15 +165,15 @@
         <td>
           <div class="buttons">
             <% if prompt_execution.error_message.present? %>
-              <%= button_to "Retry", retry_prompt_execution_path(prompt_execution), method: :patch, class: "button is-warning is-light" %>
+              <%= button_to "Retry", retry_prompt_execution_path(prompt_execution), method: :post, class: "button is-warning is-light" %>
             <% end %>
             <% if prompt_execution.sample.human_judge? %>
               <% if prompt_execution.passed.nil? %>
-                <%= button_to "Pass", pass_prompt_execution_path(prompt_execution), method: :patch, class: "button is-success is-light" %>
-                <%= button_to "Fail", fail_prompt_execution_path(prompt_execution), method: :patch, class: "button is-danger is-light" %>
+                <%= button_to "Pass", prompt_execution_passage_path(prompt_execution), method: :post, class: "button is-success is-light" %>
+                <%= button_to "Fail", prompt_execution_failure_path(prompt_execution), method: :post, class: "button is-danger is-light" %>
               <% else %>
-                <% target_action = prompt_execution.passed? ? :fail : :pass %>
-                <%= button_to "Toggle", send("#{target_action}_prompt_execution_path", prompt_execution), method: :patch, class: "button" %>
+                <% target_path = prompt_execution.passed? ? prompt_execution_failure_path(prompt_execution) : prompt_execution_passage_path(prompt_execution) %>
+                <%= button_to "Toggle", target_path, method: :post, class: "button" %>
               <% end %>
             <% end %>
           </div>
