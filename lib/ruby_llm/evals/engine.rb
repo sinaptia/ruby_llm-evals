@@ -36,8 +36,11 @@ module RubyLLM
           ruby_llm/evals/application.js
           ruby_llm/evals/controllers/application.js
           ruby_llm/evals/controllers/index.js
-          ruby_llm/evals/controllers/provider_model_controller.js
+          ruby_llm/evals/controllers/eval_type_selector_controller.js
           ruby_llm/evals/controllers/file_input_controller.js
+          ruby_llm/evals/controllers/json_editor_controller.js
+          ruby_llm/evals/controllers/provider_model_controller.js
+          ruby_llm/evals/controllers/schema_selector_controller.js
         ]
       end
 
