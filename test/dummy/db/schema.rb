@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_22_211231) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_19_145205) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -76,6 +76,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_22_211231) do
     t.json "schema_other"
     t.string "slug", null: false
     t.float "temperature"
+    t.integer "thinking_budget"
+    t.string "thinking_effort"
     t.json "tools"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_ruby_llm_evals_prompts_on_name", unique: true
@@ -96,6 +98,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_22_211231) do
     t.json "schema_other"
     t.datetime "started_at"
     t.float "temperature"
+    t.integer "thinking_budget"
+    t.string "thinking_effort"
     t.json "tools"
     t.datetime "updated_at", null: false
     t.index ["ruby_llm_evals_prompt_id"], name: "index_ruby_llm_evals_runs_on_ruby_llm_evals_prompt_id"

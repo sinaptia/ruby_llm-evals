@@ -38,7 +38,7 @@ module RubyLLM
       private
 
       def set_prompt_attributes
-        %i[instructions message model params provider temperature tools schema schema_other].each { |attribute| send :"#{attribute}=", prompt.send(:"#{attribute}") }
+        %i[instructions message model params provider temperature tools schema schema_other thinking_effort thinking_budget].each { |attribute| send :"#{attribute}=", prompt.send(:"#{attribute}") }
       end
     end
   end

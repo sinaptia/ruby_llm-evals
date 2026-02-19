@@ -42,6 +42,10 @@ module RubyLLM
           chat.with_schema schema.constantize
         end
 
+        if thinking_effort.present? || thinking_budget.present?
+          chat.with_thinking effort: thinking_effort, budget: thinking_budget
+        end
+
         chat.ask Liquid::Template.parse(message).render(variables), with: files
       end
 

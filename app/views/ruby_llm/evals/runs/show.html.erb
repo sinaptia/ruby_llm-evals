@@ -35,6 +35,14 @@
       </td>
     </tr>
     <tr>
+      <th>Thinking effort</th>
+      <td><%= @run.thinking_effort %></td>
+    </tr>
+    <tr>
+      <th>Thinking budget</th>
+      <td><%= @run.thinking_budget %></td>
+    </tr>
+    <tr>
       <th>Instructions</th>
       <td style="white-space: pre-wrap;"><%= @run.instructions %></td>
     </tr>
@@ -165,7 +173,7 @@
         <td>
           <div class="buttons">
             <% if prompt_execution.error_message.present? %>
-              <%= button_to "Retry", retry_prompt_execution_path(prompt_execution), method: :post, class: "button is-warning is-light" %>
+              <%= button_to "Retry", prompt_execution_retry_path(prompt_execution), method: :post, class: "button is-warning is-light" %>
             <% end %>
             <% if prompt_execution.sample.human_judge? %>
               <% if prompt_execution.passed.nil? %>

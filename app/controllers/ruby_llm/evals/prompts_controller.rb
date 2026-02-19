@@ -66,6 +66,8 @@ module RubyLLM
           :message,
           :schema,
           :schema_other,
+          :thinking_effort,
+          :thinking_budget,
           samples_attributes: [ :id, :_destroy, :eval_type, :expected_output, :judge_model, :judge_provider, :variables, files: [] ],
           tools: []
         ).tap do |prompt_params|

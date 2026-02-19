@@ -68,6 +68,16 @@
   </div>
 
   <div class="field">
+    <%= form.label :thinking_effort, class: "label" %>
+    <%= form.text_field :thinking_effort, class: "input" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :thinking_budget, class: "label" %>
+    <%= form.number_field :thinking_budget, min: 0, class: "input" %>
+  </div>
+
+  <div class="field">
     <%= form.label :instructions, class: "label" %>
     <%= form.text_area :instructions, class: "textarea" %>
     <p class="help">You can use liquid tags.</p>

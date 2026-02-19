@@ -186,6 +186,17 @@ module RubyLLM::Evals
       end
     end
 
+    test ".execute handles thinking" do
+      @prompt.update model: "gpt-oss:20b-cloud", thinking_effort: "high"
+
+      VCR.use_cassette("prompt_test_handles_thinking") do
+        response = Prompt.execute(@prompt.slug, variables: {}, files: [])
+
+        assert_not_nil response
+        assert_not_nil response.thinking
+      end
+    end
+
     test "#execute instance method returns RubyLLM response object" do
       VCR.use_cassette("prompt_test_execute_returns_response") do
         response = @prompt.execute(variables: {})
