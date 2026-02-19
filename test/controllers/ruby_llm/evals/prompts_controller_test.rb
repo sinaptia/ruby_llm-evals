@@ -117,6 +117,40 @@ module RubyLLM
         assert_redirected_to prompt_url(Prompt.last)
       end
 
+      test "should create prompt with thinking_effort" do
+        assert_difference("Prompt.count") do
+          post prompts_url, params: {
+            prompt: {
+              name: "Prompt with thinking effort",
+              provider: "anthropic",
+              model: "claude-3-5-sonnet-20241022",
+              message: "Test message",
+              thinking_effort: "high"
+            }
+          }
+        end
+
+        assert_equal "high", Prompt.last.thinking_effort
+        assert_redirected_to prompt_url(Prompt.last)
+      end
+
+      test "should create prompt with thinking_budget" do
+        assert_difference("Prompt.count") do
+          post prompts_url, params: {
+            prompt: {
+              name: "Prompt with thinking effort",
+              provider: "anthropic",
+              model: "claude-3-5-sonnet-20241022",
+              message: "Test message",
+              thinking_budget: 1000
+            }
+          }
+        end
+
+        assert_equal 1000, Prompt.last.thinking_budget
+        assert_redirected_to prompt_url(Prompt.last)
+      end
+
       test "should create prompt with nested samples" do
         assert_difference("Prompt.count", 1) do
           assert_difference("Sample.count", 3) do

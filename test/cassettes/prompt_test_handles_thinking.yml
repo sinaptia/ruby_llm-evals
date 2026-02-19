@@ -1,0 +1,86 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<OLLAMA_API_BASE>/chat/completions"
+    body:
+      encoding: UTF-8
+      string: '{"model":"gpt-oss:20b-cloud","messages":[{"role":"system","content":"You
+        are an image classification expert. Categorize images accurately based on
+        their content."},{"role":"user","content":"Please categorize this image into
+        one of the following categories: car, landscape, person, animal, building,
+        or other. Respond with just the category name."}],"stream":false,"reasoning_effort":"high"}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.1
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 19 Feb 2026 17:21:24 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"id":"chatcmpl-625","object":"chat.completion","created":1771521685,"model":"gpt-oss:20b-cloud","system_fingerprint":"fp_ollama","choices":[{"index":0,"message":{"role":"assistant","content":"other","reasoning":"We
+        need to answer based on the given image. However, there''s no image visible
+        here. The user says: \"Please categorize this image into one of the following
+        categories: car, landscape, person, animal, building, or other. Respond with
+        just the category name.\" But we don''t see the image. In these openAI exercises,
+        often the user will incorporate an image in the conversation. Here, we can''t
+        see it. The task is to respond with the correct category. The system can''t
+        see the image. But there is a possibility of context. Usually, the user will
+        attach an image. The image might be some instance like a car. But we can''t
+        see it. We must anticipate: With no image, we can''t decide. But perhaps there''s
+        an expected pattern: The image might be a generic car illustration or maybe
+        random. Could be a building. It''s uncertain.\n\nGiven standard dataset: classification
+        categories. The user wants one of: car, landscape, person, animal, building,
+        or other.\n\nWe have to produce the answer. If we don''t know, there''s no
+        correct answer. But maybe the user has posted an image that the assistant
+        can see? As ChatGPT, textual I can''t see images. However, someone building
+        a test dataset might have this, and GPT needs to guess. Not possible. So we
+        might provide a generic answer: \"other\". But that''s a guess.\n\nWait there
+        might be pattern: The conversation # may refer to the image in the conversation.
+        In the chat interface, the system often provides a link to an image. Did we
+        get any image ID? The user might be referencing \"this image,\" but we can''t
+        see it.\n\nThis is a part of assistance about \"image classification.\" Could
+        be a labeling issue. Sometimes the dataset is from the Summarize Photos dataset
+        used for training segmented.\n\nWe need to consider the possibility: The conversation
+        system may have a placeholder for the image. But no else.\n\nWe have to respond
+        with a category name only.\n\nI think the best answer is \"other\" because
+        we can''t determine the content. But perhaps the test expects a particular
+        category. But if we can''t see, cross-check randomness: The test might check
+        if our classification logic matches. But we can''t know the actual content.\n\nMaybe
+        we can try to reason based on common sense: In these tasks, they may test
+        with images of unknown categories. The content might be typical images like
+        a car, person, etc. We can guess.\n\nBut we can''t guess. Maybe it''s a typical
+        training set from open-source. E.g., \"Image\" might be a photograph of a
+        car (like a red sedan). Or could be a landscape. The tasks are random. Real
+        test may break.\n\nWe might attempt: The classification categories are standard.
+        Many times, \"car\" is common. But we can''t know.\n\nWe need to decide something.
+        There''s no instruction to talk about uncertainty. Just respond with the category
+        name. The user says \"Respond with just the category name.\" So we can only
+        output one of: car, landscape, person, animal, building, or other. If no image,
+        we might answer \"other\" as fallback.\n\nBut we could also ask for clarification.
+        But instructions: \"Respond with just the category name.\" So no question.
+        So presumably we should guess.\n\nWe should consider typical distribution:
+        Out of these categories, \"other\" is maybe least likely. But since we can''t
+        see image, maybe error?\n\nBetter approach: \"other\" indicates unknown. That
+        might be safe.\n\nAlternatively, maybe the image is a known dataset image
+        like \"cat\" etc. But we can''t know.\n\nWe can pick \"animal\" maybe because
+        many tasks ask to identify. But no.\n\nOk, we have to produce a final answer:
+        \"other\".\n\nLet''s do that."},"finish_reason":"stop"}],"usage":{"prompt_tokens":122,"completion_tokens":770,"total_tokens":892}}
+
+        '
+  recorded_at: Thu, 19 Feb 2026 17:21:24 GMT
+recorded_with: VCR 6.4.0
