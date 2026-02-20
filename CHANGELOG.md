@@ -14,3 +14,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Add missing assets to precompilation when using sprockets. [@patriciomacadden](https://github.com/patriciomacadden)
+- Fix pagination not preserving filters. [#50](https://github.com/sinaptia/ruby_llm-evals/pull/50) [@patriciomacadden](https://github.com/patriciomacadden)
