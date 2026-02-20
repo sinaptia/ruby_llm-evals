@@ -12,8 +12,8 @@ RubyLLM::Evals::Engine.routes.draw do
   resources :prompts do
     resources :runs, only: %i[create]
 
-    member do
-      get :compare
+    scope module: :prompts do
+      resource :comparison, only: %i[show]
     end
   end
 

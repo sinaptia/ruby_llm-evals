@@ -108,7 +108,7 @@
 
 <div class="mt-6 buttons">
   <% if @prompt.runs.any? %>
-    <%= link_to "Compare runs", compare_prompt_path(@prompt), class: "button" %>
+    <%= link_to "Compare runs", prompt_comparison_path(@prompt), class: "button" %>
   <% end %>
   <%= link_to "Edit this prompt", edit_prompt_path(@prompt), class: "button" %>
   <%= button_to "Destroy this prompt", @prompt, method: :delete, class: "button is-danger" %>
