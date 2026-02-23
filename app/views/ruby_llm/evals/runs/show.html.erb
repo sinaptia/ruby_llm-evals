@@ -98,7 +98,7 @@
       <th>Output message</th>
       <th>Eval type</th>
       <th>Expected output</th>
-      <th>Tokens (input/output)</th>
+      <th>Tokens (input/output/thinking)</th>
       <th>Duration</th>
       <th>Cost</th>
       <th>Passed?</th>
@@ -157,9 +157,9 @@
           <% end %>
         </td>
         <td>
-          <div><%= prompt_execution.input %>/<%= prompt_execution.output %></div>
+          <div><%= prompt_execution.input %>/<%= prompt_execution.output %>/<%= prompt_execution.thinking %></div>
           <% if prompt_execution.llm_judge? %>
-            <div><%= prompt_execution.judge_input %>/<%= prompt_execution.judge_output %> (judge)</div>
+            <div><%= prompt_execution.judge_input %>/<%= prompt_execution.judge_output %>/<%= prompt_execution.judge_thinking %> (judge)</div>
           <% end %>
         </td>
         <td><%= duration prompt_execution %></td>

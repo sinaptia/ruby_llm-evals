@@ -108,7 +108,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-temp-snapshot"
+        active_job_id: "test-temp-active-job-id"
       )
 
       assert_equal 0.8, result.temperature
@@ -120,7 +120,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-params-snapshot"
+        active_job_id: "test-params-active-job-id"
       )
 
       assert_equal({ "max_tokens" => 500 }, result.params)
@@ -132,7 +132,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-tools-snapshot"
+        active_job_id: "test-tools-active-job-id"
       )
 
       assert_equal [ "Weather", "Calculator" ], result.tools
@@ -144,7 +144,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-nil-temp-snapshot"
+        active_job_id: "test-nil-temp-active-job-id"
       )
 
       assert_nil result.temperature
@@ -156,7 +156,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-empty-params-snapshot"
+        active_job_id: "test-empty-params-active-job-id"
       )
 
       # Empty hash should be normalized to nil on the prompt
@@ -170,7 +170,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-empty-tools-snapshot"
+        active_job_id: "test-empty-tools-active-job-id"
       )
 
       # Empty array should be normalized to nil on the prompt
@@ -184,7 +184,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-schema-snapshot"
+        active_job_id: "test-schema-active-job-id"
       )
 
       assert_equal "WeatherSchema", result.schema
@@ -196,7 +196,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-schema-other-snapshot"
+        active_job_id: "test-schema-other-active-job-id"
       )
 
       assert_equal({ "type" => "object", "properties" => { "name" => { "type" => "string" } } }, result.schema_other)
@@ -208,7 +208,7 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-nil-schema-snapshot"
+        active_job_id: "test-nil-schema-active-job-id"
       )
 
       assert_nil result.schema
@@ -220,10 +220,58 @@ module RubyLLM::Evals
 
       result = Run.create(
         prompt: prompt,
-        active_job_id: "test-nil-schema-other-snapshot"
+        active_job_id: "test-nil-schema-other-active-job-id"
       )
 
       assert_nil result.schema_other
+    end
+
+    test "should copy thinking_effort from prompt on create" do
+      prompt = ruby_llm_evals_prompts(:one)
+      prompt.update(thinking_effort: "high")
+
+      result = Run.create(
+        prompt: prompt,
+        active_job_id: "test-thinking-effort-active-job-id"
+      )
+
+      assert_equal "high", result.thinking_effort
+    end
+
+    test "should copy thinking_budget from prompt on create" do
+      prompt = ruby_llm_evals_prompts(:one)
+      prompt.update(thinking_budget: 1000)
+
+      result = Run.create(
+        prompt: prompt,
+        active_job_id: "test-thinking-budget-active-job-id"
+      )
+
+      assert_equal 1000, result.thinking_budget
+    end
+
+    test "should copy nil thinking_effort from prompt on create" do
+      prompt = ruby_llm_evals_prompts(:one)
+      prompt.update(thinking_effort: nil)
+
+      result = Run.create(
+        prompt: prompt,
+        active_job_id: "test-nil-thinking-effort-active-job-id"
+      )
+
+      assert_nil result.thinking_effort
+    end
+
+    test "should copy nil thinking_budget from prompt on create" do
+      prompt = ruby_llm_evals_prompts(:one)
+      prompt.update(thinking_budget: nil)
+
+      result = Run.create(
+        prompt: prompt,
+        active_job_id: "test-nil-thinking-budget-active-job-id"
+      )
+
+      assert_nil result.thinking_budget
     end
 
     test "should normalize empty hash params to nil" do

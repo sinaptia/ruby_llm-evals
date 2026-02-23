@@ -290,5 +290,45 @@ module RubyLLM::Evals
 
       assert_equal execution.cost, execution.total_cost
     end
+
+    test "cost should include thinking tokens in calculation" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+
+      execution.update_columns(
+        input: 1000,
+        output: 100,
+        thinking: 500
+      )
+
+      model, provider = RubyLLM.models.resolve(execution.run.model, provider: execution.run.provider)
+      cost = (
+        execution.input / 1_000_000.0 * model.input_price_per_million +
+        execution.output / 1_000_000.0 * model.output_price_per_million +
+        execution.thinking / 1_000_000.0 * model.output_price_per_million
+      ).round(4)
+
+      assert_equal cost, execution.cost
+    end
+
+    test "judge_cost should include judge_thinking tokens in calculation" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+
+      execution.update_columns(
+        judge_model: "gemini-2.0-flash-001",
+        judge_provider: "gemini",
+        judge_input: 1000,
+        judge_output: 100,
+        judge_thinking: 200
+      )
+
+      model, provider = RubyLLM.models.resolve(execution.judge_model, provider: execution.judge_provider)
+      judge_cost = (
+        execution.judge_input / 1_000_000.0 * model.input_price_per_million +
+        execution.judge_output / 1_000_000.0 * model.output_price_per_million +
+        execution.judge_thinking / 1_000_000.0 * model.output_price_per_million
+      ).round(4)
+
+      assert_equal judge_cost, execution.judge_cost
+    end
   end
 end
