@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Thinking support. [#47](https://github.com/sinaptia/ruby_llm-evals/pull/47) [@patriciomacadden](https://github.com/patriciomacadden)
 
+### Changed
+
+- Cost and judge cost contemplate thinking tokens. [#51](https://github.com/sinaptia/ruby_llm-evals/pull/51) [@patriciomacadden](https://github.com/patriciomacadden)
+
 ### Fixed
 
 - Add missing assets to precompilation when using sprockets. [@patriciomacadden](https://github.com/patriciomacadden)

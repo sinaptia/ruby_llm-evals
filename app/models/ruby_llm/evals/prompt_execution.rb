@@ -39,7 +39,8 @@ module RubyLLM
           model_name: run.model,
           provider_name: run.provider,
           input_tokens: input,
-          output_tokens: output
+          output_tokens: output,
+          thinking_tokens: thinking
         )
       end
 
@@ -50,7 +51,8 @@ module RubyLLM
           model_name: judge_model,
           provider_name: judge_provider,
           input_tokens: judge_input,
-          output_tokens: judge_output
+          output_tokens: judge_output,
+          thinking_tokens: judge_thinking
         )
       end
 
@@ -76,6 +78,7 @@ module RubyLLM
         update(
           input: response.input_tokens,
           output: response.output_tokens,
+          thinking: response.thinking_tokens,
           message:,
           passed:
         )
@@ -83,7 +86,7 @@ module RubyLLM
 
       private
 
-      def calculate_cost(model_name:, provider_name:, input_tokens:, output_tokens:)
+      def calculate_cost(model_name:, provider_name:, input_tokens:, output_tokens:, thinking_tokens:)
         return 0.0 if [ input_tokens, output_tokens ].all?(nil)
 
         model, provider = RubyLLM.models.resolve(model_name, provider: provider_name)
@@ -91,8 +94,9 @@ module RubyLLM
 
         input_cost = input_tokens.to_f / 1_000_000.0 * model.input_price_per_million
         output_cost = output_tokens.to_f / 1_000_000.0 * model.output_price_per_million
+        thinking_cost = thinking_tokens.to_f / 1_000_000.0 * model.output_price_per_million
 
-        (input_cost + output_cost).round(4)
+        (input_cost + output_cost + thinking_cost).round(4)
       end
 
       def judge(output)
@@ -112,7 +116,8 @@ module RubyLLM
         assign_attributes(
           judge_message: verdict,
           judge_input: judge_response.input_tokens,
-          judge_output: judge_response.output_tokens
+          judge_output: judge_response.output_tokens,
+          judge_thinking: judge_response.thinking_tokens
         )
 
         verdict["passed"]

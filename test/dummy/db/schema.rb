@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_19_145205) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_23_172157) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -52,12 +52,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_19_145205) do
     t.string "judge_model"
     t.integer "judge_output"
     t.string "judge_provider"
+    t.integer "judge_thinking"
     t.text "message"
     t.integer "output"
     t.boolean "passed"
     t.integer "ruby_llm_evals_run_id", null: false
     t.integer "ruby_llm_evals_sample_id", null: false
     t.datetime "started_at"
+    t.integer "thinking"
     t.datetime "updated_at", null: false
     t.json "variables"
     t.index ["ruby_llm_evals_run_id"], name: "index_rle_prompt_executions_on_rle_run_id"
