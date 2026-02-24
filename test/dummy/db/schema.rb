@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_23_172157) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_25_103146) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -94,6 +94,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_172157) do
     t.text "message"
     t.string "model", null: false
     t.json "params"
+    t.datetime "pinned_at"
     t.string "provider", null: false
     t.integer "ruby_llm_evals_prompt_id", null: false
     t.string "schema"
@@ -104,6 +105,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_172157) do
     t.string "thinking_effort"
     t.json "tools"
     t.datetime "updated_at", null: false
+    t.index ["ruby_llm_evals_prompt_id"], name: "index_ruby_llm_evals_runs_on_prompt_id_pinned", unique: true, where: "pinned_at IS NOT NULL"
     t.index ["ruby_llm_evals_prompt_id"], name: "index_ruby_llm_evals_runs_on_ruby_llm_evals_prompt_id"
   end
 

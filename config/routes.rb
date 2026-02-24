@@ -1,5 +1,7 @@
 RubyLLM::Evals::Engine.routes.draw do
-  resources :runs, only: %i[destroy index show]
+  resources :runs, only: %i[destroy index show] do
+    resource :pin, only: %i[create destroy], module: :runs
+  end
 
   resources :prompt_executions, only: [] do
     scope module: :prompt_executions do

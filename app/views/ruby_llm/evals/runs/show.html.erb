@@ -1,6 +1,6 @@
 <% content_for :title, "Run ##{@run.id}" %>
 
-<h1 class="title">Run #<%= @run.id %></h1>
+<h1 class="title">Run #<%= @run.id %><%= " 📌" if @run.pinned? %></h1>
 
 <table class="table">
   <tbody>
@@ -62,6 +62,12 @@
       <th>Ended at</th>
       <td><%= @run.ended_at %></td>
     </tr>
+    <% if @run.pinned? %>
+      <tr>
+        <th>Pinned at</th>
+        <td><%= @run.pinned_at %></td>
+      </tr>
+    <% end %>
     <tr>
       <th>Duration</th>
       <td><%= duration @run %></td>
@@ -192,5 +198,10 @@
 </table>
 
 <div class="mt-6 buttons">
+  <% if @run.pinned? %>
+    <%= button_to "Unpin", run_pin_path(@run), method: :delete, class: "button" %>
+  <% else %>
+    <%= button_to "Pin", run_pin_path(@run), method: :post, class: "button" %>
+  <% end %>
   <%= button_to "Destroy this run", @run, method: :delete, class: "button is-danger" %>
 </div>

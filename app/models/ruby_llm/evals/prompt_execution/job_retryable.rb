@@ -1,6 +1,7 @@
 module RubyLLM
   module Evals
-    module JobRetryable
+    class PromptExecution
+      module JobRetryable
       extend ActiveSupport::Concern
 
       def retry_job
@@ -43,6 +44,7 @@ module RubyLLM
         job = SolidQueue::Job.find_by(active_job_id: active_job_id)
         raise "Job not found in queue" if job.blank?
         job.retry
+      end
       end
     end
   end

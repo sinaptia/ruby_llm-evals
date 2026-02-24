@@ -1,7 +1,9 @@
 module RubyLLM
   module Evals
     class Run < ApplicationRecord
+      include Executable
       include JobTrackable
+      include Run::Pinnable
 
       belongs_to :prompt, class_name: "RubyLLM::Evals::Prompt", foreign_key: :ruby_llm_evals_prompt_id
       has_many :prompt_executions, class_name: "RubyLLM::Evals::PromptExecution", foreign_key: :ruby_llm_evals_run_id, dependent: :destroy
