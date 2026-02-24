@@ -102,8 +102,10 @@ A prompt represents an LLM prompt template with:
 * Message: message template.
 * Temperature: optional, controls randomness (0.0 to 1.0). Lower values make output more focused and deterministic.
 * Params: optional, additional provider-specific parameters as JSON (e.g., `{"max_tokens": 1000}`).
-* Tools: optional, array of tool class names that the LLM can use (e.g., `["Weather", "Calculator"]`). See how tools are defined in [RubyLLM](https://rubyllm.com/tools/).
+* Tools: optional, array of tool class names that the LLM can use (e.g., `["Weather", "Calculator"]`). See [how tools are defined in RubyLLM](https://rubyllm.com/tools/).
 * Schema: optional, a Ruby class name (e.g., `User`) to structure the LLM's response, or use "other" to provide a custom JSON schema in the Schema Other field. See [RubyLLM structured output](https://rubyllm.com/structured-output/).
+* Thinking effort: optional, controls the reasoning effort level for models that support thinking (e.g., `low`, `medium`, `high`). See [how thinking works in RubyLLM](https://rubyllm.com/thinking/).
+* Thinking budget: optional, sets a maximum token budget for thinking/reasoning.
 
 Both the instructions and the message template can contain liquid tags that will be rendered at runtime. To add variables, enclose them with braces. Eg: `{{name}}`.
 
