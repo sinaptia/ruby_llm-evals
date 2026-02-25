@@ -1,5 +1,5 @@
 <tr>
-  <td><%= link_to "##{run.id}", run_path(run) %></td>
+  <td><%= link_to "##{run.id}#{run.pinned? ? " 📌" : ""}", run_path(run) %></td>
   <td><%= link_to run.prompt.name, run.prompt %></td>
   <td><%= run.provider %>/<%= run.model %></td>
   <td><%= truncate run.instructions %></td>
@@ -9,5 +9,14 @@
   <td><%= duration run %></td>
   <td><%= accuracy run %></td>
   <td>$<%= run.cost %></td>
-  <td><%= button_to "Destroy", run, method: :delete, class: "button is-danger" %></td>
+  <td>
+    <div class="buttons">
+      <% if run.pinned? %>
+        <%= button_to "Unpin", run_pin_path(run), method: :delete, class: "button" %>
+      <% else %>
+        <%= button_to "Pin", run_pin_path(run), method: :post, class: "button" %>
+      <% end %>
+      <%= button_to "Destroy", run, method: :delete, class: "button is-danger" %>
+    </div>
+  </td>
 </tr>

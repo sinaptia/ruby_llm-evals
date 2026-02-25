@@ -368,5 +368,45 @@ module RubyLLM::Evals
       assert_equal({ "type" => "object" }, prompt.schema_other)
       assert_equal({ "type" => "object" }, prompt.reload.schema_other)
     end
+
+    test "#execute uses prompt's own config when no pinned run" do
+      VCR.use_cassette("prompt_test_execute_without_pinned") do
+        response = @prompt.execute(variables: {})
+        assert_equal "gemma3", response.model_id
+      end
+    end
+
+    test "#execute delegates to pinned run when present" do
+      pinned_run = Run.create!(
+        prompt: @prompt,
+        active_job_id: "random-id"
+      )
+      pinned_run.pin!
+
+      model = @prompt.model
+      @prompt.update model: "ministral-3"
+
+      VCR.use_cassette("run_test_execute_with_pinned") do
+        response = @prompt.execute(variables: {})
+        assert_equal model, response.model_id
+      end
+    end
+
+    test "pinned_run association returns the pinned run" do
+      pinned_run = Run.create!(
+        prompt: @prompt,
+        active_job_id: "pinned-assoc-test",
+        provider: "openai",
+        model: "gpt-4",
+        message: "Test"
+      )
+      pinned_run.pin!
+
+      assert_equal pinned_run, @prompt.reload.pinned_run
+    end
+
+    test "pinned_run returns nil when no pinned run exists" do
+      assert_nil @prompt.pinned_run
+    end
   end
 end

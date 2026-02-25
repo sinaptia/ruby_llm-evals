@@ -133,6 +133,10 @@ You can view the accuracy, cost, and duration of the entire run and each individ
 
 If you chose the human review eval type, it's now that you can review if an eval passed or not.
 
+#### Pinned runs
+
+When you find a run with particularly good results, you can **pin** it (only one per prompt). This helps you keep track of the best-performing prompt configurations as you iterate and experiment, but also will be how a prompt will be configured when you execute it (see below).
+
 ### Beyond a typical workflow
 
 #### Using your data to create prompts/samples
@@ -154,7 +158,7 @@ Then you can iterate over the prompt trying to find the best configuration possi
 
 Once you've tested and refined your prompt, you can use it in your application code.
 
-Execute prompts by their slug to get a response object with content and metadata:
+Execute prompts by their slug to get a response object with content and metadata. If a pinned run exists for this prompt, it will use the pinned run's configuration (model, provider, temperature, etc.) instead of the prompt's current settings:
 
 ```ruby
 # Simple execution without variables

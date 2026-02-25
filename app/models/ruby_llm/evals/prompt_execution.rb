@@ -1,7 +1,7 @@
 module RubyLLM
   module Evals
     class PromptExecution < ApplicationRecord
-      include JobRetryable
+      include PromptExecution::JobRetryable
       include JobTrackable
 
       JUDGE_PROMPT_TEMPLATE = <<~TEMPLATE.freeze
@@ -61,7 +61,7 @@ module RubyLLM
       end
 
       def execute
-        response = sample.prompt.execute(
+        response = run.execute(
           variables: variables,
           files: files.map(&:blob)
         )

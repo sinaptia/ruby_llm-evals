@@ -1,8 +1,11 @@
 module RubyLLM
   module Evals
     class Prompt < ApplicationRecord
+      include Executable
+
       has_many :samples, class_name: "RubyLLM::Evals::Sample", foreign_key: :ruby_llm_evals_prompt_id, inverse_of: :prompt, dependent: :destroy
       has_many :runs, class_name: "RubyLLM::Evals::Run", foreign_key: :ruby_llm_evals_prompt_id, dependent: :destroy
+      has_one :pinned_run, -> { where.not(pinned_at: nil) }, class_name: "RubyLLM::Evals::Run", foreign_key: :ruby_llm_evals_prompt_id
 
       accepts_nested_attributes_for :samples, reject_if: :all_blank, allow_destroy: true
 
@@ -24,28 +27,11 @@ module RubyLLM
       end
 
       def execute(variables: {}, files: [])
-        chat = RubyLLM.chat(model: model, provider: provider)
-
-        chat.with_instructions Liquid::Template.parse(instructions).render(variables) if instructions.present?
-
-        chat.with_temperature(temperature) if temperature.present?
-        chat.with_params(**params) if params.present?
-
-        if tools.present?
-          tool_classes = tools.map { _1.constantize rescue nil }.compact
-          chat.with_tools(*tool_classes)
+        if pinned_run.present?
+          pinned_run.execute(variables: variables, files: files)
+        else
+          super
         end
-
-        if schema_other.present?
-          chat.with_schema(**schema_other)
-        elsif schema.present?
-          chat.with_schema schema.constantize
-        end
-
-        chat.with_thinking(effort: thinking_effort) if thinking_effort.present?
-        chat.with_thinking(budget: thinking_budget) if thinking_budget.present?
-
-        chat.ask Liquid::Template.parse(message).render(variables), with: files
       end
 
       private
