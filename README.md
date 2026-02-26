@@ -197,6 +197,30 @@ response = prompt.execute(variables: { "text" => "I love this product!" })
 response.content  # => "positive"
 ```
 
+#### Building a chat without executing
+
+For more control over the execution flow, you can build a configured `RubyLLM::Chat` object without immediately calling the LLM. This is useful for:
+
+- Inspecting the configured chat before execution
+- Modifying the chat further before completing
+- Testing prompt configurations
+
+```ruby
+prompt = RubyLLM::Evals::Prompt.find_by(slug: "sentiment-analysis")
+
+# Build the chat with all prompt configuration applied
+chat = prompt.to_chat(variables: { "text" => "I love this product!" })
+
+# The chat is configured but not executed yet
+chat.messages.count  # => 1 (user message)
+
+# Now execute when ready
+response = chat.complete
+response.content  # => "positive"
+```
+
+The `to_chat` method applies all prompt configuration.
+
 ## Contributing
 
 You can open an issue or a PR in GitHub.

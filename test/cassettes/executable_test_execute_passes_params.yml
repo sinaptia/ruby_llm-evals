@@ -1,0 +1,34 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: "<OLLAMA_API_BASE>/chat/completions"
+    body:
+      encoding: UTF-8
+      string: '{"model":"gemma3","messages":[{"role":"user","content":"Hello, World!"}],"stream":false}'
+    headers:
+      User-Agent:
+      - Faraday v2.14.1
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 26 Feb 2026 02:17:20 GMT
+      Content-Length:
+      - '376'
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJpZCI6ImNoYXRjbXBsLTE3MCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbiIsImNyZWF0ZWQiOjE3NzIwNzIyNDAsIm1vZGVsIjoiZ2VtbWEzIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfb2xsYW1hIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsIm1lc3NhZ2UiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiJIZWxsbyB0aGVyZSEg8J+RiyBcblxuSXQncyBncmVhdCB0byBoZWFyIGZyb20geW91ISBJcyB0aGVyZSBhbnl0aGluZyBJIGNhbiBoZWxwIHlvdSB3aXRoIHRvZGF5PyJ9LCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XSwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6MTMsImNvbXBsZXRpb25fdG9rZW5zIjoyNiwidG90YWxfdG9rZW5zIjozOX19Cg==
+  recorded_at: Thu, 26 Feb 2026 02:17:20 GMT
+recorded_with: VCR 6.4.0
