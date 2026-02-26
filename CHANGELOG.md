@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Thinking support. [#47](https://github.com/sinaptia/ruby_llm-evals/pull/47) [@patriciomacadden](https://github.com/patriciomacadden)
 - Pinned runs. [#52](https://github.com/sinaptia/ruby_llm-evals/pull/52) [@patriciomacadden](https://github.com/patriciomacadden)
+- Add `RubyLLM::Evals::Prompt#to_chat` method to build configured `RubyLLM::Chat` objects without immediate execution. [#53](https://github.com/sinaptia/ruby_llm-evals/pull/53) [@patriciomacadden](https://github.com/patriciomacadden)
 
 ### Changed
 
