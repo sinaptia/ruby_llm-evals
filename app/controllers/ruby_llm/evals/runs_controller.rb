@@ -6,7 +6,7 @@ module RubyLLM
       before_action :set_prompt, only: %i[create]
 
       def index
-        @runs = Page.new Run.where(@filters), page: params[:page].to_i
+        @runs = Page.new Run.where(@filters).order(id: :desc), page: params[:page].to_i
       end
 
       def show
