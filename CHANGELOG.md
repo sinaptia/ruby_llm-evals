@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Cost and judge cost contemplate thinking tokens. [#51](https://github.com/sinaptia/ruby_llm-evals/pull/51) [@patriciomacadden](https://github.com/patriciomacadden)
+- Show newer runs first. [#54](https://github.com/sinaptia/ruby_llm-evals/pull/54) [@patriciomacadden](https://github.com/patriciomacadden)
 
 ### Fixed
 
