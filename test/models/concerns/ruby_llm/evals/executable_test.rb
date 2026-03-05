@@ -107,7 +107,7 @@ module RubyLLM::Evals
 
       chat = prompt_with_schema_other.to_chat(variables: {}, files: [])
 
-      assert_equal schema_definition, chat.schema
+      assert_equal schema_definition, chat.schema[:schema].as_json
     end
 
     test "#to_chat prefers schema_other over schema" do
@@ -124,7 +124,7 @@ module RubyLLM::Evals
 
       chat = prompt_with_schema_other.to_chat(variables: {}, files: [])
 
-      assert_equal schema_other_def, chat.schema
+      assert_equal schema_other_def, chat.schema[:schema].as_json
     end
 
     test "#to_chat applies thinking_effort when present" do
