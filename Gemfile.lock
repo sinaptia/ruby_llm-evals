@@ -283,7 +283,7 @@ GEM
       marcel (~> 1)
       ruby_llm-schema (~> 0)
       zeitwerk (~> 2)
-    ruby_llm-schema (0.3.0)
+    ruby_llm-schema (0.3.1)
     securerandom (0.4.1)
     sqlite3 (2.9.4-aarch64-linux-gnu)
     sqlite3 (2.9.4-x86_64-linux-gnu)
