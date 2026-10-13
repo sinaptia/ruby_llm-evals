@@ -13,7 +13,7 @@ module RubyLLM
         chat.with_instructions Liquid::Template.parse(instructions).render(variables) if instructions.present?
 
         chat.with_temperature(temperature) if temperature.present?
-        chat.with_params(**params) if params.present?
+        Compatibility.with_params(chat, params) if params.present?
 
         if tools.present?
           tool_classes = tools.map { _1.constantize rescue nil }.compact
@@ -21,7 +21,7 @@ module RubyLLM
         end
 
         if schema_other.present?
-          chat.with_schema(**schema_other)
+          chat.with_schema(schema_other)
         elsif schema.present?
           chat.with_schema schema.constantize
         end

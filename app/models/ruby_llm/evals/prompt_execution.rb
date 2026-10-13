@@ -75,10 +75,11 @@ module RubyLLM
         when "llm_judge" then judge(message)
         end
 
+        # RubyLLM 2.x output includes thinking; persist it separately to avoid double billing.
         update(
-          input: response.input_tokens,
-          output: response.output_tokens,
-          thinking: response.thinking_tokens,
+          input: Compatibility.tokens(response, :input),
+          output: Compatibility.output_tokens(response),
+          thinking: Compatibility.tokens(response, :thinking),
           message:,
           passed:
         )
@@ -92,9 +93,9 @@ module RubyLLM
         model, provider = RubyLLM.models.resolve(model_name, provider: provider_name)
         return 0.0 if provider.nil? || provider.local?
 
-        input_cost = input_tokens.to_f / 1_000_000.0 * model.input_price_per_million
-        output_cost = output_tokens.to_f / 1_000_000.0 * model.output_price_per_million
-        thinking_cost = thinking_tokens.to_f / 1_000_000.0 * model.output_price_per_million
+        input_cost = input_tokens.to_f / 1_000_000.0 * Compatibility.price(model, :input)
+        output_cost = output_tokens.to_f / 1_000_000.0 * Compatibility.price(model, :output)
+        thinking_cost = thinking_tokens.to_f / 1_000_000.0 * Compatibility.price(model, :output)
 
         (input_cost + output_cost + thinking_cost).round(4)
       end
@@ -115,9 +116,9 @@ module RubyLLM
 
         assign_attributes(
           judge_message: verdict,
-          judge_input: judge_response.input_tokens,
-          judge_output: judge_response.output_tokens,
-          judge_thinking: judge_response.thinking_tokens
+          judge_input: Compatibility.tokens(judge_response, :input),
+          judge_output: Compatibility.output_tokens(judge_response),
+          judge_thinking: Compatibility.tokens(judge_response, :thinking)
         )
 
         verdict["passed"]

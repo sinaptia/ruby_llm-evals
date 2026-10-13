@@ -29,15 +29,17 @@ jobs:
       matrix:
         ruby-version: ["3.2", "3.3", "3.4", "4.0"]
         rails-version: ["rails-7.2", "rails-8.0", "rails-8.1"]
+        ruby-llm-version: ["~> 1.12", "~> 2.0"]
         exclude:
           - ruby-version: "3.1"
             rails-version: "rails-8.0"
           - ruby-version: "3.1"
             rails-version: "rails-8.1"
 
-    name: Test (ruby-${{ matrix.ruby-version }}, ${{ matrix.rails-version }})
+    name: Test (ruby-${{ matrix.ruby-version }}, ${{ matrix.rails-version }}, RubyLLM ${{ matrix.ruby-llm-version }})
 
     env:
+      RUBY_LLM_VERSION: ${{ matrix.ruby-llm-version }}
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.rails-version }}.gemfile
 
     steps:
@@ -52,6 +54,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
+          cache-version: ${{ matrix.ruby-llm-version }}
 
       - name: Setup database
         env:

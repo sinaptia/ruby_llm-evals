@@ -2,6 +2,62 @@ require "test_helper"
 
 module RubyLLM::Evals
   class PromptExecutionTest < ActiveSupport::TestCase
+    def token_response(content:)
+      if RubyLLM::Message.method_defined?(:tokens)
+        RubyLLM::Message.new(role: :assistant, content:, tokens: RubyLLM::Tokens.new(input: 1000, output: 600, thinking: 500))
+      else
+        RubyLLM::Message.new(role: :assistant, content:, input_tokens: 1000, output_tokens: 600, thinking_tokens: 500)
+      end
+    end
+
+    test "execute stores visible output separately from billable thinking" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      response = token_response(content: "test")
+
+      execution.run.define_singleton_method(:execute) { |**| response }
+      execution.execute
+
+      execution.reload
+      assert_equal 1000, execution.input
+      assert_equal (Gem::Version.new(RubyLLM::VERSION) >= Gem::Version.new("2.0") ? 100 : 600), execution.output
+      assert_equal 500, execution.thinking
+      model, = RubyLLM.models.resolve(execution.run.model, provider: execution.run.provider)
+      assert_equal (1000 / 1_000_000.0 * Compatibility.price(model, :input) + (Gem::Version.new(RubyLLM::VERSION) >= Gem::Version.new("2.0") ? 100 : 600) / 1_000_000.0 * Compatibility.price(model, :output) + 500 / 1_000_000.0 * Compatibility.price(model, :output)).round(4), execution.cost
+    end
+
+    test "execute preserves unreported token counts" do
+      execution = ruby_llm_evals_prompt_executions(:one)
+      response = RubyLLM::Message.new(role: :assistant, content: "test")
+
+      execution.run.define_singleton_method(:execute) { |**| response }
+      execution.execute
+
+      execution.reload
+      assert_nil execution.input
+      assert_nil execution.output
+      assert_nil execution.thinking
+    end
+
+    test "judge stores visible output separately from billable thinking" do
+      execution = ruby_llm_evals_prompt_executions(:five)
+      response = token_response(content: "")
+      response.define_singleton_method(:content) { { "passed" => true } }
+      chat = RubyLLM.chat(model: execution.judge_model, provider: execution.judge_provider)
+
+      original_chat = RubyLLM.method(:chat)
+      RubyLLM.define_singleton_method(:chat) { |**| chat }
+      chat.define_singleton_method(:ask) { |_| response }
+      assert execution.send(:judge, "Paris")
+
+      assert_equal 1000, execution.judge_input
+      assert_equal (Gem::Version.new(RubyLLM::VERSION) >= Gem::Version.new("2.0") ? 100 : 600), execution.judge_output
+      assert_equal 500, execution.judge_thinking
+      model, = RubyLLM.models.resolve(execution.judge_model, provider: execution.judge_provider)
+      assert_equal (1000 / 1_000_000.0 * Compatibility.price(model, :input) + (Gem::Version.new(RubyLLM::VERSION) >= Gem::Version.new("2.0") ? 100 : 600) / 1_000_000.0 * Compatibility.price(model, :output) + 500 / 1_000_000.0 * Compatibility.price(model, :output)).round(4), execution.judge_cost
+    ensure
+      RubyLLM.define_singleton_method(:chat, original_chat) if original_chat
+    end
+
     test "should be valid with required attributes" do
       execution = PromptExecution.new(
         sample: ruby_llm_evals_samples(:one),
@@ -236,7 +292,7 @@ module RubyLLM::Evals
     test "judge_cost should calculate correctly for paid API judge providers" do
       execution = ruby_llm_evals_prompt_executions(:one)
       execution.update_columns(
-        judge_model: "gemini-2.0-flash-001",
+        judge_model: "gemini-2.5-flash",
         judge_provider: "gemini",
         judge_input: 1000,
         judge_output: 100
@@ -249,7 +305,7 @@ module RubyLLM::Evals
     test "judge_cost should return 0.0 when judge_input and judge_output are nil" do
       execution = ruby_llm_evals_prompt_executions(:one)
       execution.update_columns(
-        judge_model: "gemini-2.0-flash-001",
+        judge_model: "gemini-2.5-flash",
         judge_provider: "gemini",
         judge_input: nil,
         judge_output: nil
@@ -263,7 +319,7 @@ module RubyLLM::Evals
       execution.update_columns(
         input: 1500,
         output: 20,
-        judge_model: "gemini-2.0-flash-001",
+        judge_model: "gemini-2.5-flash",
         judge_provider: "gemini",
         judge_input: 1000,
         judge_output: 100
@@ -302,9 +358,9 @@ module RubyLLM::Evals
 
       model, provider = RubyLLM.models.resolve(execution.run.model, provider: execution.run.provider)
       cost = (
-        execution.input / 1_000_000.0 * model.input_price_per_million +
-        execution.output / 1_000_000.0 * model.output_price_per_million +
-        execution.thinking / 1_000_000.0 * model.output_price_per_million
+        execution.input / 1_000_000.0 * Compatibility.price(model, :input) +
+        execution.output / 1_000_000.0 * Compatibility.price(model, :output) +
+        execution.thinking / 1_000_000.0 * Compatibility.price(model, :output)
       ).round(4)
 
       assert_equal cost, execution.cost
@@ -314,7 +370,7 @@ module RubyLLM::Evals
       execution = ruby_llm_evals_prompt_executions(:one)
 
       execution.update_columns(
-        judge_model: "gemini-2.0-flash-001",
+        judge_model: "gemini-2.5-flash",
         judge_provider: "gemini",
         judge_input: 1000,
         judge_output: 100,
@@ -323,9 +379,9 @@ module RubyLLM::Evals
 
       model, provider = RubyLLM.models.resolve(execution.judge_model, provider: execution.judge_provider)
       judge_cost = (
-        execution.judge_input / 1_000_000.0 * model.input_price_per_million +
-        execution.judge_output / 1_000_000.0 * model.output_price_per_million +
-        execution.judge_thinking / 1_000_000.0 * model.output_price_per_million
+        execution.judge_input / 1_000_000.0 * Compatibility.price(model, :input) +
+        execution.judge_output / 1_000_000.0 * Compatibility.price(model, :output) +
+        execution.judge_thinking / 1_000_000.0 * Compatibility.price(model, :output)
       ).round(4)
 
       assert_equal judge_cost, execution.judge_cost
