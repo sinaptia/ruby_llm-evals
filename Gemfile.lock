@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     ruby_llm-evals (0.1.0)
+      faraday (>= 2.12, < 3)
       importmap-rails
       liquid
       rails (>= 7.2.0)
