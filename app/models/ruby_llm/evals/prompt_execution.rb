@@ -90,7 +90,12 @@ module RubyLLM
       def calculate_cost(model_name:, provider_name:, input_tokens:, output_tokens:, thinking_tokens:)
         return 0.0 if [ input_tokens, output_tokens ].all?(nil)
 
-        model, provider = RubyLLM.models.resolve(model_name, provider: provider_name)
+        model, provider = begin
+          RubyLLM.models.resolve(model_name, provider: provider_name)
+        rescue RubyLLM::ModelNotFoundError
+          # Missing registry entries have no pricing available.
+          return 0.0
+        end
         return 0.0 if provider.nil? || provider.local?
 
         input_cost = input_tokens.to_f / 1_000_000.0 * Compatibility.price(model, :input)
