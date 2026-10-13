@@ -2,6 +2,8 @@ source "https://rubygems.org"
 
 gemspec path: ".."
 
+gem "ruby_llm", ENV["RUBY_LLM_VERSION"] if ENV["RUBY_LLM_VERSION"]
+
 gem "rails", "~> 8.1.0"
 
 gem "puma"

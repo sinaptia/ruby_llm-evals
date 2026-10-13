@@ -75,11 +75,11 @@ module RubyLLM
         when "llm_judge" then judge(message)
         end
 
-        # RubyLLM output includes thinking; persist it separately to avoid double billing.
+        # RubyLLM 2.x output includes thinking; persist it separately to avoid double billing.
         update(
-          input: response.tokens.input,
-          output: (response.tokens.output - response.tokens.thinking.to_i if response.tokens.output),
-          thinking: response.tokens.thinking,
+          input: Compatibility.tokens(response, :input),
+          output: Compatibility.output_tokens(response),
+          thinking: Compatibility.tokens(response, :thinking),
           message:,
           passed:
         )
@@ -93,9 +93,9 @@ module RubyLLM
         model, provider = RubyLLM.models.resolve(model_name, provider: provider_name)
         return 0.0 if provider.nil? || provider.local?
 
-        input_cost = input_tokens.to_f / 1_000_000.0 * model.price(:input).to_f
-        output_cost = output_tokens.to_f / 1_000_000.0 * model.price(:output).to_f
-        thinking_cost = thinking_tokens.to_f / 1_000_000.0 * model.price(:output).to_f
+        input_cost = input_tokens.to_f / 1_000_000.0 * Compatibility.price(model, :input)
+        output_cost = output_tokens.to_f / 1_000_000.0 * Compatibility.price(model, :output)
+        thinking_cost = thinking_tokens.to_f / 1_000_000.0 * Compatibility.price(model, :output)
 
         (input_cost + output_cost + thinking_cost).round(4)
       end
@@ -116,9 +116,9 @@ module RubyLLM
 
         assign_attributes(
           judge_message: verdict,
-          judge_input: judge_response.tokens.input,
-          judge_output: (judge_response.tokens.output - judge_response.tokens.thinking.to_i if judge_response.tokens.output),
-          judge_thinking: judge_response.tokens.thinking
+          judge_input: Compatibility.tokens(judge_response, :input),
+          judge_output: Compatibility.output_tokens(judge_response),
+          judge_thinking: Compatibility.tokens(judge_response, :thinking)
         )
 
         verdict["passed"]
