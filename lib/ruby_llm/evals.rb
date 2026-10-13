@@ -1,6 +1,7 @@
 require "activemodel/validations/json_validator"
 require "liquid"
 require "ruby_llm"
+require "faraday/net_http"
 require "ruby_llm/evals/engine"
 require "ruby_llm/evals/version"
 require "ruby_llm/schema"
