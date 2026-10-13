@@ -6,7 +6,7 @@ PATH
       importmap-rails
       liquid
       rails (>= 7.2.0)
-      ruby_llm (~> 1.12)
+      ruby_llm (>= 1.12, < 3.0)
       ruby_llm-schema
       stimulus-rails
       turbo-rails
@@ -108,7 +108,6 @@ GEM
     drb (2.2.3)
     erb (6.0.7)
     erubi (1.13.1)
-    event_stream_parser (1.0.0)
     faraday (2.14.4)
       faraday-net_http (>= 2.0, < 3.5)
       json
@@ -273,17 +272,19 @@ GEM
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
-    ruby_llm (1.16.0)
+    ruby_llm (2.1.0)
       base64
-      event_stream_parser (~> 1)
       faraday (>= 1.10.0)
       faraday-multipart (>= 1)
       faraday-net_http (>= 1)
       faraday-retry (>= 1)
-      marcel (~> 1)
-      ruby_llm-schema (~> 0)
+      json (< 4)
+      marcel (>= 1.0, < 3)
+      schematist (~> 1.1)
       zeitwerk (~> 2)
-    ruby_llm-schema (0.4.0)
+    ruby_llm-schema (1.0.0)
+      schematist (~> 1.0)
+    schematist (1.1.0)
     securerandom (0.4.1)
     sqlite3 (2.9.6-aarch64-linux-gnu)
     sqlite3 (2.9.6-arm64-darwin)
