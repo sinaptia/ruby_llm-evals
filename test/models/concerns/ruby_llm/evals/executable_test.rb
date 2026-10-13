@@ -76,7 +76,7 @@ module RubyLLM::Evals
 
       chat = prompt_with_params.to_chat(variables: {}, files: [])
 
-      assert_equal({ "num_predict" => 50 }, chat.params)
+      assert_equal({ "num_predict" => 50 }, chat.provider_options)
     end
 
     test "#to_chat ignores invalid tool classes" do
@@ -210,8 +210,8 @@ module RubyLLM::Evals
         response = @prompt.execute(variables: {})
 
         assert_respond_to response, :content
-        assert_respond_to response, :input_tokens
-        assert_respond_to response, :output_tokens
+        assert_not_nil response.tokens.input
+        assert_not_nil response.tokens.output
       end
     end
 

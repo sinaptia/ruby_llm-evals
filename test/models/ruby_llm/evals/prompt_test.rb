@@ -116,8 +116,8 @@ module RubyLLM::Evals
         response = Prompt.execute("image-categorization", variables: {})
 
         assert_respond_to response, :content
-        assert_respond_to response, :input_tokens
-        assert_respond_to response, :output_tokens
+        assert_not_nil response.tokens.input
+        assert_not_nil response.tokens.output
       end
     end
 
@@ -126,8 +126,8 @@ module RubyLLM::Evals
         response = Prompt.execute(@prompt.slug, variables: {})
 
         assert_respond_to response, :content
-        assert_respond_to response, :input_tokens
-        assert_respond_to response, :output_tokens
+        assert_not_nil response.tokens.input
+        assert_not_nil response.tokens.output
       end
     end
 
@@ -202,8 +202,8 @@ module RubyLLM::Evals
         response = @prompt.execute(variables: {})
 
         assert_respond_to response, :content
-        assert_respond_to response, :input_tokens
-        assert_respond_to response, :output_tokens
+        assert_not_nil response.tokens.input
+        assert_not_nil response.tokens.output
       end
     end
 
@@ -372,7 +372,7 @@ module RubyLLM::Evals
     test "#execute uses prompt's own config when no pinned run" do
       VCR.use_cassette("prompt_test_execute_without_pinned") do
         response = @prompt.execute(variables: {})
-        assert_equal "gemma3", response.model_id
+        assert_equal "gemma3", response.model
       end
     end
 
@@ -388,7 +388,7 @@ module RubyLLM::Evals
 
       VCR.use_cassette("run_test_execute_with_pinned") do
         response = @prompt.execute(variables: {})
-        assert_equal model, response.model_id
+        assert_equal model, response.model
       end
     end
 

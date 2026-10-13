@@ -72,7 +72,7 @@ module RubyLLM::Evals
 
       assert sample.valid?
       assert_equal "llm_judge", sample.eval_type
-      assert_equal "gemini-2.0-flash-001", sample.judge_model
+      assert_equal "gemini-2.5-flash", sample.judge_model
       assert_equal "gemini", sample.judge_provider
     end
 

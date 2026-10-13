@@ -75,10 +75,11 @@ module RubyLLM
         when "llm_judge" then judge(message)
         end
 
+        # RubyLLM output includes thinking; persist it separately to avoid double billing.
         update(
-          input: response.input_tokens,
-          output: response.output_tokens,
-          thinking: response.thinking_tokens,
+          input: response.tokens.input,
+          output: (response.tokens.output - response.tokens.thinking.to_i if response.tokens.output),
+          thinking: response.tokens.thinking,
           message:,
           passed:
         )
@@ -92,9 +93,9 @@ module RubyLLM
         model, provider = RubyLLM.models.resolve(model_name, provider: provider_name)
         return 0.0 if provider.nil? || provider.local?
 
-        input_cost = input_tokens.to_f / 1_000_000.0 * model.input_price_per_million
-        output_cost = output_tokens.to_f / 1_000_000.0 * model.output_price_per_million
-        thinking_cost = thinking_tokens.to_f / 1_000_000.0 * model.output_price_per_million
+        input_cost = input_tokens.to_f / 1_000_000.0 * model.price(:input).to_f
+        output_cost = output_tokens.to_f / 1_000_000.0 * model.price(:output).to_f
+        thinking_cost = thinking_tokens.to_f / 1_000_000.0 * model.price(:output).to_f
 
         (input_cost + output_cost + thinking_cost).round(4)
       end
@@ -115,9 +116,9 @@ module RubyLLM
 
         assign_attributes(
           judge_message: verdict,
-          judge_input: judge_response.input_tokens,
-          judge_output: judge_response.output_tokens,
-          judge_thinking: judge_response.thinking_tokens
+          judge_input: judge_response.tokens.input,
+          judge_output: (judge_response.tokens.output - judge_response.tokens.thinking.to_i if judge_response.tokens.output),
+          judge_thinking: judge_response.tokens.thinking
         )
 
         verdict["passed"]
